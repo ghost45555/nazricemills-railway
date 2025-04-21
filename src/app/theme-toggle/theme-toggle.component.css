@@ -1,0 +1,115 @@
+.theme-toggle {
+  position: relative;
+  padding: 0;
+  width: 48px;
+  height: 28px;
+  border: none;
+  border-radius: 24px;
+  background: var(--color-green);
+  cursor: pointer;
+  transition: all var(--transition-medium);
+}
+
+.theme-toggle:hover {
+  opacity: 0.85;
+}
+
+.toggle-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 24px;
+  background-color: var(--color-green);
+  transition: background-color var(--transition-medium);
+}
+
+.dark .toggle-track {
+  background-color: var(--color-gold);
+}
+
+.toggle-indicator {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 24px;
+  height: 24px;
+  background-color: var(--color-white);
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transform: translateX(0);
+  transition: transform var(--transition-medium), background-color var(--transition-medium);
+}
+
+.dark .toggle-indicator {
+  transform: translateX(20px);
+}
+
+/* Icons */
+.sun-icon,
+.moon-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 16px;
+  height: 16px;
+  transition: opacity var(--transition-medium);
+}
+
+.sun-icon {
+  opacity: 1;
+  color: var(--color-gold);
+}
+
+.moon-icon {
+  opacity: 0;
+  color: var(--color-cream);
+}
+
+.dark .sun-icon {
+  opacity: 0;
+}
+
+.dark .moon-icon {
+  opacity: 1;
+}
+
+/* Focus styles */
+.theme-toggle:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-cream), 0 0 0 4px var(--color-green);
+}
+
+.dark .theme-toggle:focus {
+  box-shadow: 0 0 0 2px var(--color-cream), 0 0 0 4px var(--color-gold);
+}
+
+/* Hover effect */
+.theme-toggle:hover .toggle-indicator {
+  transform: translateX(0) scale(1.05);
+}
+
+.dark .theme-toggle:hover .toggle-indicator {
+  transform: translateX(20px) scale(1.05);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .theme-toggle {
+    width: 44px;
+    height: 26px;
+  }
+
+  .toggle-indicator {
+    width: 22px;
+    height: 22px;
+  }
+
+  .dark .toggle-indicator {
+    transform: translateX(18px);
+  }
+
+  .dark .theme-toggle:hover .toggle-indicator {
+    transform: translateX(18px) scale(1.05);
+  }
+}

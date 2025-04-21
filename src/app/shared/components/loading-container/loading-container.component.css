@@ -1,0 +1,169 @@
+.loading-container {
+  position: relative;
+  width: 100%;
+  min-height: inherit;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Content Styles */
+.loading-container__content {
+  flex: 1;
+  position: relative;
+  transition: opacity var(--transition-medium),
+              filter var(--transition-medium);
+}
+
+.loading-container--loading .loading-container__content {
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Overlay Styles */
+.loading-container__overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--container-background, rgba(10, 26, 31, 0.9));
+  z-index: 9999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.loading-container--loading .loading-container__overlay {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Blur Effect */
+.loading-container__overlay--blur {
+  backdrop-filter: blur(5px);
+}
+
+.loading-container--loading.loading-container--blur .loading-container__content {
+  filter: blur(3px);
+}
+
+/* Fullscreen Mode */
+.loading-container--fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  min-height: 100vh;
+}
+
+.loading-container--fullscreen .loading-container__overlay {
+  position: fixed;
+}
+
+/* Overlay Mode */
+.loading-container--overlay {
+  overflow: hidden;
+}
+
+.loading-container--overlay .loading-container__overlay {
+  z-index: 1000;
+}
+
+/* Screen Reader Only */
+.loading-container__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Dark Theme Adjustments */
+:host-context(.dark-theme) {
+  .loading-container__overlay {
+    background-color: var(--container-background, rgba(0, 0, 0, 0.9));
+  }
+}
+
+/* Animation Keyframes */
+@keyframes contentFadeOut {
+  from {
+    opacity: 1;
+    filter: blur(0);
+  }
+  to {
+    opacity: 0.5;
+    filter: blur(3px);
+  }
+}
+
+@keyframes contentFadeIn {
+  from {
+    opacity: 0.5;
+    filter: blur(3px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+/* Loading State Transitions */
+.loading-container--loading .loading-container__content {
+  animation: contentFadeOut 0.3s ease forwards;
+}
+
+.loading-container:not(.loading-container--loading) .loading-container__content {
+  animation: contentFadeIn 0.3s ease forwards;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .loading-container__overlay {
+    padding: 1rem;
+  }
+
+  .loading-container--blur .loading-container__content {
+    filter: blur(2px);
+  }
+}
+
+/* Accessibility Focus Styles */
+.loading-container:focus-within {
+  outline: none;
+}
+
+.loading-container:focus-within::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  border: 2px solid var(--color-green);
+  border-radius: 4px;
+}
+
+/* Add this to ensure the loading container doesn't block clicks when not loading */
+.loading-container:not(.loading-container--loading) {
+  pointer-events: none;
+}
+
+.loading-container--loading {
+  pointer-events: auto;
+}
+
+/* Make sure the loading spinner is visible */
+.loading-spinner {
+  z-index: 10000;
+}

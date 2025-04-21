@@ -1,0 +1,72 @@
+<div class="performance-monitor" [class.fixed]="position === 'fixed'" [class.dark]="theme === 'dark'">
+  <div class="header" (click)="toggleDetails()">
+    <h3>Performance Metrics</h3>
+    <button class="toggle-button">{{ showDetails ? '▼' : '▲' }}</button>
+  </div>
+
+  <div class="metrics-container" *ngIf="showDetails">
+    <!-- Core Web Vitals -->
+    <div class="section">
+      <h4>Core Web Vitals</h4>
+      <div class="metrics-grid">
+        <div class="metric-card" *ngFor="let metric of getCoreWebVitals()" [class]="getMetricStatus(metric)">
+          <div class="metric-header">
+            <span class="metric-name" [title]="metric.description">{{ metric.name }}</span>
+            <span class="metric-value">{{ formatValue(metric.value, metric.unit) }}</span>
+          </div>
+          <div class="metric-progress">
+            <div class="progress-bar" [style.width]="getThresholdPercentage(metric.value, metric.threshold.good)"></div>
+          </div>
+          <div class="metric-status">{{ getStatusLabel(getMetricStatus(metric)) }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Other Metrics -->
+    <div class="section">
+      <h4>Other Metrics</h4>
+      <div class="metrics-grid">
+        <div class="metric-card" *ngFor="let metric of getOtherMetrics()" [class]="getMetricStatus(metric)">
+          <div class="metric-header">
+            <span class="metric-name" [title]="metric.description">{{ metric.name }}</span>
+            <span class="metric-value">{{ formatValue(metric.value, metric.unit) }}</span>
+          </div>
+          <div class="metric-progress">
+            <div class="progress-bar" [style.width]="getThresholdPercentage(metric.value, metric.threshold.good)"></div>
+          </div>
+          <div class="metric-status">{{ getStatusLabel(getMetricStatus(metric)) }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Timing -->
+    <div class="section" *ngIf="navigationTiming">
+      <h4>Navigation Timing</h4>
+      <div class="timing-grid">
+        <div class="timing-item" *ngFor="let item of navigationTiming | keyvalue">
+          <span class="timing-label">{{ formatTimingKey(item.key) }}</span>
+          <span class="timing-value">{{ item.value }}ms</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resource Timing -->
+    <div class="section" *ngIf="resourceTiming.length">
+      <h4>Resource Timing</h4>
+      <div class="resource-stats">
+        <div class="stat-item">
+          <span class="stat-label">Total Resources</span>
+          <span class="stat-value">{{ getResourceTimingStats().count }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Total Size</span>
+          <span class="stat-value">{{ formatBytes(getResourceTimingStats().totalSize) }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Total Duration</span>
+          <span class="stat-value">{{ getResourceTimingStats().totalDuration.toFixed(0) }}ms</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,104 @@
+<nav [@navbarScroll]="isScrolled ? 'scrolled' : 'top'"
+     [class.mobile-menu-open]="isMobileMenuOpen"
+     [class.scrolling-up]="isScrollingUp"
+     [class.premium-nav]="true">
+  <div class="nav-backdrop" [@backdropBlur]="isScrolled ? 'scrolled' : 'top'"></div>
+  <div class="nav-content">
+    <div class="logo">
+      <a [routerLink]="['/']" class="logo-text" aria-label="Naz Rice Mills - Home">
+        <img class="logo-img" src="/assets/img/Logo.png" style="width: 50px; height: 50px; "  alt="">
+        <span class="logo-main">Naz Rice Mills</span>
+        <span class="logo-accent"></span>
+        <span class="logo-glow"></span>
+      </a>
+    </div>
+    
+    <button class="mobile-menu-btn premium-icon" 
+            (click)="toggleMobileMenu()" 
+            [attr.aria-expanded]="isMobileMenuOpen"
+            aria-label="Toggle navigation menu"
+            [class.active]="isMobileMenuOpen">
+      <span class="menu-line"></span>
+      <span class="menu-line"></span>
+      <span class="menu-line"></span>
+    </button>
+
+    <!-- At the top of the template, store the theme toggle content -->
+    <ng-template #themeToggleTemplate>
+      <ng-content select=".theme-toggle-position"></ng-content>
+    </ng-template>
+
+    <!-- Desktop Navigation -->
+    <div class="nav-menu" [@menuAnimation]>
+      <ul class="nav-links" role="navigation">
+        <li *ngFor="let item of navItems" class="nav-item">
+          <a [routerLink]="[item.path]" 
+             routerLinkActive="active" 
+             [routerLinkActiveOptions]="item.exact ? {exact: true} : {exact: false}">
+            <span class="link-text">{{item.label}}</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="nav-actions">
+        <div class="theme-toggle-wrapper" role="presentation">
+          <ng-container *ngTemplateOutlet="themeToggleTemplate"></ng-container>
+        </div>
+        <a [routerLink]="['/contact']" 
+           class="btn-premium" 
+           aria-label="Contact Us">
+          <span class="btn-text">Get in Touch</span>
+          <span class="btn-shine"></span>
+          <span class="btn-glow"></span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation -->
+    <div class="nav-menu mobile-menu" *ngIf="isMobileMenuOpen" @menuAnimation>
+      <div class="menu-backdrop" 
+           (click)="closeMobileMenu()"
+           [@backdropAnimation]></div>
+      <div class="menu-container" [@mobileMenuAnimation]>
+        <ul class="nav-links" role="navigation" [@menuItemsAnimation]="isMobileMenuOpen">
+          <li *ngFor="let item of navItems" class="nav-item">
+            <a [routerLink]="[item.path]" 
+               routerLinkActive="active" 
+               [routerLinkActiveOptions]="item.exact ? {exact: true} : {exact: false}"
+               (click)="closeMobileMenu()">
+              <span class="link-text">{{item.label}}</span>
+            </a>
+          </li>
+        </ul>
+        
+        <div class="nav-actions">
+          <div class="theme-toggle-wrapper" role="presentation">
+            <ng-container *ngTemplateOutlet="themeToggleTemplate"></ng-container>
+          </div>
+          <a [routerLink]="['/contact']" 
+             class="btn-premium" 
+             (click)="closeMobileMenu()"
+             aria-label="Contact Us">
+            <span class="btn-text">Get in Touch</span>
+            <span class="btn-arrow">→</span>
+          </a>
+        </div>
+
+        <div class="social-links premium-social">
+          <a *ngFor="let social of socialLinks" 
+             [href]="social.url" 
+             class="social-link"
+             target="_blank"
+             rel="noopener noreferrer"
+             [@socialAnimation]
+             [attr.aria-label]="'Visit our ' + social.icon + ' page'">
+            <i class="fa-brands fa-{{social.icon}}"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add this inside nav element -->
+    <div class="nav-scroll-indicator"></div>
+  </div>
+</nav>

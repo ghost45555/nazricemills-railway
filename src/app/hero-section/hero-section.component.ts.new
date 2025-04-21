@@ -1,0 +1,78 @@
+import { Component, OnInit, PLATFORM_ID, Inject, OnDestroy, ElementRef, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
+import { ThemeService } from '../services/theme.service';
+import { map } from 'rxjs';
+
+@Component({
+  selector: 'app-hero-section',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './hero-section.component.html',
+  styleUrls: ['./hero-section.component.css']
+})
+export class HeroSectionComponent implements OnInit, OnDestroy {
+  private observer: IntersectionObserver | null = null;
+  private animatedElements: NodeListOf<Element> | null = null;
+  private themeService = inject(ThemeService);
+
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private elementRef: ElementRef
+  ) {}
+
+  readonly currentTheme$ = this.themeService.theme$.pipe(
+    map(theme => theme || 'light')
+  );
+
+  ngOnInit() {
+    if (isPlatformBrowser(this.platformId)) {
+      this.setupAnimations();
+      this.initParallaxEffect();
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.observer) {
+      this.observer.disconnect();
+    }
+  }
+
+  private setupAnimations() {
+    this.animatedElements = this.elementRef.nativeElement.querySelectorAll(
+      '.slide-up, .slide-down'
+    );
+
+    const options = {
+      threshold: 0.2, // Adjusted threshold for better performance
+      rootMargin: '0px'
+    };
+
+    this.observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate');
+          this.observer?.unobserve(entry.target);
+        }
+      });
+    }, options);
+
+    if (this.animatedElements) {
+      this.animatedElements.forEach(el => {
+        el.classList.add('will-animate');
+        this.observer?.observe(el);
+      });
+    }
+  }
+
+  private initParallaxEffect() {
+    const heroBackground = this.elementRef.nativeElement.querySelector('.hero-background');
+    if (!heroBackground) return;
+
+    window.addEventListener('scroll', () => {
+      const scrolled = window.pageYOffset;
+      const rate = scrolled * 0.5; // Keep the scaling factor as is
+      heroBackground.style.transform = `translate3d(0, ${rate}px, 0) scale(1.05)`; // Adjusted scale
+    }, { passive: true });
+  }
+}

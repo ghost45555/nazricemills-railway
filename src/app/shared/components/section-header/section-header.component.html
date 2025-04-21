@@ -1,0 +1,37 @@
+<div 
+  [class]="classes.join(' ')"
+  [ngStyle]="containerStyles"
+  [appScrollAnimation]="true"
+  [threshold]="0.3">
+  
+  <!-- Subtitle -->
+  <div *ngIf="subtitle" class="section-header__subtitle">
+    <span class="section-header__subtitle-text">{{ subtitle }}</span>
+  </div>
+
+  <!-- Title -->
+  <h2 class="section-header__title">
+    <ng-content select="[title]">
+      {{ title }}
+    </ng-content>
+  </h2>
+
+  <!-- Divider -->
+  <div *ngIf="showDivider" class="section-header__divider">
+    <span class="section-header__divider-line"></span>
+    <span class="section-header__divider-icon">✦</span>
+    <span class="section-header__divider-line"></span>
+  </div>
+
+  <!-- Description -->
+  <div *ngIf="description || description?.length !== 0" class="section-header__description">
+    <ng-content select="[description]">
+      {{ description }}
+    </ng-content>
+  </div>
+
+  <!-- Additional Content -->
+  <div class="section-header__content">
+    <ng-content></ng-content>
+  </div>
+</div>

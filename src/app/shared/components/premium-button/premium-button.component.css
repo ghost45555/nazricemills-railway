@@ -1,0 +1,238 @@
+.premium-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  font-family: var(--font-body);
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all var(--transition-medium);
+  outline: none;
+}
+
+/* Size Variants */
+.premium-button--small {
+  height: 32px;
+  padding: 0 16px;
+  font-size: 0.875rem;
+}
+
+.premium-button--medium {
+  height: 40px;
+  padding: 0 24px;
+  font-size: 1rem;
+}
+
+.premium-button--large {
+  height: 48px;
+  padding: 0 32px;
+  font-size: 1.125rem;
+}
+
+/* Style Variants */
+.premium-button--primary {
+  background-color: var(--color-green);
+  color: var(--color-white);
+}
+
+.premium-button--primary:hover {
+  background-color: var(--color-gold);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.premium-button--secondary {
+  background-color: transparent;
+  border: 2px solid var(--color-green);
+  color: var(--color-green);
+}
+
+.premium-button--secondary:hover {
+  background-color: var(--color-green);
+  color: var(--color-white);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.premium-button--outline {
+  background-color: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+.premium-button--outline:hover {
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.premium-button--text {
+  background-color: transparent;
+  color: var(--color-text);
+  padding: 0;
+}
+
+.premium-button--text:hover {
+  color: var(--color-gold);
+  transform: translateY(-1px);
+}
+
+/* States */
+.premium-button--disabled,
+.premium-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.premium-button--loading {
+  cursor: wait;
+}
+
+.premium-button--full-width {
+  width: 100%;
+}
+
+/* Content Layout */
+.premium-button__content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: opacity var(--transition-fast);
+}
+
+.premium-button--loading .premium-button__content {
+  opacity: 0;
+}
+
+/* Icons */
+.premium-button__icon {
+  display: flex;
+  align-items: center;
+  font-size: 1.2em;
+}
+
+/* Loading Animation */
+.premium-button__loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 24px;
+  height: 24px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Ripple Effect */
+.premium-button--ripple {
+  position: relative;
+}
+
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: scale(0);
+  animation: ripple 0.6s linear;
+  pointer-events: none;
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Hover Animation */
+.premium-button--animate {
+  transition: all var(--transition-medium);
+}
+
+.premium-button--animate:hover {
+  transform: translateY(-2px);
+}
+
+.premium-button--animate:active {
+  transform: translateY(0);
+}
+
+/* Dark Theme Adjustments */
+:host-context(.dark-theme) {
+  .premium-button--primary {
+    background-color: var(--color-gold);
+    color: var(--color-green);
+  }
+
+  .premium-button--primary:hover {
+    background-color: var(--color-green);
+    color: var(--color-white);
+  }
+
+  .premium-button--secondary {
+    border-color: var(--color-gold);
+    color: var(--color-gold);
+  }
+
+  .premium-button--secondary:hover {
+    background-color: var(--color-gold);
+    color: var(--color-green);
+  }
+
+  .premium-button--outline {
+    border-color: var(--color-border);
+    color: var(--color-text);
+  }
+
+  .premium-button--outline:hover {
+    border-color: var(--color-gold);
+    color: var(--color-gold);
+  }
+
+  .premium-button--text {
+    color: var(--color-text);
+  }
+
+  .premium-button--text:hover {
+    color: var(--color-gold);
+  }
+}
+
+/* Focus States */
+.premium-button:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .premium-button--small {
+    height: 28px;
+    padding: 0 12px;
+    font-size: 0.8125rem;
+  }
+
+  .premium-button--medium {
+    height: 36px;
+    padding: 0 20px;
+    font-size: 0.9375rem;
+  }
+
+  .premium-button--large {
+    height: 44px;
+    padding: 0 28px;
+    font-size: 1rem;
+  }
+}

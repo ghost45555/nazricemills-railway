@@ -1,0 +1,52 @@
+<div 
+  [class]="classes.join(' ')"
+  [ngStyle]="styles"
+  [appScrollAnimation]="animateIn"
+  [animationClass]="'fade-in'"
+  (click)="onImageClick($event)">
+  
+  <!-- Loading Skeleton -->
+  <div 
+    *ngIf="isLoading && !hasError" 
+    class="premium-image__skeleton">
+    <div class="premium-image__skeleton-shine"></div>
+  </div>
+
+  <!-- Error State -->
+  <div 
+    *ngIf="hasError" 
+    class="premium-image__error">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+    </svg>
+    <span>Image failed to load</span>
+  </div>
+
+  <!-- Main Image -->
+  <img
+    *ngIf="true"
+    [src]="hasError ? fallbackSrc : src"
+    [alt]="alt"
+    [style.object-fit]="objectFit"
+    (load)="onImageLoad()"
+    (error)="onImageError($event)"
+    class="premium-image__img"
+    [class.premium-image__img--loaded]="!isLoading && !hasError">
+
+  <!-- Overlay -->
+  <div 
+    *ngIf="overlay" 
+    class="premium-image__overlay">
+    <ng-content select="[imageOverlay]"></ng-content>
+  </div>
+
+  <!-- Hover Content -->
+  <div 
+    *ngIf="hoverEffect" 
+    class="premium-image__hover-content">
+    <ng-content select="[imageHover]"></ng-content>
+  </div>
+
+  <!-- Additional Content -->
+  <ng-content></ng-content>
+</div>

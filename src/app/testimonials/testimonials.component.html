@@ -1,0 +1,124 @@
+<section class="testimonials" id="testimonials" aria-label="Client Testimonials" role="region" [appScrollAnimation]="true">
+  <app-section-header
+    title="What Our Clients Say"
+    subtitle="Client Testimonials"
+    [animateIn]="true">
+  </app-section-header>
+
+  <div class="testimonials-slider" 
+       *ngIf="testimonials.length > 0"
+       (mouseenter)="pauseAutoPlay()" 
+       (mouseleave)="resumeAutoPlay()"
+       role="region"
+       aria-label="Testimonials Slider"
+       tabindex="0"
+       [appScrollAnimation]="true"
+       [animationClass]="'slide-up'"
+       [delay]="0.3">
+    
+    <!-- Navigation Arrows -->
+    <button class="nav-button prev" 
+            (click)="prev()" 
+            [disabled]="isTransitioning"
+            aria-label="Previous testimonial">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M15 18l-6-6 6-6"/>
+      </svg>
+    </button>
+    
+    <button class="nav-button next" 
+            (click)="next()" 
+            [disabled]="isTransitioning"
+            aria-label="Next testimonial">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M9 18l6-6-6-6"/>
+      </svg>
+    </button>
+
+    <!-- Testimonial Cards -->
+    <div class="slider-container" role="presentation">
+      <div class="slider-track" role="list" aria-live="polite">
+        <div *ngFor="let testimonial of testimonials; let i = index; trackBy: trackByFn"
+             class="testimonial-card"
+             [class.active]="i === currentIndex"
+             role="listitem"
+             [attr.aria-hidden]="i !== currentIndex"
+             [attr.aria-label]="'Testimonial ' + (i + 1) + ' of ' + testimonials.length">
+          
+          <!-- Card Header -->
+          <div class="testimonial-header">
+            <div class="image-container">
+              <img [src]="testimonial.imageUrl" 
+                   [alt]="'Photo of ' + testimonial.name" 
+                   class="testimonial-image"
+                   loading="lazy" />
+              <div class="shine-effect"></div>
+            </div>
+            <div class="testimonial-info">
+              <h3 class="testimonial-name">{{testimonial.name}}</h3>
+              <p class="testimonial-position">
+                {{testimonial.position}} at {{testimonial.company}}
+              </p>
+              <div class="testimonial-location" *ngIf="testimonial.location">
+                <svg class="location-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                  <circle cx="12" cy="9" r="2.5"/>
+                </svg>
+                <span>{{testimonial.location}}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card Content -->
+          <div class="testimonial-content">
+            <blockquote class="testimonial-text" [attr.aria-label]="'Testimonial by ' + testimonial.name">
+              <span class="quote-start" aria-hidden="true">"</span>
+              <p>{{testimonial.content}}</p>
+              <span class="quote-end" aria-hidden="true">"</span>
+              <div class="underline" role="presentation"></div>
+            </blockquote>
+            <div class="testimonial-rating" 
+                 [attr.aria-label]="(testimonial.rating || 0) + ' out of 5 stars'">
+              <ng-container *ngFor="let star of [].constructor(5); let i = index">
+                <span class="star" 
+                      [class.filled]="i < (testimonial.rating || 0)" 
+                      [style.--star-index]="i"
+                      aria-hidden="true">
+                  {{i < (testimonial.rating || 0) ? '★' : '☆'}}
+                </span>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Dots -->
+    <div class="slider-dots" 
+         role="tablist" 
+         aria-label="Testimonial navigation"
+         [appScrollAnimation]="true"
+         [animationClass]="'slide-up'"
+         [delay]="0.5">
+      <button *ngFor="let _ of testimonials; let i = index" 
+              class="dot" 
+              role="tab"
+              [class.active]="i === currentIndex"
+              [disabled]="isTransitioning"
+              (click)="goToSlide(i)"
+              [attr.aria-selected]="i === currentIndex"
+              [attr.aria-label]="'View testimonial ' + (i + 1) + ' of ' + testimonials.length">
+        <span class="dot-ring"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="!testimonials.length" 
+       class="testimonials-loading" 
+       role="alert" 
+       aria-busy="true">
+    <div class="loading-spinner"></div>
+    <p>Loading testimonials...</p>
+  </div>
+</section>

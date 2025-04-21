@@ -1,0 +1,54 @@
+{
+  "hero": {
+    "path": "/assets/img/process/hero-bg.jpg",
+    "alt": "Premium rice processing facility"
+  },
+  "steps": [
+    {
+      "id": "paddy",
+      "path": "/assets/img/process/paddy-selection.jpg",
+      "alt": "Premium paddy selection",
+      "thumbnail": "/assets/img/process/thumbnails/paddy-selection.jpg"
+    },
+    {
+      "id": "husk",
+      "path": "/assets/img/process/husk-separation.jpg",
+      "alt": "Husk separation process",
+      "thumbnail": "/assets/img/process/thumbnails/husk-separation.jpg"
+    },
+    {
+      "id": "brown",
+      "path": "/assets/img/process/brown-rice.jpg",
+      "alt": "Brown rice stage",
+      "thumbnail": "/assets/img/process/thumbnails/brown-rice.jpg"
+    },
+    {
+      "id": "grading",
+      "path": "/assets/img/process/grading.jpg",
+      "alt": "Precision grading",
+      "thumbnail": "/assets/img/process/thumbnails/grading.jpg"
+    },
+    {
+      "id": "polishing",
+      "path": "/assets/img/process/polishing.jpg",
+      "alt": "Premium polishing",
+      "thumbnail": "/assets/img/process/thumbnails/polishing.jpg"
+    },
+    {
+      "id": "sorting",
+      "path": "/assets/img/process/sorting.jpg",
+      "alt": "Quality sorting",
+      "thumbnail": "/assets/img/process/thumbnails/sorting.jpg"
+    },
+    {
+      "id": "packaging",
+      "path": "/assets/img/process/packaging.jpg",
+      "alt": "Global distribution",
+      "thumbnail": "/assets/img/process/thumbnails/packaging.jpg"
+    }
+  ],
+  "impact": {
+    "path": "/assets/img/process/global-impact.jpg",
+    "alt": "Global impact and sustainability"
+  }
+}

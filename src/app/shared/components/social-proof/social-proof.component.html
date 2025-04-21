@@ -1,0 +1,33 @@
+<div [class]="classes.join(' ')" [style.--platform-color]="platformColor">
+  <!-- Platform Badge -->
+  <div class="social-proof__badge">
+    <a 
+      *ngIf="link; else badgeContent" 
+      [href]="link" 
+      target="_blank" 
+      rel="noopener noreferrer"
+      class="social-proof__link"
+      [attr.aria-label]="'View ' + platformLabel">
+      <ng-container *ngTemplateOutlet="badgeContent"></ng-container>
+    </a>
+
+    <ng-template #badgeContent>
+      <div class="social-proof__icon" [innerHTML]="platformIcon"></div>
+      
+      <!-- Verification Badge -->
+      <div *ngIf="verified" class="social-proof__verified">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+        </svg>
+      </div>
+    </ng-template>
+  </div>
+
+  <!-- Platform Label -->
+  <span *ngIf="showLabel" class="social-proof__label">
+    {{ platformLabel }}
+    <span *ngIf="verified" class="social-proof__verified-text">
+      (Verified)
+    </span>
+  </span>
+</div>

@@ -1,0 +1,52 @@
+<div class="products-section">
+  <app-section-header
+    title="Our Premium Rice Collection"
+    subtitle="Discover Excellence in Every Grain"
+    [animateIn]="true">
+  </app-section-header>
+
+  <div class="products-grid">
+    <ng-container *ngIf="products$ | async as products">
+      <app-premium-card
+        *ngFor="let product of products"
+        variant="product"
+        [imageSrc]="product.imageUrl"
+        [imageAlt]="product.name"
+        [badge]="product.isNewArrival ? 'New Arrival' : product.isBestSeller ? 'Best Seller' : ''"
+        [badgeVariant]="product.isNewArrival ? 'accent' : 'primary'"
+        [animateIn]="true"
+        [borderAccent]="true">
+        
+        <!-- Card Header -->
+        <div cardHeader>
+          <h3 class="product-title">{{product.name}}</h3>
+        </div>
+
+        <!-- Card Body -->
+        <div class="product-content">
+          <p class="product-description">{{product.description}}</p>
+          <ul class="product-features">
+            <li *ngFor="let feature of product.features">{{feature}}</li>
+          </ul>
+        </div>
+
+        <!-- Card Footer -->
+        <div cardFooter>
+          <div class="product-certifications">
+            <span *ngFor="let cert of product.certifications" class="certification">{{cert}}</span>
+          </div>
+        </div>
+
+        <!-- Image Overlay -->
+        <div imageOverlay *ngIf="product.specifications">
+          <div class="product-overlay-content">
+            <p class="product-specs">
+              <span>Grain Length: {{product.specifications.grainLength}}</span>
+              <span>Cooking Time: {{product.specifications.cookingTime}}</span>
+            </p>
+          </div>
+        </div>
+      </app-premium-card>
+    </ng-container>
+  </div>
+</div>

@@ -1,0 +1,214 @@
+.premium-image {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--color-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Base Image Styles */
+.premium-image__img {
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity var(--transition-medium),
+              transform var(--transition-medium);
+}
+
+.premium-image__img--loaded {
+  opacity: 1;
+}
+
+/* Loading Skeleton */
+.premium-image__skeleton {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--color-surface) 0%,
+    var(--color-cream) 50%,
+    var(--color-surface) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.premium-image__skeleton-shine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  animation: shine 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Error State */
+.premium-image__error {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-surface);
+  color: var(--color-text-light);
+  padding: 1rem;
+  text-align: center;
+}
+
+.premium-image__error svg {
+  width: 48px;
+  height: 48px;
+  fill: currentColor;
+  margin-bottom: 0.5rem;
+  opacity: 0.5;
+}
+
+.premium-image__error span {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Overlay */
+.premium-image__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--overlay-color, rgba(0, 0, 0, 0.3));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  transition: opacity var(--transition-medium);
+}
+
+/* Hover Effects */
+.premium-image--hover .premium-image__hover-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--overlay-color, rgba(0, 0, 0, 0.5));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity var(--transition-medium);
+}
+
+.premium-image--hover:hover .premium-image__hover-content {
+  opacity: 1;
+}
+
+/* Zoom Effect */
+.premium-image--zoom .premium-image__img {
+  transform: scale(1);
+}
+
+.premium-image--zoom:hover .premium-image__img {
+  transform: scale(1.1);
+}
+
+/* Rounded Corners */
+.premium-image--rounded {
+  border-radius: 8px;
+}
+
+.premium-image--rounded .premium-image__img,
+.premium-image--rounded .premium-image__skeleton,
+.premium-image--rounded .premium-image__error,
+.premium-image--rounded .premium-image__overlay,
+.premium-image--rounded .premium-image__hover-content {
+  border-radius: inherit;
+}
+
+/* Clickable State */
+.premium-image--clickable {
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+}
+
+.premium-image--clickable:hover {
+  transform: translateY(-2px);
+}
+
+.premium-image--clickable:active {
+  transform: translateY(0);
+}
+
+/* Animation */
+.premium-image.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: imageFadeIn 0.6s ease forwards;
+}
+
+@keyframes imageFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Dark Theme Adjustments */
+:host-context(.dark-theme) {
+  .premium-image__skeleton {
+    background: linear-gradient(
+      90deg,
+      var(--color-surface) 0%,
+      rgba(255, 255, 255, 0.1) 50%,
+      var(--color-surface) 100%
+    );
+  }
+
+  .premium-image__error {
+    background-color: var(--color-surface);
+    color: var(--color-text-light);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .premium-image__error svg {
+    width: 36px;
+    height: 36px;
+  }
+
+  .premium-image__error span {
+    font-size: 0.75rem;
+  }
+}

@@ -1,0 +1,77 @@
+<div class="error-notification-container" [class]="'error-notification-container--' + position">
+  <div 
+    *ngFor="let error of errors; let i = index"
+    [class]="getNotificationClasses(error).join(' ')"
+    [ngStyle]="getNotificationStyles(i)"
+    role="alert"
+    [attr.aria-live]="error.type === 'error' ? 'assertive' : 'polite'">
+    
+    <!-- Icon -->
+    <div 
+      class="error-notification__icon"
+      [class]="'error-notification__icon--' + error.type"
+      [innerHTML]="getIcon(error.type)">
+    </div>
+
+    <!-- Content -->
+    <div class="error-notification__content">
+      <!-- Message -->
+      <div class="error-notification__message">
+        {{ error.message }}
+      </div>
+
+      <!-- Details -->
+      <div *ngIf="error.details" class="error-notification__details">
+        {{ error.details }}
+      </div>
+
+      <!-- Error Code -->
+      <div *ngIf="error.code" class="error-notification__code">
+        Code: {{ error.code }}
+      </div>
+
+      <!-- Timestamp -->
+      <div class="error-notification__timestamp">
+        {{ formatTimestamp(error.timestamp) }}
+      </div>
+
+      <!-- Actions -->
+      <div *ngIf="error.retry || error.dismiss" class="error-notification__actions">
+        <!-- Retry Button -->
+        <app-premium-button
+          *ngIf="error.retry"
+          [variant]="'text'"
+          [size]="'small'"
+          (click)="retry(error)">
+          Retry
+        </app-premium-button>
+
+        <!-- Dismiss Button -->
+        <app-premium-button
+          *ngIf="error.dismiss"
+          [variant]="'text'"
+          [size]="'small'"
+          (click)="dismiss(error)">
+          Dismiss
+        </app-premium-button>
+      </div>
+    </div>
+
+    <!-- Close Button -->
+    <button 
+      class="error-notification__close"
+      (click)="dismiss(error)"
+      aria-label="Close notification">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+      </svg>
+    </button>
+
+    <!-- Progress Bar (for auto-close notifications) -->
+    <div 
+      *ngIf="error.autoClose"
+      class="error-notification__progress"
+      [style.animation-duration.ms]="error.duration">
+    </div>
+  </div>
+</div>

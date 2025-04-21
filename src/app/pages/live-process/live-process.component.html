@@ -1,0 +1,78 @@
+<app-hero
+subtitle="Learn about"
+mainTitle="Our Milling Process"
+highlightText="Finest Quality Rice"
+description=""
+[backgroundImage]="'/assets/img/process-hero.jpeg'"
+></app-hero>
+
+
+<section class="timeline-section" data-aos="fade">
+
+  <app-section-header
+  title="Our Milling Process"
+  subtitle="Excellence at Every Step"
+  [animateIn]="true">
+</app-section-header>
+
+
+  <div class="container" style="padding: 0;">
+    <!-- <div class="section-header">
+      <div class="badge">Our Journey</div>
+      <h2 class="section-title">
+        <span class="title-accent">Milestones of</span>
+        <span class="title-main">Excellence</span>
+        <div class="title-underline"></div>
+      </h2>
+    </div> -->
+
+    <div class="timeline-container">
+      <div class="timeline-progress"></div>
+      
+      <div class="timeline-items">
+        <div class="timeline-item" *ngFor="let process of processSteps; let i = index">
+          <div class="timeline-dot">
+            <div class="dot-pulse"></div>
+            <div class="dot-glow"></div>
+          </div>
+          
+          <div class="timeline-content">
+            <div class="timeline-year">
+              <span class="year-text">{{process.id}}</span>
+              <div class="year-line"></div>
+            </div>
+            
+            <div class="timeline-body">
+              <h3 class="timeline-title">{{process.title}}</h3>
+              <p class="timeline-description">{{process.description}} {{process.byproducts}}</p>
+              
+              <div class="timeline-media" *ngIf="process.imagePath">
+                <div class="media-container">
+                  <img [src]="process.imagePath" [alt]="process.title">
+                  <div class="media-overlay">
+                    <span class="media-caption">{{process.title}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="map-section" data-aos="fade-up">
+  <div class="container">
+    
+    <app-section-header
+  title="Our Global Presence"
+  subtitle="From Pakistan to The World"
+  [animateIn]="true">
+</app-section-header>
+    
+    <div style="border-radius: 10px;" class="map-container">
+<img src="assets/img/map.jpg" style="width: 100%; height: 100%; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); transition: transform 0.3s ease-in-out;" alt="World Map" class="world-map">
+    </div>
+  </div>
+</section>

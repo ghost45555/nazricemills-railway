@@ -1,0 +1,160 @@
+<app-hero
+subtitle="Our Products"
+mainTitle="Our "
+highlightText="Rice Collection"
+description=""
+[backgroundImage]="'/assets/img/products-hero.jpeg'"
+></app-hero>
+
+<div class="products-section">
+  <div class="filter-container">
+    <button class="filter-toggle" (click)="toggleFilter()">
+      <i class="fas fa-sliders-h"></i>
+      <span>Filter Products</span>
+    </button>
+    
+    <div class="filter-panel" [class.open]="isFilterOpen">
+      <div class="filter-header">
+        <h3>Refine Selection</h3>
+        <div class="filter-header-actions">
+          <button class="clear-filters" (click)="clearFilters()">
+            <i class="fas fa-undo"></i>
+            <span>Reset</span>
+          </button>
+          <button class="close-filter" (click)="toggleFilter()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="filter-section">
+        <label class="filter-label">Search</label>
+        <div class="search-input" [class.expanded]="searchExpanded">
+          <i class="fas fa-search" (click)="toggleSearch()"></i>
+          <input 
+            type="text" 
+            [(ngModel)]="searchTerm"
+            (input)="onSearchInput($event)"
+            placeholder="Search products..."
+          >
+          <div class="search-suggestions" *ngIf="showSuggestions && searchSuggestions$">
+            <div 
+              class="suggestion-item" 
+              *ngFor="let suggestion of searchSuggestions$ | async"
+              (click)="selectSuggestion(suggestion)">
+              <i class="fas fa-search"></i>
+              {{ suggestion }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="filter-section">
+        <label class="filter-label">Category</label>
+        <div class="category-buttons">
+          <button 
+            *ngFor="let category of categories"
+            [class.active]="selectedCategory === category"
+            (click)="selectedCategory = category; updateFilters()"
+            class="category-btn">
+            {{ category }}
+          </button>
+        </div>
+      </div>
+
+      <div class="filter-section">
+        <label class="filter-label">Certifications</label>
+        <div class="certification-chips">
+          <button 
+            *ngFor="let cert of certifications"
+            [class.active]="selectedCertifications.includes(cert)"
+            (click)="toggleCertification(cert)"
+            class="cert-chip">
+            <i class="fas fa-check-circle" *ngIf="selectedCertifications.includes(cert)"></i>
+            {{ cert }}
+          </button>
+        </div>
+      </div>
+
+      <div class="filter-section">
+        <label class="filter-label">Special Filters</label>
+        <div class="toggle-filters">
+          <label class="toggle-btn">
+            <input 
+              type="checkbox" 
+              [(ngModel)]="showNewArrivals"
+              (ngModelChange)="updateFilters()">
+            <span class="toggle-slider"></span>
+            <span class="toggle-label">New Arrivals</span>
+          </label>
+          <label class="toggle-btn">
+            <input 
+              type="checkbox" 
+              [(ngModel)]="showBestSellers"
+              (ngModelChange)="updateFilters()">
+            <span class="toggle-slider"></span>
+            <span class="toggle-label">Best Sellers</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="filter-actions">
+        <button class="apply-filters" (click)="applyFilters()">
+          <i class="fas fa-check"></i>
+          Apply Filters
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <app-section-header
+    title="Our Premium Rice Collection"
+    subtitle="Discover Excellence in Every Grain"
+    [animateIn]="true">
+  </app-section-header>
+
+  <div class="products-grid">
+    <ng-container *ngIf="products$ | async as products">
+      <app-premium-card
+        *ngFor="let product of products"
+        variant="product"
+        [imageSrc]="product.imageUrl"
+        [imageAlt]="product.name"
+        [badge]="product.isNewArrival ? 'New Arrival' : product.isBestSeller ? 'Best Seller' : ''"
+        [badgeVariant]="product.isNewArrival ? 'accent' : 'primary'"
+        [animateIn]="true"
+        [borderAccent]="true">
+        
+        <!-- Card Header -->
+        <div cardHeader>
+          <h3 class="product-title">{{product.name}}</h3>
+        </div>
+
+        <!-- Card Body -->
+        <div class="product-content">
+          <p class="product-description">{{product.description}}</p>
+          <ul class="product-features">
+            <li *ngFor="let feature of product.features">{{feature}}</li>
+          </ul>
+        </div>
+
+        <!-- Card Footer -->
+        <div cardFooter>
+          <div class="product-certifications">
+            <span *ngFor="let cert of product.certifications" class="certification">{{cert}}</span>
+          </div>
+        </div>
+
+        <!-- Image Overlay -->
+        <div imageOverlay *ngIf="product.specifications">
+          <div class="product-overlay-content">
+            <p class="product-specs">
+              <span>Grain Length: {{product.specifications.grainLength}}</span>
+              <span>Cooking Time: {{product.specifications.cookingTime}}</span>
+            </p>
+          </div>
+        </div>
+      </app-premium-card>
+    </ng-container>
+  </div>
+</div>

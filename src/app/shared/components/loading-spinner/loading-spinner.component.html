@@ -1,0 +1,69 @@
+<div [class]="classes.join(' ')" [ngStyle]="styles" role="status" aria-busy="true">
+  <!-- Loading Text - Top Position -->
+  <span *ngIf="text && textPosition === 'top'" class="loading-spinner__text">
+    {{ text }}
+  </span>
+
+  <!-- Custom Grain Loader -->
+  <div *ngIf="variant === 'grain'" class="logo-grain-container">
+    <img class="logo-inner" src="/assets/img/loader/inner.png" alt="Naz Rice Mills Logo">
+    
+    <div class="grain-wrapper">
+      <div class="logo-grain">
+        <!-- Ten separate grain segment PNGs -->
+        <img class="grain-segment segment-1" src="/assets/img/loader/p1.png" alt="Grain Segment 1">
+        <img class="grain-segment segment-2" src="/assets/img/loader/p2.png" alt="Grain Segment 2">
+        <img class="grain-segment segment-3" src="/assets/img/loader/p3.png" alt="Grain Segment 3">
+        <img class="grain-segment segment-4" src="/assets/img/loader/p4.png" alt="Grain Segment 4">
+        <img class="grain-segment segment-5" src="/assets/img/loader/p5.png" alt="Grain Segment 5">
+        <img class="grain-segment segment-6" src="/assets/img/loader/p6.png" alt="Grain Segment 6">
+        <img class="grain-segment segment-7" src="/assets/img/loader/p7.png" alt="Grain Segment 7">
+        <img class="grain-segment segment-8" src="/assets/img/loader/p8.png" alt="Grain Segment 8">
+        <img class="grain-segment segment-9" src="/assets/img/loader/p9.png" alt="Grain Segment 9">
+        <img class="grain-segment segment-10" src="/assets/img/loader/p10.png" alt="Grain Segment 10">
+      </div>
+    </div>
+    
+    <!-- Grain-specific loading text -->
+    <div *ngIf="text" class="grain-loader-text">{{ text }}</div>
+  </div>
+
+  <!-- Circle Spinner -->
+  <div *ngIf="variant === 'circle'" class="loading-spinner__circle">
+    <svg viewBox="0 0 50 50">
+      <circle cx="25" cy="25" r="20" fill="none" stroke="currentColor" stroke-width="5"/>
+    </svg>
+  </div>
+
+  <!-- Dots Spinner -->
+  <div *ngIf="variant === 'dots'" class="loading-spinner__dots">
+    <div *ngFor="let dot of dots; let i = index" 
+         class="loading-spinner__dot"
+         [style.animation-delay]="i * 0.15 + 's'">
+    </div>
+  </div>
+
+  <!-- Pulse Spinner -->
+  <div *ngIf="variant === 'pulse'" class="loading-spinner__pulse">
+    <div class="loading-spinner__pulse-ring"></div>
+    <div class="loading-spinner__pulse-core"></div>
+  </div>
+
+  <!-- Wave Spinner -->
+  <div *ngIf="variant === 'wave'" class="loading-spinner__wave">
+    <div *ngFor="let wave of waves; let i = index" 
+         class="loading-spinner__wave-bar"
+         [style.animation-delay]="i * 0.1 + 's'">
+    </div>
+  </div>
+
+  <!-- Loading Text - Bottom Position (only for non-grain variants) -->
+  <span *ngIf="text && textPosition === 'bottom' && variant !== 'grain'" class="loading-spinner__text">
+    {{ text }}
+  </span>
+
+  <!-- Screen Reader Text -->
+  <span class="loading-spinner__sr-only">
+    {{ text || 'Loading...' }}
+  </span>
+</div>

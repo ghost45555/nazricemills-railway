@@ -1,0 +1,52 @@
+<section class="contact-section">
+  <app-section-header title="Connect With Us" subtitle="Experience Excellence" [animateIn]="true">
+  </app-section-header>
+
+  <div class="contact-container">
+    <div class="contact-info" [@fadeInUp]>
+      <div class="info-card">
+        <div class="info-item">
+          <i class="fas fa-map-marker-alt"></i>
+          <div class="info-content">
+            <h3>Visit Our Office</h3>
+            <p class="premium-text">{{ contactInfo.address.street }}</p>
+            <p class="premium-text">{{ contactInfo.address.city }}, {{ contactInfo.address.state }}</p>
+            <p class="premium-text">{{ contactInfo.address.country }} - {{ contactInfo.address.postalCode }}</p>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <i class="fas fa-phone"></i>
+          <div class="info-content">
+            <h3>Direct Line</h3>
+            <p class="premium-text"><a [href]="'tel:' + contactInfo.phone">{{ contactInfo.phone }}</a></p>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <i class="fas fa-envelope"></i>
+          <div class="info-content">
+            <h3>Email Enquiries</h3>
+            <p class="premium-text"><a [href]="'mailto:' + contactInfo.email">{{ contactInfo.email }}</a></p>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <i class="far fa-clock"></i>
+          <div class="info-content">
+            <h3>Business Hours</h3>
+            <p class="premium-text">Monday - Friday: 9:00 AM - 6:00 PM</p>
+            <p class="premium-text">Saturday: By Appointment Only</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="map-container">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3433.374069312117!2d73.09208327604732!3d30.62341367463721!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3922b7388b4e55a1%3A0x441bbf8d19a2c4fe!2sNaz%20Rice%20Mills%20-%20Sahiwal!5e0!3m2!1sen!2s!4v1740469202438!5m2!1sen!2s"
+          width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+  </div>
+</section>

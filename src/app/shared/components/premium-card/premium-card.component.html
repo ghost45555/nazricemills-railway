@@ -1,0 +1,60 @@
+<div 
+  [class]="classes.join(' ')"
+  [ngStyle]="cardStyles"
+  [appScrollAnimation]="animateIn"
+  [animationClass]="'fade-in'"
+  [threshold]="0.3">
+  
+  <!-- Badge -->
+  <div 
+    *ngIf="badge"
+    class="premium-card__badge"
+    [class.premium-card__badge--primary]="badgeVariant === 'primary'"
+    [class.premium-card__badge--secondary]="badgeVariant === 'secondary'"
+    [class.premium-card__badge--accent]="badgeVariant === 'accent'">
+    {{ badge }}
+  </div>
+
+  <!-- Border Accent -->
+  <div *ngIf="borderAccent" class="premium-card__border-accent"></div>
+
+  <!-- Image Container -->
+  <div 
+    *ngIf="imageSrc"
+    class="premium-card__image-container"
+    [ngStyle]="imageStyles">
+    <img 
+      [src]="imageSrc" 
+      [alt]="imageAlt || ''"
+      class="premium-card__image"
+      loading="lazy">
+    
+    <!-- Image Overlay Content -->
+    <div class="premium-card__image-overlay">
+      <ng-content select="[imageOverlay]"></ng-content>
+    </div>
+  </div>
+
+  <!-- Card Content -->
+  <div class="premium-card__content">
+    <!-- Header Content -->
+    <div class="premium-card__header">
+      <ng-content select="[cardHeader]"></ng-content>
+    </div>
+
+    <!-- Body Content -->
+    <div class="premium-card__body">
+      <ng-content></ng-content>
+    </div>
+
+    <!-- Footer Content -->
+    <div class="premium-card__footer">
+      <ng-content select="[cardFooter]"></ng-content>
+    </div>
+  </div>
+
+  <!-- Hover Overlay -->
+  <div class="premium-card__hover-overlay">
+    <ng-content select="[hoverContent]"></ng-content>
+  </div>
+</div>

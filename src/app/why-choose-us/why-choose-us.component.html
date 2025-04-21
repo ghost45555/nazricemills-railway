@@ -1,0 +1,41 @@
+<div class="why-choose-us">
+  <app-section-header
+    title="Why Choose Us"
+    subtitle="Excellence in Every Grain"
+    [animateIn]="true">
+  </app-section-header>
+
+  <div class="features-grid">
+    <app-premium-card
+      *ngFor="let feature of features"
+      variant="feature"
+      [animateIn]="true"
+      [borderAccent]="true">
+      
+      <div cardHeader>
+        <div class="feature-icon">
+          <app-animated-icon [iconName]="feature.icon"></app-animated-icon>
+        </div>
+        <h3 class="feature-title">{{feature.title}}</h3>
+      </div>
+
+      <div class="feature-content">
+        <p class="feature-description">{{feature.description}}</p>
+      </div>
+    </app-premium-card>
+  </div>
+
+  <div class="stats-container">
+    <div class="stats-grid">
+      <div class="stat-item" 
+           *ngFor="let stat of stats" 
+           #statItem>
+        <div class="stat-value">
+          <span class="number">{{stat.value}}</span>
+          <span class="suffix">{{stat.suffix}}</span>
+        </div>
+        <div class="stat-label">{{stat.label}}</div>
+      </div>
+    </div>
+  </div>
+</div>

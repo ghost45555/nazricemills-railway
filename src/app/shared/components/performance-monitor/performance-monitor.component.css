@@ -1,0 +1,217 @@
+.performance-monitor {
+  background: var(--surface-color, #ffffff);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin: 16px;
+  overflow: hidden;
+  width: calc(100% - 32px);
+  max-width: 1200px;
+  transition: all 0.3s ease;
+}
+
+.performance-monitor.fixed {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  width: 360px;
+  z-index: 1000;
+}
+
+.performance-monitor.dark {
+  background: var(--surface-dark, #1a1a1a);
+  color: var(--text-light, #ffffff);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: var(--primary-color, #007bff);
+  color: white;
+  cursor: pointer;
+}
+
+.header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.toggle-button {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 4px;
+}
+
+.metrics-container {
+  padding: 16px;
+}
+
+.section {
+  margin-bottom: 24px;
+}
+
+.section h4 {
+  margin: 0 0 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary, #666666);
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.metric-card {
+  background: var(--surface-variant, #f5f5f5);
+  border-radius: 6px;
+  padding: 16px;
+}
+
+.metric-card.good {
+  border-left: 4px solid #34A853;
+}
+
+.metric-card.needs-improvement {
+  border-left: 4px solid #FBBC05;
+}
+
+.metric-card.poor {
+  border-left: 4px solid #EA4335;
+}
+
+.metric-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.metric-name {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.metric-value {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.metric-progress {
+  height: 4px;
+  background: var(--surface-variant-darker, #e0e0e0);
+  border-radius: 2px;
+  margin: 8px 0;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: currentColor;
+  transition: width 0.3s ease;
+}
+
+.good .progress-bar {
+  background: #34A853;
+}
+
+.needs-improvement .progress-bar {
+  background: #FBBC05;
+}
+
+.poor .progress-bar {
+  background: #EA4335;
+}
+
+.metric-status {
+  font-size: 12px;
+  text-align: right;
+  color: var(--text-secondary, #666666);
+}
+
+.timing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.timing-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  background: var(--surface-variant, #f5f5f5);
+  border-radius: 4px;
+}
+
+.timing-label {
+  font-size: 13px;
+  color: var(--text-secondary, #666666);
+}
+
+.timing-value {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.resource-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+}
+
+.stat-item {
+  background: var(--surface-variant, #f5f5f5);
+  border-radius: 6px;
+  padding: 12px;
+  text-align: center;
+}
+
+.stat-label {
+  display: block;
+  font-size: 12px;
+  color: var(--text-secondary, #666666);
+  margin-bottom: 4px;
+}
+
+.stat-value {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Dark theme overrides */
+.dark .section h4,
+.dark .metric-status,
+.dark .timing-label,
+.dark .stat-label {
+  color: var(--text-secondary-light, #a0a0a0);
+}
+
+.dark .metric-card,
+.dark .timing-item,
+.dark .stat-item {
+  background: var(--surface-variant-dark, #2d2d2d);
+}
+
+.dark .metric-progress {
+  background: var(--surface-variant-darker-dark, #404040);
+}
+
+@media (max-width: 600px) {
+  .performance-monitor.fixed {
+    width: calc(100% - 32px);
+    max-width: none;
+  }
+
+  .metrics-grid,
+  .timing-grid,
+  .resource-stats {
+    grid-template-columns: 1fr;
+  }
+}

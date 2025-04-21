@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+# Disallow admin and private paths
+Disallow: /admin/
+Disallow: /private/
+
+# Sitemap location
+Sitemap: https://nazricemills.com/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 10

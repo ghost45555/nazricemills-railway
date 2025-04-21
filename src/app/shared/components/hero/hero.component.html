@@ -1,0 +1,40 @@
+<section class="hero">
+    <div class="hero-background" [style.background-image]="'url(' + backgroundImage + ')'">
+      <div 
+      [style]="(currentTheme$ | async) === 'light' ? 'background-color: rgb(255 255 255 / 70%); width: 100%; height: 100%;' : 'background-color: rgb(0 0 0 / 54%); width: 100%; height: 100%;'"
+      ></div>
+    </div>
+    <div class="container">
+      <div class="hero-content-placeholder" *ngIf="!isLoaded"></div>
+      
+      <div class="hero-content" *ngIf="isLoaded"> 
+        <h1>
+          <div class="subtitle" *ngIf="subtitle" [@fadeInLeft]>{{subtitle}}</div>
+          <div class="title-main" *ngIf="mainTitle" [@fadeInUp]>{{mainTitle}}</div>
+          <div class="highlight" *ngIf="highlightText" [@fadeInUp]
+               [style]="(currentTheme$ | async) === 'light' ? '' : ''">
+            {{highlightText}}
+          </div>
+        </h1>
+        
+        <p style="color:var(--color-text);" *ngIf="description" [@fadeInUp]>
+          {{description}}
+        </p>
+        
+        <div class="cta-group" *ngIf="ctaText" [@fadeInScale]>
+          <a [routerLink]="ctaLink" class="btn btn-primary">
+            {{ctaText}}
+            <span class="btn-icon">→</span>
+          </a>
+        </div>
+      </div>
+      
+      <div class="hero-features" style="color:var(--color-text);" *ngIf="features.length > 0 && isLoaded" [@staggerFeatures]>
+        <div class="feature" *ngFor="let feature of features">
+          <span class="feature-icon">{{feature.icon}}</span>
+          <span class="feature-text">{{feature.text}}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+  

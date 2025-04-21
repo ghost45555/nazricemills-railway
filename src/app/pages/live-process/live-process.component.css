@@ -1,0 +1,713 @@
+
+/* Timeline Section Styles */
+.timeline-section {
+  position: relative;
+  padding: clamp(8rem, 10vw, 12rem) 0;
+  background: var(--color-background);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.timeline-container {
+  position: relative;
+  max-width: 1400px;
+  margin: 6rem auto 0;
+  padding: 0 2rem;
+}
+
+.timeline-progress {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--color-gold) 10%,
+    var(--color-gold) 90%,
+    transparent
+  );
+  transform: translateX(-50%);
+  opacity: 0.3;
+}
+
+.timeline-items {
+  position: relative;
+}
+
+.timeline-item {
+  display: grid;
+  grid-template-columns: 1fr 80px 1fr;
+  gap: 2rem;
+  margin: 8rem 0;
+  opacity: 0;
+  transform: translateX(-30px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.timeline-item:nth-child(even) {
+  transform: translateX(30px);
+}
+
+.timeline-item.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Timeline elements base state */
+.timeline-dot,
+.timeline-content,
+.timeline-year,
+.timeline-title,
+.timeline-description,
+.timeline-media {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Timeline elements visible state - shorter delays */
+.timeline-item.visible .timeline-dot {
+  transition-delay: 0.02s;
+}
+
+.timeline-item.visible .timeline-content {
+  transition-delay: 0.04s;
+}
+
+.timeline-item.visible .timeline-year {
+  transition-delay: 0.06s;
+}
+
+.timeline-item.visible .timeline-title {
+  transition-delay: 0.08s;
+}
+
+.timeline-item.visible .timeline-description {
+  transition-delay: 0.1s;
+}
+
+.timeline-item.visible .timeline-media {
+  transition-delay: 0.12s;
+}
+
+/* All timeline elements visible state */
+.timeline-item.visible .timeline-dot,
+.timeline-item.visible .timeline-content,
+.timeline-item.visible .timeline-year,
+.timeline-item.visible .timeline-title,
+.timeline-item.visible .timeline-description,
+.timeline-item.visible .timeline-media {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.timeline-dot {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  background: var(--color-gold);
+  border-radius: 50%;
+  margin: 2rem auto;
+  grid-column: 2;
+  z-index: 2;
+  box-shadow: 
+    0 0 0 3px rgba(var(--color-gold-rgb), 0.1),
+    0 0 0 6px rgba(var(--color-gold-rgb), 0.05),
+    0 0 20px rgba(var(--color-gold-rgb), 0.3);
+}
+
+.timeline-dot::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    var(--color-gold),
+    var(--color-gold-light),
+    var(--color-gold)
+  );
+  animation: rotateDot 4s linear infinite;
+  opacity: 0.3;
+}
+
+.timeline-dot::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid var(--color-gold);
+  animation: pulseDot 2s ease-out infinite;
+}
+
+/* Refined keyframe animations */
+@keyframes rotateDot {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes pulseDot {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.35);
+    opacity: 0.2;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+}
+
+/* Performance optimizations */
+.timeline-dot,
+.timeline-dot::before,
+.timeline-dot::after {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Ensure animations continue during timeline transitions */
+.timeline-item.visible .timeline-dot {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Remove any conflicting transitions that might interfere with the continuous animation */
+.timeline-dot {
+  transition: none;
+}
+
+.timeline-content {
+  position: relative;
+  padding: 2rem;
+  background: linear-gradient(
+    135deg,
+    var(--color-surface) 0%,
+    var(--color-surface) 100%
+  );
+  backdrop-filter: blur(10px);
+  border-radius: 2rem;
+  border: 1px solid var(--color-border);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.timeline-item:nth-child(odd) .timeline-content {
+  grid-column: 1;
+  transform-origin: right center;
+}
+
+.timeline-item:nth-child(even) .timeline-content {
+  grid-column: 3;
+  transform-origin: left center;
+}
+
+.timeline-year {
+  margin-bottom: 2rem;
+}
+
+.year-text {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 300;
+  background: linear-gradient(
+    135deg,
+    var(--color-gold) 0%,
+    var(--color-gold-light) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.year-line {
+  width: 60px;
+  height: 2px;
+  background: var(--color-gold);
+  margin-top: 1rem;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
+}
+
+.timeline-item.visible .year-line {
+  transform: scaleX(1);
+}
+
+.timeline-title {
+  font-size: clamp(1.5rem, 2vw, 2rem);
+  color: var(--color-text);
+  margin-bottom: 1rem;
+}
+
+.timeline-description {
+  font-size: clamp(1rem, 1.2vw, 1.1rem);
+  line-height: 1.8;
+  color: var(--color-text);
+  margin-bottom: 2rem;
+}
+
+.timeline-media {
+  position: relative;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.timeline-item.visible .timeline-media {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.media-container {
+  position: relative;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.2),
+    0 0 50px rgba(var(--color-gold-rgb), 0.1);
+}
+
+.media-container img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  transform: scale(1.1);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: grayscale(30%);
+}
+
+.media-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.8) 0%,
+    transparent 50%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  display: flex;
+  align-items: flex-end;
+  padding: 1.5rem;
+}
+
+.media-caption {
+  color: var(--color-white);
+  font-size: 0.9rem;
+  transform: translateY(20px);
+  transition: transform 0.3s ease;
+  position: relative;
+  z-index: 1;
+  padding: 0.75rem 1rem;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: fit-content;
+}
+
+/* Hover Effects */
+.timeline-content:hover {
+  transform: translateZ(30px);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.2),
+    0 0 100px rgba(var(--color-gold-rgb), 0.1);
+  border-color: rgba(var(--color-gold-rgb), 0.3);
+}
+
+.timeline-content:hover .media-container img {
+  transform: scale(1);
+  filter: grayscale(0%);
+}
+
+.timeline-content:hover .media-overlay {
+  opacity: 1;
+}
+
+.timeline-content:hover .media-caption {
+  transform: translateY(0);
+}
+
+/* Visible State */
+.timeline-item.visible .year-text,
+.timeline-item.visible .timeline-title,
+.timeline-item.visible .timeline-description,
+.timeline-item.visible .timeline-media {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.timeline-item.visible .year-line {
+  transform: scaleX(1);
+}
+
+/* Animations */
+@keyframes pulseDot {
+  0% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 0.5; }
+}
+
+@keyframes glowDot {
+  0% { opacity: 0.2; }
+  100% { opacity: 0.4; }
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+  .timeline-item {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin: 3rem 0;
+  }
+  .timeline-container {
+    padding: 0 1rem 0 0;
+  }
+  .timeline-progress {
+    left: 2rem;
+  }
+
+  .timeline-dot {
+    grid-column: 1;
+    margin: 1rem 0 1rem 2rem;
+  }
+
+  .timeline-item:nth-child(odd) .timeline-content,
+  .timeline-item:nth-child(even) .timeline-content {
+    grid-column: 1;
+    margin-left: 4rem;
+  }
+
+  .year-line {
+    width: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .timeline-content {
+    padding: 1.5rem;
+  }
+
+  .media-container img {
+    height: 200px;
+  }
+
+  .media-overlay {
+    padding: 1rem;
+  }
+}
+
+/* Premium Animations */
+@keyframes subtleFloat {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate(2px, 2px) rotate(0.5deg);
+  }
+  50% {
+    transform: translate(-2px, -2px) rotate(-0.5deg);
+  }
+  75% {
+    transform: translate(-2px, 2px) rotate(0.25deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+/* Add smooth transitions for reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .premium-card,
+  .stat-item,
+  .premium-image-container,
+  .parallax-image {
+    transition: none;
+    animation: none;
+    transform: none;
+  }
+}
+
+/* High-end loading state */
+.heritage-section[data-loading="true"] {
+  opacity: 0;
+  transform: translateY(30px);
+
+}
+
+.heritage-section[data-loading="false"] {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Add performance optimizations */
+.hero-banner,
+.timeline-section,
+.team-section,
+.heritage-section {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Optimize animations */
+.timeline-item,
+.value-card,
+.team-member {
+  will-change: transform, opacity;
+}
+
+/* Use hardware acceleration for smooth animations */
+.premium-card,
+.timeline-content,
+.member-image {
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+}
+
+/* Optimize backdrop-filter usage */
+@supports (backdrop-filter: blur(10px)) {
+  .premium-card,
+  .timeline-content {
+    backdrop-filter: blur(10px);
+    background: var(--color-surface);
+  }
+}
+
+@supports not (backdrop-filter: blur(10px)) {
+  .premium-card,
+  .timeline-content {
+    background: rgba(20, 20, 20, 0.8);
+  }
+}
+
+/* Reduce repaints */
+.parallax-image,
+.hero-gradient,
+.timeline-progress {
+  transform: translate3d(0, 0, 0);
+}
+
+/* Add performance class for elements that will animate */
+.will-animate {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Use CSS variables for dynamic properties */
+.premium-card {
+  --card-translate: 0;
+  --card-scale: 1;
+  transform: 
+    translate3d(0, var(--card-translate), 0) 
+    scale(var(--card-scale));
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Optimize backdrop filters */
+@supports (backdrop-filter: blur(10px)) {
+  .glass-effect {
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.02);
+  }
+}
+
+/* Reduce paint operations */
+.parallax-section {
+  transform: translate3d(0, 0, 0);
+  z-index: 1;
+}
+
+/* Use GPU acceleration for animations */
+.animate-transform {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.values-section {
+  position: relative;
+  padding: 10rem 0;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.97) 0%,
+    rgba(var(--color-gold-rgb), 0.05) 100%
+  );
+  overflow: hidden;
+  will-change: transform;
+}
+
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 3rem;
+  margin-top: 4rem;
+  will-change: transform;
+}
+
+.timeline-dot {
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    background: conic-gradient(
+      from 0deg,
+      var(--color-gold),
+      var(--color-gold-light),
+      var(--color-gold)
+    );
+    border-radius: 50%;
+    animation: rotateDot 4s linear infinite;
+  }
+}
+
+@keyframes floatContent {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulseIcon {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+@keyframes rotateDot {
+  to { transform: rotate(360deg); }
+}
+
+/* Replace GSAP animations with CSS transitions */
+
+/* Base transitions */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Optimize title underline */
+.title-underline {
+  position: absolute;
+  bottom: -1rem;
+  left: 50%;
+  width: 80%;
+  transform: translateX(-50%) scaleX(0);
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-gold),
+    transparent
+  );
+  transition: transform 0.8s ease;
+  transform-origin: center;
+}
+
+.title-underline.animate {
+  transform: translateX(-50%) scaleX(1);
+}
+
+/* Optimize value cards */
+.value-card {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.value-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Initial page load animation */
+.about-page {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.about-page.loaded {
+  opacity: 1;
+}
+
+/* Optimize hover effects */
+.value-card:hover {
+  transform: translateY(-5px);
+  transition: transform 0.3s ease;
+}
+
+.team-member {
+  transition: transform 0.3s ease;
+}
+
+.team-member:hover {
+  transform: translateY(-5px);
+}
+
+/* Use CSS custom properties for dynamic values */
+:root {
+  --animation-timing: 0.6s;
+  --animation-easing: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Use will-change only where necessary */
+.timeline-item,
+.value-card,
+.title-underline {
+  will-change: transform, opacity;
+}
+
+/* Add content-visibility for better performance */
+.section-header,
+.timeline-section,
+.values-section,
+.team-section {
+  content-visibility: auto;
+  contain: layout style paint;
+}
+
+/* Use reduced motion if preferred */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Values Section Styles */
+.values-section {
+  position: relative;
+  padding: clamp(8rem, 10vw, 12rem) 0;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.97) 0%,
+    rgba(var(--color-gold-rgb), 0.05) 50%,
+    rgba(0, 0, 0, 0.95) 100%
+  );
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.values-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  /* background: url('/assets/img/patterns/luxury-pattern.png') repeat; */
+  opacity: 0.03;
+  z-index: -1;
+  animation: subtleFloat 20s linear infinite;
+}

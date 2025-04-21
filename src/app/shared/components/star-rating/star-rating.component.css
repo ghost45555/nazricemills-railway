@@ -1,0 +1,151 @@
+.star-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.star-container {
+  display: flex;
+  gap: 4px;
+}
+
+.star-wrapper {
+  position: relative;
+  cursor: pointer;
+  width: var(--star-size, 24px);
+  height: var(--star-size, 24px);
+}
+
+/* Star Sizes */
+.star--small {
+  --star-size: 16px;
+}
+
+.star--medium {
+  --star-size: 24px;
+}
+
+.star--large {
+  --star-size: 32px;
+}
+
+/* Star Base Styles */
+.star {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  fill: var(--star-inactive-color, #E0E0E0);
+  transition: transform var(--transition-fast);
+}
+
+.star--filled {
+  fill: var(--star-active-color, #FFD700);
+  transform-origin: center;
+  transform: scale(0);
+}
+
+/* Star States */
+.star-wrapper {
+  --star-fill: 0%;
+}
+
+.star--filled {
+  transform: scale(calc(var(--star-fill, 0) / 100));
+}
+
+/* Half Star State */
+.star--half .star--filled {
+  clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
+  transform: scale(1);
+}
+
+/* Interactive States */
+.star-rating--interactive .star-wrapper:hover .star {
+  transform: scale(1.1);
+}
+
+.star-rating--interactive .star-wrapper:active .star {
+  transform: scale(0.95);
+}
+
+/* Animation */
+.star--animate {
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.star--animate.star--filled {
+  animation: starFill 0.3s ease forwards;
+}
+
+@keyframes starFill {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Rating Number */
+.rating-number {
+  font-family: var(--font-body);
+  font-weight: 500;
+  color: var(--color-text);
+  min-width: 2ch;
+  text-align: left;
+}
+
+.rating-number--small {
+  font-size: 0.875rem;
+}
+
+.rating-number--large {
+  font-size: 1.25rem;
+}
+
+/* Dark Theme Adjustments */
+:host-context(.dark-theme) {
+  .star {
+    --star-inactive-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .rating-number {
+    color: var(--color-text);
+  }
+}
+
+/* Hover Effects */
+.star-rating--interactive .star-wrapper:hover {
+  transform: translateY(-1px);
+}
+
+.star-rating--interactive .star-wrapper:active {
+  transform: translateY(0);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .star--large {
+    --star-size: 28px;
+  }
+
+  .star-container {
+    gap: 2px;
+  }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) {
+  .star-rating--interactive .star-wrapper:hover {
+    transform: none;
+  }
+
+  .star-rating--interactive .star-wrapper:hover .star {
+    transform: none;
+  }
+}

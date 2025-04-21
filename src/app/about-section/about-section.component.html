@@ -1,0 +1,87 @@
+<section class="section about-section" id="about">
+  <app-section-header
+    title="Our Heritage"
+    subtitle="A Legacy of Excellence"
+    [animateIn]="true">
+  </app-section-header>
+
+  <div class="about-content">
+    <!-- Top Section with Image and Two Key Cards -->
+    <div class="top-section">
+      <div class="about-cards">
+        <!-- Logo Card -->
+        <app-premium-card
+          [animateIn]="true"
+          [hoverEffect]="true"
+          [borderAccent]="true"
+          [variant]="'feature'"
+          [elevation]="'md'">
+          <div class="premium-card__content">
+            <div class="logo-container">
+              <div class="logo-wrapper" [appScrollAnimation]="true" [animationClass]="'fade-in'" [threshold]="0.2">
+                <img 
+                  class="logo" 
+                  [src]="(currentTheme$ | async) === 'light' ? 'assets/img/light-logo.svg' : 'assets/img/dark-logo.png'"
+                  [alt]="(currentTheme$ | async) === 'light' ? 'Naz Rice Mills Logo - Light Theme' : 'Naz Rice Mills Logo - Dark Theme'">
+                <div class="logo-accent"></div>
+              </div>
+            </div>
+            <div class="logo-tagline" [appScrollAnimation]="true" [animationClass]="'fade-in'" [delay]="0.3">
+              <p>Crafting Excellence Since 1985</p>
+            </div>
+          </div>
+        </app-premium-card>
+
+        <!-- Sustainable Future Card -->
+        <app-premium-card
+          [animateIn]="true"
+          [hoverEffect]="true"
+          [borderAccent]="true"
+          [variant]="'feature'"
+          [elevation]="'md'">
+          <div class="premium-card__content">
+            <div class="premium-card__header">
+              <h3>Sustainable Future</h3>
+            </div>
+            <div class="premium-card__body">
+              <p>Pioneering eco-friendly practices in rice processing, we combine traditional expertise with environmental responsibility to create a sustainable future for generations to come.</p>
+            </div>
+          </div>
+        </app-premium-card>
+      </div>
+
+      <!-- Plant Image -->
+      <div class="about-image" [appScrollAnimation]="true" [animationClass]="'fade-in-right'" [threshold]="0.2">
+        <app-premium-image
+          src="/assets/img/rice-milling-plant.jpg"
+          alt="Naz Rice Mills Processing Plant"
+          [aspectRatio]="'4/3'"
+          [animateIn]="true"
+          [hoverEffect]="true"
+          [hoverZoom]="true"
+          [overlay]="true"
+          [overlayColor]="'rgba(0, 0, 0, 0.2)'">
+        </app-premium-image>
+      </div>
+    </div>
+
+    <!-- Bottom Section with Timeline -->
+    <div class="timeline-section">
+      <div class="timeline">
+        <div 
+          *ngFor="let milestone of milestones; let i = index" 
+          class="timeline-item"
+          [appScrollAnimation]="true"
+          [animationClass]="'slide-up'"
+          [delay]="0.2 * i"
+          [threshold]="0.2">
+          <div class="timeline-year">{{milestone.year}}</div>
+          <div class="timeline-content">
+            <h3>{{milestone.title}}</h3>
+            <p>{{milestone.description}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

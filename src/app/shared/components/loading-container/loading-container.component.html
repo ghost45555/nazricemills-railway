@@ -1,0 +1,35 @@
+<div 
+  [class]="containerClasses.join(' ')"
+  [ngStyle]="containerStyles"
+  role="region"
+  [attr.aria-busy]="isLoading">
+  
+  <!-- Content -->
+  <div class="loading-container__content">
+    <ng-content></ng-content>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div 
+    *ngIf="isLoading"
+    class="loading-container__overlay"
+    [class.loading-container__overlay--blur]="blur">
+    
+    <!-- Loading Spinner -->
+    <app-loading-spinner
+      [variant]="spinnerVariant"
+      [size]="spinnerSize"
+      [color]="spinnerColor"
+      [text]="message"
+      [textPosition]="textPosition">
+    </app-loading-spinner>
+  </div>
+
+  <!-- Screen Reader Text -->
+  <div 
+    *ngIf="isLoading" 
+    class="loading-container__sr-only" 
+    role="status">
+    {{ message || 'Loading content...' }}
+  </div>
+</div>

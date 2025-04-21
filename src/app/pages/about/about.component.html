@@ -1,0 +1,304 @@
+<app-hero 
+subtitle="Meet Us"
+mainTitle="Heritage & Team"
+
+[backgroundImage]="'/assets/img/about-hero.jpeg'"
+></app-hero>
+
+<!-- highlightText="Crafted for Excellence"
+description="Crafting premium rice experiences since 1985." -->
+
+
+<section class="about-page" #aboutPage>
+  <!-- Premium Hero Banner with 3D Parallax -->
+  <!-- <section class="hero-banner">
+    <div class="hero-background">
+      <img 
+        src="assets/img/hero-bg.jpg" 
+        alt="Premium rice fields at sunset" 
+        loading="eager"
+        fetchpriority="high"
+      >
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="grain-overlay"></div>
+    
+    <div class="hero-content">
+      <h1 class="hero-title">Excellence in Every Grain</h1>
+      <p class="hero-subtitle">
+        Crafting premium rice experiences since 1985, setting the gold standard 
+        in quality and innovation across global markets.
+      </p>
+    </div>
+    
+    <div class="scroll-indicator">
+      <div class="scroll-line"></div>
+    </div>
+  </section> -->
+
+  
+
+
+
+  <!-- Heritage Section -->
+  <section class="heritage-section" data-aos="fade-up" content-visibility="auto">
+    <div class="container">
+      <app-section-header
+        title="Our Legacy"
+        subtitle="A Heritage of Excellence & Innovation"
+        [animateIn]="true">
+      </app-section-header>
+      
+      <div class="heritage-content">
+        <div class="heritage-message-card">
+          <!-- Left Column: Message -->
+          <div class="message-content">
+            <div class="quote-symbol">"</div>
+            <p class="ceo-message">
+              Since our inception in 1985, we have pursued an unwavering commitment to excellence. 
+              Our journey has been defined by a relentless pursuit of perfection in every grain we process. 
+              Through innovative technology and sustainable practices, we have transformed the art of rice 
+              cultivation into a science of precision and quality. Our legacy is not just in the premium 
+              rice we produce.
+            </p>
+            
+            <!-- Stats Grid -->
+            <div class="heritage-stats">
+              <div class="stat-item" *ngFor="let stat of stats">
+                <div class="stat-value">{{stat.value}}</div>
+                <div class="stat-label">{{stat.label}}</div>
+                <div class="stat-border"></div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Right Column: CEO Image & Signature -->
+          <div class="message-media">
+            <div class="image-container">
+              <img src="assets/img/team/ceo.jpg" alt="CEO Portrait" class="ceo-image">
+              <div class="image-overlay"></div>
+              <div class="image-accent"></div>
+            </div>
+            
+            <div class="ceo-signature-wrapper">
+              <div class="signature-details">
+                <span class="ceo-name">Muhammad Nazir</span>
+                <span class="ceo-title">Founder & Chairman</span>
+                <span class="ceo-quote">Crafting Excellence Since 1985</span>
+              </div>
+              <img src="assets/img/signature.png" alt="CEO Signature" class="signature-image">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Values Section with Premium Cards -->
+  <section class="values-section" data-aos="fade-up">
+
+    <app-section-header
+    title="Our Core Values"
+    subtitle="The Pillars of Our Excellence"
+    [animateIn]="true">
+  </app-section-header>
+
+
+    <div class="container">
+     
+      
+      <div class="values-grid">
+        <div class="value-card" *ngFor="let value of companyValues; let i = index">
+          <div class="value-inner" style="align-items: center; justify-content: center; display: flex; flex-direction: column; position: relative;">
+            <div class="premium-card__border-accent"></div>
+            <div class="value-icon-wrapper">
+              <app-animated-icon style="margin-left: auto; margin-right: auto;" [iconName]="value.icon"></app-animated-icon>
+              <div class="icon-glow"></div>
+            </div>
+            
+            <h3 class="value-title">{{value.title}}</h3>
+            <p class="value-description">{{value.description}}</p>
+            
+            <div class="value-stats">
+              <div class="stat" *ngFor="let stat of value.stats">
+                <span class="stat-number">{{stat.number}}</span>
+                <span class="stat-text">{{stat.text}}</span>
+              </div>
+            </div>
+            
+            <div class="value-quote">
+              <span class="quote-mark">"</span>
+              <p class="quote-text">{{value.quote}}</p>
+              <span class="quote-mark">"</span>
+            </div>
+          </div>
+          <div class="card-backdrop"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Timeline Section -->
+  <section class="timeline-section" data-aos="fade">
+    <div style="padding: 0 0rem;" class="container">
+
+      <app-section-header
+    title="Our Journey"
+    subtitle="Milestones of Excellence"
+    [animateIn]="true">
+  </app-section-header>
+      <!-- <div class="section-header">
+        <div class="badge">Our Journey</div>
+        <h2 class="section-title">
+          <span class="title-accent">Milestones of</span>
+          <span class="title-main">Excellence</span>
+          <div class="title-underline"></div>
+        </h2>
+      </div> -->
+
+      <div class="timeline-container">
+        <div class="timeline-progress"></div>
+        
+        <div class="timeline-items">
+          <div class="timeline-item" *ngFor="let milestone of milestones; let i = index">
+            <div class="timeline-dot">
+              <div class="dot-pulse"></div>
+              <div class="dot-glow"></div>
+            </div>
+            
+            <div class="timeline-content">
+              <div class="timeline-year">
+                <span class="year-text">{{milestone.year}}</span>
+                <div class="year-line"></div>
+              </div>
+              
+              <div class="timeline-body">
+                <h3 class="timeline-title">{{milestone.title}}</h3>
+                <p class="timeline-description">{{milestone.description}}</p>
+                
+                <div class="timeline-media" *ngIf="milestone.media">
+                  <div class="media-container">
+                    <img [src]="milestone.media.image" [alt]="milestone.title">
+                    <div class="media-overlay">
+                      <span class="media-caption">{{milestone.media.caption}}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Leadership Team Section -->
+  <section class="leadership-section" data-aos="fade-up">
+    <div class="container">
+      <app-section-header
+        title="Our Leadership"
+        subtitle="Meet the Visionaries"
+        [animateIn]="true">
+      </app-section-header>
+      
+      <div class="leadership-slider">
+        <div class="swiper" #teamSlider>
+          <div class="swiper-wrapper">
+            <div class="swiper-slide" *ngFor="let member of teamMembers">
+              <div class="leader-card">
+                <div class="leader-image-wrapper">
+                  <div class="image-container">
+                    <img [src]="member.image" [alt]="member.name" loading="lazy">
+                    <div class="image-overlay"></div>
+                  </div>
+                  <div class="social-links">
+                    <a *ngFor="let social of member.social" 
+                       [href]="social.url" 
+                       class="social-link"
+                       target="_blank" 
+                       rel="noopener noreferrer">
+                      <i [class]="social.icon"></i>
+                    </a>
+                  </div>
+                </div>
+                
+                <div class="leader-content">
+                  <div class="leader-info">
+                    <h3 class="leader-name">{{member.name}}</h3>
+                    <span class="leader-position">{{member.position}}</span>
+                  </div>
+                  <p class="leader-bio">{{member.bio}}</p>
+                  <div class="leader-accent"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="slider-pagination"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Global Presence Map -->
+  <section class="map-section" data-aos="fade-up">
+    <div class="container">
+      
+      <app-section-header
+    title="Our Global Presence"
+    subtitle="From Pakistan to The World"
+    [animateIn]="true">
+  </app-section-header>
+      
+      <!-- <div class="section-header">
+        <div class="badge">Global Presence</div>
+        <h2 class="section-title">
+          <span class="title-accent">From Pakistan</span>
+          <span class="title-main">To The World</span>
+          <div class="title-underline"></div>
+        </h2>
+      </div> -->
+      
+      <div style="border-radius: 10px;" class="map-container">
+        <!-- <div #globeContainer class="globe-container"></div> -->
+<!-- <div class="location-info" *ngIf="selectedLocation">
+  <h3 class="location-name">{{selectedLocation?.name || ''}}</h3>
+  <div class="location-stats">
+    <div class="stat">
+      <span class="stat-label">Annual Export</span>
+      <span class="stat-value">{{selectedLocation?.exportVolume || ''}}</span>
+    </div>
+  </div>
+  <p class="location-description">{{selectedLocation?.description || ''}}</p>
+  <button class="close-btn magnetic" (click)="closeLocationInfo()">×</button>
+</div> -->
+<img src="assets/img/map.jpg" style="width: 100%; height: 100%; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); transition: transform 0.3s ease-in-out;" alt="World Map" class="world-map">
+      </div>
+    </div>
+  </section>
+
+  <!-- Premium CTA Section -->
+  <section class="cta-section" data-aos="fade-up">
+    <div class="cta-parallax">
+      <div class="parallax-layer" data-speed="0.1"></div>
+      <div class="overlay-gradient"></div>
+    </div>
+    <div class="container">
+      <div class="cta-content">
+        <h2 class="cta-title">Experience Premium Quality Rice</h2>
+        <p class="cta-text">Join our global family of satisfied customers and discover the unparalleled taste and quality of Naz Rice Mills products.</p>
+        <div class="cta-buttons">
+          <button class="premium-btn primary magnetic" [routerLink]="['/contact']">
+            <span class="btn-text">Contact Us</span>
+            <!-- <span class="btn-icon">→</span> -->
+            <div class="btn-backdrop"></div>
+          </button>
+          <button class="premium-btn secondary magnetic" [routerLink]="['/products']"> 
+            <span class="btn-text">View Products</span>
+            <span class="btn-icon">→</span>
+            <div class="btn-backdrop"></div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+</section>

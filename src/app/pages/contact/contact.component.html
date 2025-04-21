@@ -1,0 +1,124 @@
+<app-hero subtitle="Connect With Us" mainTitle="Let's Create Something" highlightText="Great" [features]="[
+    { icon: '✧', text: '24/7 Support' },
+    { icon: '✧', text: 'Global Excellence' }
+  ]" [backgroundImage]="'/assets/img/contact-hero.jpeg'"></app-hero>
+
+
+<section class="contact-page">
+  <div class="container">
+    <app-section-header title="Get in Touch" subtitle="We're Here for You" [animateIn]="true">
+    </app-section-header>
+
+    <div class="contact-grid">
+      <!-- Left Side - Contact Cards -->
+
+      <div class="contact-container">
+        <div class="contact-info" [@fadeInUp]>
+          <div class="info-card">
+            <div class="info-item">
+              <i class="fas fa-map-marker-alt"></i>
+              <div class="info-content">
+                <h3>Visit Our Office</h3>
+                <p class="premium-text">{{ contactInfo.address.street }}</p>
+                <p class="premium-text">{{ contactInfo.address.city }}, {{ contactInfo.address.state }}</p>
+                <p class="premium-text">{{ contactInfo.address.country }} - {{ contactInfo.address.postalCode }}</p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <i class="fas fa-phone"></i>
+              <div class="info-content">
+                <h3>Direct Line</h3>
+                <p class="premium-text"><a [href]="'tel:' + contactInfo.phone">{{ contactInfo.phone }}</a></p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <i class="fas fa-envelope"></i>
+              <div class="info-content">
+                <h3>Email Enquiries</h3>
+                <p class="premium-text"><a [href]="'mailto:' + contactInfo.email">{{ contactInfo.email }}</a></p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <i class="far fa-clock"></i>
+              <div class="info-content">
+                <h3>Business Hours</h3>
+                <p class="premium-text">Monday - Friday: 9:00 AM - 6:00 PM</p>
+                <p class="premium-text">Saturday: By Appointment Only</p>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+      <!-- Right Side - Contact Form -->
+      <div class="contact-form-wrapper" scrollAnimation="fadeInRight">
+        <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="premium-form">
+          <div class="form-group floating">
+            <input id="name" type="text" formControlName="name" [class.error]="name?.invalid && name?.touched" required>
+            <label for="name">Full Name</label>
+            <div class="line-animation"></div>
+            <div class="error-message" *ngIf="name?.invalid && name?.touched">
+              <span *ngIf="name?.errors?.['required']">Name is required</span>
+              <span *ngIf="name?.errors?.['minlength']">Name must be at least 2 characters</span>
+            </div>
+          </div>
+
+          <div class="form-group floating">
+            <input id="email" type="email" formControlName="email" [class.error]="email?.invalid && email?.touched"
+              required>
+            <label for="email">Email Address</label>
+            <div class="line-animation"></div>
+            <div class="error-message" *ngIf="email?.invalid && email?.touched">
+              <span *ngIf="email?.errors?.['required']">Email is required</span>
+              <span *ngIf="email?.errors?.['email']">Please enter a valid email</span>
+            </div>
+          </div>
+
+          <div class="form-group floating">
+            <input id="phone" type="tel" formControlName="phone" [class.error]="phone?.invalid && phone?.touched">
+            <label for="phone">Phone Number (Optional)</label>
+            <div class="line-animation"></div>
+            <div class="error-message" *ngIf="phone?.invalid && phone?.touched">
+              <span *ngIf="phone?.errors?.['pattern']">Please enter a valid number</span>
+            </div>
+          </div>
+
+          <div class="form-group floating">
+            <textarea id="message" formControlName="message" [class.error]="message?.invalid && message?.touched"
+              rows="5" required></textarea>
+            <label for="message">Your Message</label>
+            <div class="line-animation"></div>
+            <div class="error-message" *ngIf="message?.invalid && message?.touched">
+              <span *ngIf="message?.errors?.['required']">Message is required</span>
+              <span *ngIf="message?.errors?.['minlength']">Message must be at least 10 characters</span>
+            </div>
+          </div>
+
+          <app-premium-button type="submit" [disabled]="contactForm.invalid || isSubmitting" class="submit-button"
+            [loading]="isSubmitting">
+            {{ isSubmitting ? 'Sending...' : 'Send Message' }}
+          </app-premium-button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="map-section" scrollAnimation="fadeIn">
+  <!-- <iframe
+    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3405.6774818892983!2d74.2683264!3d31.4826847!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzHCsDI4JzU3LjciTiA3NMKwMTYnMDYuMCJF!5e0!3m2!1sen!2s!4v1635770000000!5m2!1sen!2s"
+    width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy">
+  </iframe> -->
+
+  <iframe
+    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3433.374069312117!2d73.09208327604732!3d30.62341367463721!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3922b7388b4e55a1%3A0x441bbf8d19a2c4fe!2sNaz%20Rice%20Mills%20-%20Sahiwal!5e0!3m2!1sen!2s!4v1740469202438!5m2!1sen!2s"
+    width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade">
+  </iframe>
+</div>
+
+<app-toast></app-toast>

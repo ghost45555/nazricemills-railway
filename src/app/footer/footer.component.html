@@ -1,0 +1,51 @@
+<footer class="footer">
+  <!-- Premium Background Overlay -->
+  <div class="footer-overlay"></div>
+
+  <div class="footer-content">
+    <!-- Main Footer Content -->
+    <div class="footer-main">
+      <!-- Brand Section -->
+      <div class="brand-section" [@fadeInUp]>
+        <img [src]="(currentTheme$ | async) === 'light' ? 'assets/img/light-logo.svg' : 'assets/img/dark-logo.png'" alt="{{ siteInfo.siteName }} Logo" class="footer-logo" />
+        <h3>{{ siteInfo.siteName }}</h3>
+        <p class="tagline" style="color: var(--color-text);">Crafting Excellence in Every Grain</p>
+        <div class="social-links">
+          <a [href]="'https://linkedin.com/company/' + socialHandles.linkedin" target="_blank" class="social-link" aria-label="LinkedIn">
+            <i class="fab fa-linkedin"></i>
+          </a>
+          <a [href]="'https://instagram.com/' + socialHandles.instagram" target="_blank" class="social-link" aria-label="Instagram">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a [href]="'https://twitter.com/' + socialHandles.twitter" target="_blank" class="social-link" aria-label="Twitter">
+            <i class="fab fa-twitter"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Essential Links -->
+      <div class="essential-links" [@fadeInUp]="{ delay: 200 }">
+        <a routerLink="/about" class="premium-link">About</a>
+        <a routerLink="/products" class="premium-link">Products</a>
+        <a routerLink="/contact" class="premium-link">Contact</a>
+      </div>
+    </div>
+
+    <!-- Footer Bottom -->
+    <div class="footer-bottom"  [@fadeIn]>
+      <div class="legal-section">
+        <p class="copyright" style="color: var(--color-text);">&copy; {{ currentYear }} {{ siteInfo.legal.companyName }}. All rights reserved.</p>
+        <div class="legal-links" >
+          <a  style="color: var(--color-text);" >Privacy</a>
+          <span class="dot-separator"></span>
+          <a  style="color: var(--color-text);" >Terms</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Premium Scroll to Top -->
+  <!-- <button class="scroll-to-top" (click)="scrollToTop()" [@fadeScale] aria-label="Scroll to top">
+    <i class="fas fa-arrow-up"></i>
+  </button> -->
+</footer>

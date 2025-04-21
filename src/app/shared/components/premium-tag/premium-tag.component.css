@@ -1,0 +1,220 @@
+.premium-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  font-family: var(--font-body);
+  font-weight: 500;
+  border-radius: 4px;
+  background-color: var(--tag-background, var(--color-surface));
+  color: var(--tag-color, var(--color-text));
+  border: 1px solid transparent;
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+
+/* Size Variants */
+.premium-tag--small {
+  font-size: 0.75rem;
+  padding: 0.125rem 0.5rem;
+}
+
+.premium-tag--medium {
+  font-size: 0.875rem;
+  padding: 0.25rem 0.75rem;
+}
+
+.premium-tag--large {
+  font-size: 1rem;
+  padding: 0.375rem 1rem;
+}
+
+/* Variant Styles */
+.premium-tag--primary {
+  background-color: var(--color-green);
+  color: var(--color-white);
+}
+
+.premium-tag--secondary {
+  background-color: var(--color-gold);
+  color: var(--color-green);
+}
+
+.premium-tag--accent {
+  background-color: var(--color-cream);
+  color: var(--color-green);
+}
+
+.premium-tag--success {
+  background-color: #34A853;
+  color: var(--color-white);
+}
+
+.premium-tag--warning {
+  background-color: #FBBC05;
+  color: var(--color-black);
+}
+
+.premium-tag--error {
+  background-color: #EA4335;
+  color: var(--color-white);
+}
+
+/* Outline Variants */
+.premium-tag--outline {
+  background-color: transparent;
+  border-color: currentColor;
+}
+
+.premium-tag--outline.premium-tag--primary {
+  color: var(--color-green);
+}
+
+.premium-tag--outline.premium-tag--secondary {
+  color: var(--color-gold);
+}
+
+/* Rounded Style */
+.premium-tag--rounded {
+  border-radius: 999px;
+}
+
+/* Clickable State */
+.premium-tag--clickable {
+  cursor: pointer;
+}
+
+.premium-tag--clickable:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.premium-tag--clickable:active {
+  transform: translateY(0);
+}
+
+/* Selected State */
+.premium-tag--selected {
+  background-color: var(--color-green);
+  color: var(--color-white);
+  border-color: transparent;
+}
+
+.premium-tag--selected .premium-tag__selected-indicator {
+  display: flex;
+  align-items: center;
+  margin-left: 0.25rem;
+}
+
+.premium-tag__selected-indicator svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+}
+
+/* Disabled State */
+.premium-tag--disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Icons */
+.premium-tag__icon {
+  display: flex;
+  align-items: center;
+  font-size: 1.1em;
+}
+
+.premium-tag__icon--left {
+  margin-right: -0.25rem;
+}
+
+.premium-tag__icon--right {
+  margin-left: -0.25rem;
+}
+
+/* Remove Button */
+.premium-tag__remove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  width: 16px;
+  height: 16px;
+  background: none;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  color: currentColor;
+  opacity: 0.7;
+  transition: all var(--transition-fast);
+  margin-left: 0.25rem;
+}
+
+.premium-tag__remove:hover {
+  opacity: 1;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.premium-tag__remove svg {
+  width: 12px;
+  height: 12px;
+  fill: currentColor;
+}
+
+/* Animation */
+.premium-tag--animate {
+  animation: tagAppear 0.3s ease-out;
+}
+
+@keyframes tagAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Focus States */
+.premium-tag--clickable:focus-visible {
+  outline: 2px solid var(--color-green);
+  outline-offset: 2px;
+}
+
+/* Dark Theme Adjustments */
+:host-context(.dark-theme) {
+  .premium-tag {
+    --tag-background: var(--color-surface);
+    --tag-color: var(--color-text);
+  }
+
+  .premium-tag--outline {
+    border-color: currentColor;
+  }
+
+  .premium-tag__remove:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .premium-tag--large {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.75rem;
+  }
+
+  .premium-tag__remove {
+    width: 14px;
+    height: 14px;
+  }
+
+  .premium-tag__remove svg {
+    width: 10px;
+    height: 10px;
+  }
+}
