@@ -34,7 +34,6 @@
             "sourceMap": false,
             "namedChunks": false,
             "extractLicenses": true,
-            "vendorChunk": true,
             "buildOptimizer": true,
             "budgets": [
               {
@@ -56,7 +55,6 @@
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": true,
               "buildOptimizer": true,
               "fileReplacements": [
                 {
