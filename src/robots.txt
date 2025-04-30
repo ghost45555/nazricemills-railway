@@ -6,7 +6,7 @@ Disallow: /admin/
 Disallow: /private/
 
 # Sitemap location
-Sitemap: https://nazricemills.com/sitemap.xml
+Sitemap: https://naz-rice-mills-9bp6.vercel.app/sitemap.xml
 
 # Crawl-delay
 Crawl-delay: 10
