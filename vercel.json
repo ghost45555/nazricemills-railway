@@ -7,6 +7,20 @@
       "config": {
         "distDir": "dist/ricemill/browser"
       }
+    },
+    {
+      "src": "server.ts",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/assets/(.*)",
+      "dest": "/assets/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/server.ts"
     }
   ],
   "rewrites": [
