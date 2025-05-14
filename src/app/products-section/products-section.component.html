@@ -1,4 +1,4 @@
-<div class="products-section">
+<div class="products-section home-products-section">
   <app-section-header
     title="Our Premium Rice Collection"
     subtitle="Discover Excellence in Every Grain"
@@ -15,7 +15,9 @@
         [badge]="product.isNewArrival ? 'New Arrival' : product.isBestSeller ? 'Best Seller' : ''"
         [badgeVariant]="product.isNewArrival ? 'accent' : 'primary'"
         [animateIn]="true"
-        [borderAccent]="true">
+        [borderAccent]="true"
+        [clickable]="true"
+        (click)="onProductClick(product)">
         
         <!-- Card Header -->
         <div cardHeader>
@@ -39,14 +41,23 @@
 
         <!-- Image Overlay -->
         <div imageOverlay *ngIf="product.specifications">
-          <div class="product-overlay-content">
-            <p class="product-specs">
-              <span>Grain Length: {{product.specifications.grainLength}}</span>
-              <span>Cooking Time: {{product.specifications.cookingTime}}</span>
-            </p>
+          <div class="product-specs">
+            <span *ngFor="let spec of product.specifications">
+              {{spec.key | titlecase}}: {{spec.value}}
+            </span>
           </div>
         </div>
       </app-premium-card>
     </ng-container>
   </div>
+
+  <!-- Product Detail Modal -->
+  <app-product-detail-modal
+    *ngIf="selectedProduct"
+    [product]="selectedProduct"
+    [isOpen]="isModalOpen"
+    (close)="onModalClose()"
+    (addToCart)="onAddToCart($event)"
+    (buyNow)="onBuyNow($event)">
+  </app-product-detail-modal>
 </div>

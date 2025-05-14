@@ -1,0 +1,336 @@
+<div class="checkout-container">
+  <div class="checkout-header">
+    <h1>Checkout</h1>
+    <p class="checkout-subtitle">Complete your order with confidence</p>
+  </div>
+
+  <div class="checkout-content">
+    <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()" class="checkout-form">
+      <!-- Contact Information -->
+      <div class="form-section" formGroupName="contact">
+        <h2>Contact Information</h2>
+        <div class="form-group floating">
+          <input 
+            type="email" 
+            id="email" 
+            formControlName="email"
+            [ngClass]="{'error': checkoutForm.get('contact.email')?.invalid && checkoutForm.get('contact.email')?.touched}"
+          >
+          <label for="email">Email</label>
+          <div class="line-animation"></div>
+          <div class="error-message" *ngIf="checkoutForm.get('contact.email')?.invalid && checkoutForm.get('contact.email')?.touched">
+            {{ getErrorMessage(checkoutForm.get('contact.email')) }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Delivery Information -->
+      <div class="form-section" formGroupName="delivery">
+        <h2>Delivery Information</h2>
+        
+        <!-- Saved Addresses Section (for logged-in users) -->
+        <div *ngIf="isLoggedIn && savedAddresses.length > 0" class="saved-addresses-section mb-4">
+          <h3 class="mb-3">Select a Saved Address</h3>
+          <div class="saved-addresses-list">
+            <div *ngFor="let address of savedAddresses" 
+                class="address-card" 
+                [class.selected]="selectedAddressId === address.id"
+                (click)="address.id !== undefined && selectAddress(address.id)">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <strong>{{ address.address }}</strong>
+                  <p class="mb-0">
+                    {{ address.apartment ? address.apartment + ', ' : '' }}
+                    {{ address.city }}, 
+                    {{ address.postalCode }}
+                  </p>
+                  <span *ngIf="address.isDefault" class="badge bg-primary">Default</span>
+                </div>
+                <div class="form-check">
+                  <input 
+                    class="form-check-input" 
+                    type="radio" 
+                    [checked]="selectedAddressId === address.id"
+                    name="addressSelection"
+                    [id]="'address' + address.id">
+                </div>
+              </div>
+            </div>
+          </div>
+          <button type="button" class="btn btn-outline-primary mt-3" (click)="useNewAddressForm()">
+            <i class="bi bi-plus-circle"></i> Use a New Address
+          </button>
+          <hr class="mb-4">
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group floating">
+            <input 
+              type="text" 
+              id="firstName" 
+              formControlName="firstName"
+              [ngClass]="{'error': checkoutForm.get('delivery.firstName')?.invalid && checkoutForm.get('delivery.firstName')?.touched}"
+            >
+            <label for="firstName">First Name</label>
+            <div class="line-animation"></div>
+            <div class="error-message" *ngIf="checkoutForm.get('delivery.firstName')?.invalid && checkoutForm.get('delivery.firstName')?.touched">
+              {{ getErrorMessage(checkoutForm.get('delivery.firstName')) }}
+            </div>
+          </div>
+
+          <div class="form-group floating">
+            <input 
+              type="text" 
+              id="lastName" 
+              formControlName="lastName"
+              [ngClass]="{'error': checkoutForm.get('delivery.lastName')?.invalid && checkoutForm.get('delivery.lastName')?.touched}"
+            >
+            <label for="lastName">Last Name</label>
+            <div class="line-animation"></div>
+            <div class="error-message" *ngIf="checkoutForm.get('delivery.lastName')?.invalid && checkoutForm.get('delivery.lastName')?.touched">
+              {{ getErrorMessage(checkoutForm.get('delivery.lastName')) }}
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group floating">
+          <input 
+            type="text" 
+            id="address" 
+            formControlName="address"
+            [ngClass]="{'error': checkoutForm.get('delivery.address')?.invalid && checkoutForm.get('delivery.address')?.touched}"
+          >
+          <label for="address">Address</label>
+          <div class="line-animation"></div>
+          <div class="error-message" *ngIf="checkoutForm.get('delivery.address')?.invalid && checkoutForm.get('delivery.address')?.touched">
+            {{ getErrorMessage(checkoutForm.get('delivery.address')) }}
+          </div>
+        </div>
+
+        <div class="form-group floating">
+          <input 
+            type="text" 
+            id="apartment" 
+            formControlName="apartment"
+          >
+          <label for="apartment">Apartment, suite, etc. (optional)</label>
+          <div class="line-animation"></div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group floating">
+            <input 
+              type="text" 
+              id="city" 
+              formControlName="city"
+              [ngClass]="{'error': checkoutForm.get('delivery.city')?.invalid && checkoutForm.get('delivery.city')?.touched}"
+            >
+            <label for="city">City</label>
+            <div class="line-animation"></div>
+            <div class="error-message" *ngIf="checkoutForm.get('delivery.city')?.invalid && checkoutForm.get('delivery.city')?.touched">
+              {{ getErrorMessage(checkoutForm.get('delivery.city')) }}
+            </div>
+          </div>
+
+          <div class="form-group floating">
+            <input 
+              type="text" 
+              id="postalCode" 
+              formControlName="postalCode"
+            >
+            <label for="postalCode">Postal Code (optional)</label>
+            <div class="line-animation"></div>
+          </div>
+        </div>
+
+        <div class="form-group floating">
+          <input 
+            type="tel" 
+            id="phone" 
+            formControlName="phone"
+            [ngClass]="{'error': checkoutForm.get('delivery.phone')?.invalid && checkoutForm.get('delivery.phone')?.touched}"
+          >
+          <label for="phone">Phone</label>
+          <div class="line-animation"></div>
+          <div class="error-message" *ngIf="checkoutForm.get('delivery.phone')?.invalid && checkoutForm.get('delivery.phone')?.touched">
+            {{ getErrorMessage(checkoutForm.get('delivery.phone')) }}
+          </div>
+        </div>
+        
+        <!-- Save Address Options (for logged in users) -->
+        <div *ngIf="isLoggedIn && useNewAddress" class="address-options mt-3">
+          <div class="form-check mb-2">
+            <input 
+              type="checkbox" 
+              id="saveAddress" 
+              formControlName="saveAddress"
+              class="form-check-input"
+            >
+            <label for="saveAddress" class="form-check-label">Save this address to my account</label>
+          </div>
+          
+          <div class="form-check mb-2" *ngIf="checkoutForm.get('saveAddress')?.value">
+            <input 
+              type="checkbox" 
+              id="setDefaultAddress" 
+              formControlName="setDefaultAddress"
+              class="form-check-input"
+            >
+            <label for="setDefaultAddress" class="form-check-label">Set as default address</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Information -->
+      <div class="form-section" formGroupName="payment">
+        <h2>Payment Method</h2>
+        <div class="payment-method">
+          <div class="payment-option">
+            <input 
+              type="radio" 
+              id="cod" 
+              formControlName="method" 
+              value="cod"
+            >
+            <label for="cod">
+              <i class="fas fa-money-bill-wave"></i>
+              Cash on Delivery (COD)
+            </label>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Order Notes -->
+      <div class="form-section">
+        <h2>Additional Information</h2>
+        <div class="form-group floating">
+          <textarea style="background: var(--color-surface); color: var(--color-text);"
+            id="orderNotes" 
+            class="form-control" 
+            rows="3"
+            [(ngModel)]="orderNotes"
+            [ngModelOptions]="{standalone: true}"
+          ></textarea>
+          <label *ngIf="!savedNotes" for="orderNotes">Order Notes (optional)</label>
+          <div class="line-animation"></div>
+        </div>
+      </div>
+
+      <!-- Save Information -->
+      <div class="form-section">
+        <div class="save-info">
+          <input 
+            type="checkbox" 
+            id="saveInfo" 
+            formControlName="saveInfo"
+          >
+          <label for="saveInfo">Save this information for next time</label>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="form-actions">
+        <button 
+          type="submit" 
+          class="btn btn-primary" 
+          [disabled]="isSubmitting || cartItems.length === 0"
+        >
+          <span *ngIf="!isSubmitting">Place Order</span>
+          <span *ngIf="isSubmitting" class="loading-spinner"></span>
+        </button>
+      </div>
+    </form>
+
+    <!-- Order Summary -->
+    <div class="order-summary">
+      <h2>Order Summary</h2>
+      
+      <div class="cart-items">
+        <div class="cart-item" *ngFor="let item of cartItems">
+          <div class="item-image">
+            <img [src]="item.packagingPhoto" [alt]="item.name">
+          </div>
+          
+          <div class="item-details">
+            <h3>{{ item.name }}</h3>
+            <div class="price-container">
+              <p class="item-price">
+                <span class="current-price">Rs. {{ item.price.toFixed(0) }}</span>
+                <span *ngIf="getOriginalPrice(item)" class="original-price">Rs. {{ getOriginalPrice(item)!.toFixed(0) }}</span>
+                <span *ngIf="getDiscountAmount(item)" class="discount-badge">
+                  -{{ (getDiscountAmount(item)! / getOriginalPrice(item)! * 100).toFixed(0) }}%
+                </span>
+              </p>
+              <p class="quantity">{{ item.quantity }}</p>
+            </div>
+          </div>
+
+          <div class="item-total">
+            <p>
+              <span *ngIf="getOriginalPrice(item)" class="original-total">Rs. {{ (getOriginalPrice(item)! * item.quantity).toFixed(0) }}</span>
+              <span class="current-total">Rs. {{ (item.price * item.quantity).toFixed(0) }}</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="summary-content">
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span>Rs. {{ getSubtotal().toFixed(0) }}</span>
+        </div>
+        <div class="summary-row" *ngIf="getTotalDiscount() > 0">
+          <span>Discount</span>
+          <span class="discount">Rs. {{ getTotalDiscount().toFixed(0) }}</span>
+        </div>
+        <div class="summary-row">
+          <span>Shipping</span>
+          <span>Rs. {{ SHIPPING_COST.toFixed(0) }}</span>
+        </div>
+        <div class="summary-row total">
+          <span>Total</span>
+          <span>Rs. {{ getTotal().toFixed(0) }}</span>
+        </div>
+      </div>
+
+      <div class="order-notes" *ngIf="orderNotes">
+        <h3>Additional Comments</h3>
+        <p>{{ orderNotes }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Order Success Modal -->
+<div class="modal" [class.show]="showOrderSuccess" [style.display]="showOrderSuccess ? 'block' : 'none'" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title">Order Placed Successfully!</h5>
+        <button type="button" class="btn-close btn-close-white" (click)="closeModal()"></button>
+      </div>
+      <div class="modal-body">
+        <div class="text-center mb-4">
+          <i class="bi bi-check-circle text-success" style="font-size: 4rem;"></i>
+        </div>
+        <p>Thank you for your order. Your order has been placed successfully.</p>
+        <p>Order Number: <strong>{{ lastOrderId }}</strong></p>
+        <p>A confirmation email has been sent to <strong>{{ lastOrderEmail }}</strong></p>
+        
+        <!-- Sign Up Card for Guest Users -->
+        <div *ngIf="!isLoggedIn" class="card mt-4 bg-light">
+          <div class="card-body">
+            <h6 class="card-title"><i class="bi bi-person-plus me-2"></i>Create an Account</h6>
+            <p class="card-text small">Create an account to track this order and future purchases.</p>
+            <button (click)="redirectToSignup()" class="btn btn-outline-primary btn-sm">Sign Up</button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a routerLink="/" class="btn btn-secondary">Back to Home</a>
+        <button type="button" class="btn btn-primary" (click)="viewOrderDetails()">View Order Details</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop fade show" *ngIf="showOrderSuccess"></div> 

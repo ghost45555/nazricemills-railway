@@ -3,6 +3,7 @@
 
 :root {
   /* Light Theme Colors */
+  --color-theme:white;
   --color-gold: #957f36;
   --color-gold-light: #bc8e04;
   --color-gold-dark: #B39129;
@@ -22,6 +23,13 @@
   --color-border: rgba(212, 175, 55, 0.15);
   --color-shadow: rgba(0, 0, 0, 0.08);
   --color-shadow-gold: rgba(212, 175, 55, 0.12);
+  
+  /* RGB Values for Color Manipulations */
+  --color-gold-rgb: 149, 127, 54;
+  --color-gold-light-rgb: 188, 142, 4;
+  --color-green-rgb: 27, 77, 62;
+  --color-green-light-rgb: 42, 122, 98;
+  --color-border-rgb: 212, 175, 55;
   
   /* Typography */
   --font-heading: 'Playfair Display', serif;
@@ -67,6 +75,7 @@
 
 /* Dark Theme Colors */
 .dark-theme {
+  --color-theme:var(--color-surface);
   --color-background: #1A1A1A;
   --color-surface: #2C2C2C;
   --color-text: #F5F5F0;
@@ -85,6 +94,13 @@
   --color-cream-dark: #242424;
   --color-brown: #8B7355;
   --color-brown-light: #A68B6C;
+  
+  /* RGB Values for Dark Theme */
+  --color-gold-rgb: 255, 215, 0;
+  --color-gold-light-rgb: 255, 228, 77;
+  --color-green-rgb: 42, 122, 98;
+  --color-green-light-rgb: 59, 158, 128;
+  --color-border-rgb: 255, 255, 255;
 }
 
 /* Reset & Base Styles */

@@ -1,8 +1,11 @@
-import { Component, HostListener, ElementRef, Renderer2, OnInit, ViewChild, AfterViewInit, ContentChild } from '@angular/core';
+import { Component, HostListener, ElementRef, Renderer2, OnInit, ViewChild, AfterViewInit, ContentChild, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { trigger, transition, style, animate, stagger, query, state, group } from '@angular/animations';
 import { AnimationService } from '../services/animation.service';
+import { CartService } from '../shared/services/cart.service';
+import { AuthService } from '../services/auth.service';
+import { Subscription } from 'rxjs';
 
 interface NavItem {
   path: string;
@@ -99,28 +102,30 @@ interface NavItem {
       state('top', style({
         height: 'var(--nav-height-desktop)',
         backdropFilter: 'blur(0px)',
-        backgroundColor: 'rgba(28, 35, 45, 0.92)'
+        backgroundColor: 'transparent',
+        boxShadow: 'none'
       })),
       state('scrolled', style({
         height: 'var(--nav-height-scrolled)',
         backdropFilter: 'blur(20px)',
-        backgroundColor: 'rgba(28, 35, 45, 0.96)'
+        backgroundColor: 'var(--color-surface)',
+        boxShadow: 'var(--shadow-md)'
       })),
       transition('top <=> scrolled', [
-        animate('400ms cubic-bezier(0.4, 0, 0.2, 1)')
+        animate('0.3s ease-in-out')
       ])
     ]),
     trigger('backdropBlur', [
       state('top', style({
-        backdropFilter: 'blur(0px)',
-        backgroundColor: 'rgba(18, 24, 32, 0.92)'
+        backdropFilter: 'none',
+        backgroundColor: 'transparent'
       })),
       state('scrolled', style({
-        backdropFilter: 'blur(20px)',
-        backgroundColor: 'rgba(18, 24, 32, 0.96)'
+        backdropFilter: 'blur(10px)',
+        backgroundColor: 'rgba(255, 255, 255, 0.1)'
       })),
       transition('top <=> scrolled', [
-        animate('600ms cubic-bezier(0.4, 0, 0.2, 1)')
+        animate('0.3s ease-in-out')
       ])
     ]),
     trigger('socialAnimation', [
@@ -138,30 +143,28 @@ interface NavItem {
     ]),
     trigger('menuAnimation', [
       transition(':enter', [
-        style({ opacity: 0, transform: 'translateY(-10px)' }),
-        animate('600ms cubic-bezier(0.4, 0, 0.2, 1)', 
-          style({ opacity: 1, transform: 'translateY(0)' })
-        )
+        style({ opacity: 0 }),
+        animate('0.3s ease-out', style({ opacity: 1 }))
       ]),
       transition(':leave', [
-        animate('400ms cubic-bezier(0.4, 0, 0.2, 1)', 
-          style({ 
-            opacity: 0, 
-            transform: 'translateY(-10px)',
-            filter: 'blur(4px)'
-          })
-        )
+        animate('0.3s ease-in', style({ opacity: 0 }))
       ])
     ])
   ]
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('nav') navElement!: ElementRef;
+  
   isScrolled = false;
   isMobileMenuOpen = false;
   lastScrollTop = 0;
   isScrollingUp = true;
   scrollProgress = 0;
   isMobile = false;
+  cartItemCount = 0;
+  isLoggedIn = false;
+  private cartSubscription: Subscription | null = null;
+  private authSubscription: Subscription | null = null;
 
   navItems: NavItem[] = [
     { path: '/', label: 'Home', exact: true },
@@ -172,15 +175,17 @@ export class NavbarComponent implements OnInit {
   ];
 
   socialLinks = [
-    { icon: 'facebook', url: '#' },
-    { icon: 'instagram', url: '#' },
-    { icon: 'linkedin', url: '#' }
+    { icon: 'facebook', url: 'https://facebook.com' },
+    { icon: 'instagram', url: 'https://instagram.com' },
+    { icon: 'twitter', url: 'https://twitter.com' }
   ];
 
   constructor(
     private renderer: Renderer2, 
     private el: ElementRef,
-    private animationService: AnimationService
+    private animationService: AnimationService,
+    private cartService: CartService,
+    public authService: AuthService
   ) {
     this.isMobile = window.innerWidth <= 900;
   }
@@ -196,6 +201,28 @@ export class NavbarComponent implements OnInit {
         this.resetAllEffects();
       }
     });
+
+    this.cartSubscription = this.cartService.getCartItems().subscribe(items => {
+      this.cartItemCount = items.reduce((total, item) => total + item.quantity, 0);
+    });
+
+    // Subscribe to auth state changes
+    this.authSubscription = this.authService.isLoggedIn$.subscribe(isLoggedIn => {
+      this.isLoggedIn = isLoggedIn;
+    });
+  }
+
+  ngAfterViewInit() {
+    this.checkScroll();
+  }
+
+  ngOnDestroy() {
+    if (this.cartSubscription) {
+      this.cartSubscription.unsubscribe();
+    }
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
+    }
   }
 
   private resetAllEffects() {
@@ -204,7 +231,6 @@ export class NavbarComponent implements OnInit {
     
     // Reset all styles that could cause blinking
     this.renderer.setStyle(nav, 'transform', 'none');
-    this.renderer.setStyle(nav, '--scroll-shadow-intensity', '0');
     this.renderer.setStyle(nav, '--scroll-progress', '0%');
     this.renderer.setStyle(nav, 'animation', 'none');
     this.renderer.setStyle(nav, 'transition', 'none');
@@ -217,37 +243,28 @@ export class NavbarComponent implements OnInit {
   }
 
   private initializeParallaxEffects() {
-    // Only initialize parallax on desktop
-    if (window.innerWidth > 900) {
-      const nav = this.el.nativeElement.querySelector('nav');
-      this.animationService.createParallax(nav, 0.1, true);
-    }
+    // Remove parallax initialization
+    return;
   }
 
-  @HostListener('window:scroll')
-  onWindowScroll() {
-    if (this.isMobile) {
-      return; // Skip all scroll effects on mobile
-    }
+  @HostListener('window:scroll', ['$event'])
+  onScroll() {
+    this.checkScroll();
+  }
 
-    const st = window.scrollY;
-    this.isScrollingUp = st < this.lastScrollTop;
-    this.isScrolled = st > 50;
-    this.lastScrollTop = st;
+  private checkScroll() {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    this.isScrolled = scrollTop > 50;
+    this.isScrollingUp = scrollTop < this.lastScrollTop;
+    this.lastScrollTop = scrollTop;
 
     // Calculate scroll progress
     const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    this.scrollProgress = (st / docHeight) * 100;
+    this.scrollProgress = (scrollTop / docHeight) * 100;
 
-    // Enhanced premium effects based on scroll
+    // Update scroll progress indicator only
     const nav = this.el.nativeElement.querySelector('nav');
-    const intensity = Math.min(st / 500, 0.15);
-    const parallaxOffset = Math.min(st / 10, 20);
-    const blurIntensity = Math.min(st / 100, 20);
-    
-    this.renderer.setStyle(nav, '--scroll-shadow-intensity', intensity.toString());
     this.renderer.setStyle(nav, '--scroll-progress', `${this.scrollProgress}%`);
-    this.renderer.setStyle(nav, 'transform', `translateY(${-parallaxOffset}px)`);
   }
 
   toggleMobileMenu() {

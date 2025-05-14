@@ -3,7 +3,8 @@
   [ngStyle]="cardStyles"
   [appScrollAnimation]="animateIn"
   [animationClass]="'fade-in'"
-  [threshold]="0.3">
+  [threshold]="0.3"
+  (click)="onClick()">
   
   <!-- Badge -->
   <div 
@@ -30,8 +31,10 @@
       loading="lazy">
     
     <!-- Image Overlay Content -->
-    <div class="premium-card__image-overlay">
-      <ng-content select="[imageOverlay]"></ng-content>
+    <div class="premium-card__image-overlay" [class.active]="showSpecs">
+      <div class="product-overlay-content">
+        <ng-content select="[imageOverlay]"></ng-content>
+      </div>
     </div>
   </div>
 
@@ -50,6 +53,16 @@
     <!-- Footer Content -->
     <div class="premium-card__footer">
       <ng-content select="[cardFooter]"></ng-content>
+      <div class="premium-card__actions" *ngIf="variant === 'product'">
+        <button class="premium-card__specs-btn" (click)="onSpecsClick($event)">
+          <span>{{ showSpecs ? 'Hide Specs' : 'More Specs' }}</span>
+          <i class="fas" [class.fa-chevron-down]="!showSpecs" [class.fa-chevron-up]="showSpecs"></i>
+        </button>
+        <div class="premium-card__buy-now-hint">
+          <i class="fas fa-shopping-cart"></i>
+          <span>Click to buy</span>
+        </div>
+      </div>
     </div>
   </div>
 

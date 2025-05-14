@@ -148,3 +148,42 @@ app-premium-card:nth-child(6) { animation-delay: 0.6s; }
     grid-template-columns: 1fr;
   }
 }
+
+/* Home page specific modal adjustments */
+.home-products-section {
+  position: relative;
+}
+
+.home-products-section app-product-detail-modal {
+  position: fixed;
+  top: 120px; /* Increased from 80px to 120px */
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+}
+
+.home-products-section app-product-detail-modal .modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding-top: 20px; /* Added padding to move content down */
+}
+
+.home-products-section app-product-detail-modal .modal-container {
+  margin-top: 40px; /* Increased from 20px to 40px */
+  max-height: calc(100vh - 180px); /* Added max-height to prevent overflow */
+}
+
+@media (max-width: 768px) {
+  .home-products-section app-product-detail-modal {
+    top: 100px; /* Increased from 60px to 100px */
+  }
+  
+  .home-products-section app-product-detail-modal .modal-container {
+    margin-top: 20px;
+    max-height: calc(100vh - 140px);
+  }
+}

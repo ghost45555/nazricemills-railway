@@ -9,35 +9,35 @@
 
   <!-- Home Page -->
   <url>
-    <loc>https://naz-rice-mills-9bp6.vercel.app/about/</loc>
+    <loc>https://nazricemills.com/</loc>
     <lastmod>2024-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>https://naz-rice-mills-9bp6.vercel.app/about/assets/img/farm2-slider-bg.jpg</image:loc>
+      <image:loc>https://nazricemills.com/assets/img/farm2-slider-bg.jpg</image:loc>
       <image:title>Naz Rice Mills - Premium Quality Rice Products</image:title>
     </image:image>
   </url>
 
   <!-- Products Page -->
   <url>
-    <loc>https://naz-rice-mills-9bp6.vercel.app/about/products</loc>
+    <loc>https://nazricemills.com/products</loc>
     <lastmod>2024-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>https://naz-rice-mills-9bp6.vercel.app/about/assets/img/products/basmati-rice.jpg</image:loc>
+      <image:loc>https://nazricemills.com/assets/img/products/basmati-rice.jpg</image:loc>
       <image:title>Premium Basmati Rice</image:title>
     </image:image>
     <image:image>
-      <image:loc>https://naz-rice-mills-9bp6.vercel.app/about/assets/img/products/brown-basmati-rice.jpg</image:loc>
+      <image:loc>https://nazricemills.com/assets/img/products/brown-basmati-rice.jpg</image:loc>
       <image:title>Brown Basmati Rice</image:title>
     </image:image>
   </url>
 
   <!-- About Page -->
   <url>
-    <loc>https://naz-rice-mills-9bp6.vercel.app/about/about</loc>
+    <loc>https://nazricemills.com/about</loc>
     <lastmod>2024-01-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -45,7 +45,7 @@
 
   <!-- Contact Page -->
   <url>
-    <loc>https://naz-rice-mills-9bp6.vercel.app/about/contact</loc>
+    <loc>https://nazricemills.com/contact</loc>
     <lastmod>2024-01-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -53,21 +53,21 @@
 
   <!-- Legal Pages -->
   <url>
-    <loc>https://naz-rice-mills-9bp6.vercel.app/about/privacy-policy</loc>
+    <loc>https://nazricemills.com/privacy-policy</loc>
     <lastmod>2024-01-01</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
 
   <url>
-    <loc>https://naz-rice-mills-9bp6.vercel.app/about/terms-of-service</loc>
+    <loc>https://nazricemills.com/terms-of-service</loc>
     <lastmod>2024-01-01</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
 
   <url>
-    <loc>https://naz-rice-mills-9bp6.vercel.app/about/cookie-policy</loc>
+    <loc>https://nazricemills.com/cookie-policy</loc>
     <lastmod>2024-01-01</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>

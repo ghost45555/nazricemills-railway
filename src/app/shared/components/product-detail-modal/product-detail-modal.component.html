@@ -1,0 +1,273 @@
+<div class="modal-overlay" [class.open]="isOpen" (click)="onClose()">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    <!-- Close Button -->
+    <button class="modal-close" (click)="onClose()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+
+    <!-- Modal Content -->
+    <div class="modal-content">
+      <!-- Scroll Indicator -->
+      <div class="scroll-indicator">
+        <div class="scroll-indicator-text">Scroll for more details</div>
+        <div class="scroll-indicator-arrow">
+          <i class="fas fa-chevron-down"></i>
+        </div>
+      </div>
+
+      <!-- Top Section: Image and Details -->
+      <div class="modal-top-section">
+        <!-- Product Image Section -->
+        <div class="product-image-section">
+          <!-- Product Badges -->
+          <div class="product-badges">
+            <app-premium-tag
+              *ngIf="product.inventory === 0"
+              variant="error"
+              size="small">
+              Out of Stock
+            </app-premium-tag>
+            <app-premium-tag
+              *ngIf="product.isNewArrival"
+              variant="accent"
+              size="small">
+              New Arrival
+            </app-premium-tag>
+            <app-premium-tag
+              *ngIf="product.isBestSeller"
+              variant="primary"
+              size="small">
+              Best Seller
+            </app-premium-tag>
+          </div>
+          <app-premium-image
+            [src]="selectedWeight?.packagingPhoto || product.imageUrl"
+            [alt]="product.name"
+            [aspectRatio]="'4:3'"
+            [loading]="'lazy'"
+            class="product-image">
+          </app-premium-image>
+        </div>
+
+        <!-- Product Details Section -->
+        <div class="product-details">
+          <!-- Product Header -->
+          <div class="product-header">
+            <h2 class="product-title">{{ product.name }}</h2>
+            <div class="product-price">
+              <div class="price-container">
+                <div class="price-values">
+                  <span class="current-price">Rs. {{ totalPrice | number:'1.0-0' }}</span>
+                  <span *ngIf="product.hasDiscount" class="original-price">Rs. {{ originalPrice | number:'1.0-0' }}</span>
+                </div>
+              </div>
+              <div *ngIf="product.hasDiscount" class="discount-badge">
+                {{ product.discountPercentage }}% OFF
+              </div>
+            </div>
+          </div>
+
+          <!-- Selection Groups -->
+          <div class="selection-groups">
+            <!-- Weight Selection -->
+            <div class="selection-group">
+              <div class="weight-options">
+                <button
+                  *ngFor="let option of product.weightOptions"
+                  class="weight-option"
+                  [class.selected]="selectedWeight?.value === option.value"
+                  (click)="selectWeight(option)">
+                  <span class="weight-value">{{ option.value }} kg</span>
+                  <span class="weight-price">Rs. {{ option.price | number:'1.0-0' }}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="action-buttons">
+            <button
+              class="btn btn-secondary"
+              [disabled]="!selectedWeight || product.inventory === 0"
+              (click)="onAddToCart()">
+              <i class="fas fa-shopping-cart"></i>
+              Add to Cart
+            </button>
+            <button
+              class="btn btn-primary"
+              [disabled]="!selectedWeight || product.inventory === 0"
+              (click)="onBuyNow()">
+              Buy Now
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Section: Description and Specifications -->
+      <div class="modal-bottom-section">
+        <!-- Product Description -->
+        <div class="product-description">
+          <h3>About This Product</h3>
+          <p>{{ product.description }}</p>
+        </div>
+
+        <!-- Nutritional Information -->
+        <div class="nutritional-info" *ngIf="product.nutritionalInfo">
+          <h3>Nutritional Information</h3>
+          <div class="nutritional-header">
+            <div class="serving-info">
+              <div class="serving-size">
+                <span class="label">Serving Size</span>
+                <span class="value">{{ product.nutritionalInfo.servingSize }}</span>
+              </div>
+              <div class="servings-per-container">
+                <span class="label">Servings Per Container</span>
+                <span class="value">{{ product.nutritionalInfo.servingsPerContainer }}</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="nutritional-table">
+            <div class="table-header">
+              <span class="nutrient">Amount Per Serving</span>
+              <span class="daily-value">% Daily Value*</span>
+            </div>
+            
+            <div class="table-row">
+              <div class="nutrient">
+                <span class="label">Calories</span>
+                <span class="value">{{ product.nutritionalInfo.calories }}</span>
+              </div>
+            </div>
+
+            <div class="table-row">
+              <div class="nutrient">
+                <span class="label">Total Fat</span>
+                <span class="value">{{ product.nutritionalInfo.totalFat }}</span>
+              </div>
+              <div class="daily-value">
+                <span class="value">{{ product.nutritionalInfo.totalFat }}</span>
+              </div>
+            </div>
+
+            <div class="table-row sub-row">
+              <div class="nutrient">
+                <span class="label">Saturated Fat</span>
+                <span class="value">{{ product.nutritionalInfo.saturatedFat }}</span>
+              </div>
+              <div class="daily-value">
+                <span class="value">{{ product.nutritionalInfo.saturatedFat }}</span>
+              </div>
+            </div>
+
+            <div class="table-row sub-row">
+              <div class="nutrient">
+                <span class="label">Trans Fat</span>
+                <span class="value">{{ product.nutritionalInfo.transFat }}</span>
+              </div>
+            </div>
+
+            <div class="table-row">
+              <div class="nutrient">
+                <span class="label">Cholesterol</span>
+                <span class="value">{{ product.nutritionalInfo.cholesterol }}</span>
+              </div>
+              <div class="daily-value">
+                <span class="value">{{ product.nutritionalInfo.cholesterol }}</span>
+              </div>
+            </div>
+
+            <div class="table-row">
+              <div class="nutrient">
+                <span class="label">Sodium</span>
+                <span class="value">{{ product.nutritionalInfo.sodium }}</span>
+              </div>
+              <div class="daily-value">
+                <span class="value">{{ product.nutritionalInfo.sodium }}</span>
+              </div>
+            </div>
+
+            <div class="table-row">
+              <div class="nutrient">
+                <span class="label">Total Carbohydrates</span>
+                <span class="value">{{ product.nutritionalInfo.totalCarbohydrates }}</span>
+              </div>
+              <div class="daily-value">
+                <span class="value">{{ product.nutritionalInfo.totalCarbohydrates }}</span>
+              </div>
+            </div>
+
+            <div class="table-row sub-row">
+              <div class="nutrient">
+                <span class="label">Dietary Fiber</span>
+                <span class="value">{{ product.nutritionalInfo.dietaryFiber }}</span>
+              </div>
+              <div class="daily-value">
+                <span class="value">{{ product.nutritionalInfo.dietaryFiber }}</span>
+              </div>
+            </div>
+
+            <div class="table-row sub-row">
+              <div class="nutrient">
+                <span class="label">Sugars</span>
+                <span class="value">{{ product.nutritionalInfo.sugars }}</span>
+              </div>
+            </div>
+
+            <div class="table-row">
+              <div class="nutrient">
+                <span class="label">Protein</span>
+                <span class="value">{{ product.nutritionalInfo.protein }}</span>
+              </div>
+            </div>
+
+            <div class="vitamins-section">
+              <div class="table-row">
+                <div class="nutrient">
+                  <span class="label">Vitamin A</span>
+                  <span class="value">{{ product.nutritionalInfo.vitaminA }}</span>
+                </div>
+              </div>
+              <div class="table-row">
+                <div class="nutrient">
+                  <span class="label">Vitamin C</span>
+                  <span class="value">{{ product.nutritionalInfo.vitaminC }}</span>
+                </div>
+              </div>
+              <div class="table-row">
+                <div class="nutrient">
+                  <span class="label">Calcium</span>
+                  <span class="value">{{ product.nutritionalInfo.calcium }}</span>
+                </div>
+              </div>
+              <div class="table-row">
+                <div class="nutrient">
+                  <span class="label">Iron</span>
+                  <span class="value">{{ product.nutritionalInfo.iron }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="nutritional-footer">
+            <p>* Percent Daily Values are based on a 2,000 calorie diet. Your daily values may be higher or lower depending on your calorie needs.</p>
+          </div>
+        </div>
+        
+        <!-- Product Specifications -->
+        <!-- <div class="specifications" *ngIf="product.specifications?.length">
+          <h3>Specifications</h3>
+          <div class="specifications-table">
+            <div class="specification-row" *ngFor="let spec of product.specifications">
+              <div class="specification-key">{{ spec.key }}</div>
+              <div class="specification-value">{{ spec.value }}</div>
+            </div>
+          </div>
+        </div> -->
+      </div>
+    </div>
+  </div>
+</div> 

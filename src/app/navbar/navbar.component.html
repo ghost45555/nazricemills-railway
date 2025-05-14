@@ -6,10 +6,8 @@
   <div class="nav-content">
     <div class="logo">
       <a [routerLink]="['/']" class="logo-text" aria-label="Naz Rice Mills - Home">
-        <img class="logo-img" src="/assets/img/Logo.png" style="width: 50px; height: 50px; "  alt="">
+        <img class="logo-img" src="/assets/img/Logo.png" style="width: 50px; height: 50px; " alt="Naz Rice Mills Logo">
         <span class="logo-main">Naz Rice Mills</span>
-        <span class="logo-accent"></span>
-        <span class="logo-glow"></span>
       </a>
     </div>
     
@@ -38,18 +36,52 @@
             <span class="link-text">{{item.label}}</span>
           </a>
         </li>
+        <!-- Add My Orders link for logged in users -->
+        <li *ngIf="isLoggedIn" class="nav-item">
+          <a [routerLink]="['/my-orders']" 
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{exact: false}">
+            <span class="link-text">My Orders</span>
+          </a>
+        </li>
       </ul>
 
       <div class="nav-actions">
+        <a [routerLink]="['/cart']" 
+           class="cart-icon premium-icon" 
+           aria-label="View Shopping Cart">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-label">Cart</span>
+          <span class="cart-count" *ngIf="cartItemCount > 0">{{cartItemCount}}</span>
+        </a>
+        
+        <!-- Guest user: Login button -->
+        <a *ngIf="!isLoggedIn"
+           [routerLink]="['/login']" 
+           class="login-icon" 
+           aria-label="Login or Signup">
+          <i class="fas fa-user"></i>
+        </a>
+        
+        <!-- Logged in user: Logout button -->
+        <a *ngIf="isLoggedIn"
+           href="javascript:void(0)" 
+           class="btn-premium" 
+           (click)="authService.logout()"
+           aria-label="Logout">
+          <i class="fas fa-sign-out-alt"></i> 
+          <span class="btn-text">Logout</span>
+          <span class="btn-hover-effect"></span>
+        </a>
+        
         <div class="theme-toggle-wrapper" role="presentation">
           <ng-container *ngTemplateOutlet="themeToggleTemplate"></ng-container>
         </div>
+        
         <a [routerLink]="['/contact']" 
            class="btn-premium" 
            aria-label="Contact Us">
           <span class="btn-text">Get in Touch</span>
-          <span class="btn-shine"></span>
-          <span class="btn-glow"></span>
         </a>
       </div>
     </div>
@@ -69,18 +101,58 @@
               <span class="link-text">{{item.label}}</span>
             </a>
           </li>
+          
+          <!-- My Orders link for logged in users -->
+          <li *ngIf="isLoggedIn" class="nav-item">
+            <a [routerLink]="['/my-orders']" 
+               routerLinkActive="active"
+               (click)="closeMobileMenu()">
+              <span class="link-text">My Orders</span>
+            </a>
+          </li>
         </ul>
         
         <div class="nav-actions">
+
           <div class="theme-toggle-wrapper" role="presentation">
             <ng-container *ngTemplateOutlet="themeToggleTemplate"></ng-container>
           </div>
+
+          <!-- Guest user: Login button -->
+          <a *ngIf="!isLoggedIn"
+             [routerLink]="['/login']" 
+             class="login-button" 
+             (click)="closeMobileMenu()"
+             aria-label="Login or Sign Up">
+            <i class="fas fa-user"></i>
+            <span>Login / Sign Up</span>
+          </a>
+          
+          <!-- Logged in user: Logout button -->
+          <a *ngIf="isLoggedIn"
+             href="javascript:void(0)" 
+             class="logout-button" 
+             (click)="authService.logout(); closeMobileMenu()"
+             aria-label="Logout">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+          </a>
+          
+          <a [routerLink]="['/cart']" 
+             class="cart-icon premium-icon" 
+             (click)="closeMobileMenu()"
+             aria-label="View Shopping Cart">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-label">Cart</span>
+            <span class="cart-count" *ngIf="cartItemCount > 0">{{cartItemCount}}</span>
+          </a>
+          
           <a [routerLink]="['/contact']" 
              class="btn-premium" 
              (click)="closeMobileMenu()"
              aria-label="Contact Us">
             <span class="btn-text">Get in Touch</span>
-            <span class="btn-arrow">→</span>
+            <!-- <span class="btn-arrow">→</span> -->
           </a>
         </div>
 
@@ -98,7 +170,6 @@
       </div>
     </div>
 
-    <!-- Add this inside nav element -->
     <div class="nav-scroll-indicator"></div>
   </div>
 </nav>

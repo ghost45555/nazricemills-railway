@@ -120,10 +120,12 @@ description=""
         variant="product"
         [imageSrc]="product.imageUrl"
         [imageAlt]="product.name"
-        [badge]="product.isNewArrival ? 'New Arrival' : product.isBestSeller ? 'Best Seller' : ''"
-        [badgeVariant]="product.isNewArrival ? 'accent' : 'primary'"
+        [badge]="product.inventory === 0 ? 'Out of Stock' : product.isNewArrival ? 'New Arrival' : product.isBestSeller ? 'Best Seller' : ''"
+        [badgeVariant]="product.inventory === 0 ? 'error' : product.isNewArrival ? 'accent' : 'primary'"
         [animateIn]="true"
-        [borderAccent]="true">
+        [borderAccent]="true"
+        [clickable]="product.inventory > 0"
+        (click)="onProductClick(product)">
         
         <!-- Card Header -->
         <div cardHeader>
@@ -147,14 +149,35 @@ description=""
 
         <!-- Image Overlay -->
         <div imageOverlay *ngIf="product.specifications">
-          <div class="product-overlay-content">
-            <p class="product-specs">
-              <span>Grain Length: {{product.specifications.grainLength}}</span>
-              <span>Cooking Time: {{product.specifications.cookingTime}}</span>
-            </p>
+          <div class="product-specs">
+            <span *ngFor="let spec of product.specifications">
+              {{spec.key | titlecase}}: {{spec.value}}
+            </span>
           </div>
         </div>
       </app-premium-card>
     </ng-container>
   </div>
 </div>
+
+<!-- Success Message Toast -->
+<div class="success-toast" *ngIf="showSuccessMessage" [@fadeInOut]>
+  <div class="toast-content">
+    <div class="tick-container" [@tickAnimation]>
+      <svg class="tick-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path class="tick-path" d="M3 12L9 18L21 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <span>{{ successMessage }}</span>
+  </div>
+</div>
+
+<!-- Product Detail Modal -->
+<app-product-detail-modal
+  *ngIf="selectedProduct"
+  [product]="selectedProduct"
+  [isOpen]="isModalOpen"
+  (close)="onModalClose()"
+  (addToCart)="onAddToCart($event)"
+  (buyNow)="onBuyNow($event)">
+</app-product-detail-modal>

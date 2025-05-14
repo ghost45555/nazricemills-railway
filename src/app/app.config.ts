@@ -1,10 +1,11 @@
 import { ApplicationConfig, ErrorHandler, isDevMode } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideHttpClient, withInterceptors, withFetch } from '@angular/common/http';
 import { provideServiceWorker } from '@angular/service-worker';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { routes } from './app.routes';
 import { errorHandlingInterceptor } from './interceptors/error-handling.interceptor';
+import { authInterceptor } from './interceptors/auth.interceptor';
 import { ErrorHandlerService } from './services/error-handler.service';
 import { AnalyticsConfig } from './shared/interfaces/analytics.interface';
 import { LoadingService } from './services/loading.service';
@@ -23,7 +24,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideAnimations(),
-    provideHttpClient(withInterceptors([errorHandlingInterceptor])),
+    provideHttpClient(withInterceptors([errorHandlingInterceptor, authInterceptor])),
     { provide: ErrorHandler, useClass: ErrorHandlerService },
     { provide: 'ANALYTICS_CONFIG', useValue: analyticsConfig },
     { 

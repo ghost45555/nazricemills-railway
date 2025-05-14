@@ -1,0 +1,206 @@
+<div class="auth-container">
+  <div class="auth-card-wrapper">
+    <a routerLink="/" class="brand-link">
+      <span class="brand-text">Rice <span class="text-highlight">Products</span></span>
+    </a>
+    
+    <div class="auth-card">
+      <div class="card-decorations">
+        <div class="decoration-circle"></div>
+        <div class="decoration-line"></div>
+      </div>
+      
+      <div class="card-content">
+        <div class="card-header">
+          <h2 class="auth-title">Create Your Account</h2>
+          <p class="auth-subtitle">Join us for premium rice product experience</p>
+        </div>
+        
+        <!-- Order Info Section -->
+        <div *ngIf="showOrderInfo" class="order-tracking-panel">
+          <div class="order-icon">
+            <i class="bi bi-box-seam"></i>
+          </div>
+          <h5 class="order-title">Linking Your Recent Order</h5>
+          <p class="order-subtitle">We'll connect your recent order to your new account</p>
+          <div *ngIf="orderDetails" class="order-details">
+            <div class="detail-item">
+              <span class="detail-label">Order ID:</span>
+              <span class="detail-value">#{{ orderDetails.id }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Date:</span>
+              <span class="detail-value">{{ formatDate(orderDetails.createdAt) }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Status:</span>
+              <span class="detail-value">{{ orderDetails.status || 'Processing' }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Items:</span>
+              <span class="detail-value">{{ orderDetails.items?.length || 0 }} items</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Total:</span>
+              <span class="detail-value">Rs. {{ orderDetails.total?.toFixed(0) || '0' }}</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card-body">
+          <!-- Signup Form -->
+          <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+            <div class="form-row">
+              <div class="form-group half">
+                <label for="firstName" class="form-label">First Name</label>
+                <div class="input-group">
+                  <div class="input-icon">
+                    <i class="bi bi-person"></i>
+                  </div>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    id="firstName" 
+                    placeholder="Your first name"
+                    formControlName="firstName"
+                    [ngClass]="{'is-invalid': signupForm.get('firstName')?.invalid && signupForm.get('firstName')?.touched}"
+                  >
+                </div>
+                <div *ngIf="signupForm.get('firstName')?.invalid && signupForm.get('firstName')?.touched" class="error-message">
+                  First name is required
+                </div>
+              </div>
+              
+              <div class="form-group half">
+                <label for="lastName" class="form-label">Last Name</label>
+                <div class="input-group">
+                  <div class="input-icon">
+                    <i class="bi bi-person"></i>
+                  </div>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    id="lastName" 
+                    placeholder="Your last name"
+                    formControlName="lastName"
+                    [ngClass]="{'is-invalid': signupForm.get('lastName')?.invalid && signupForm.get('lastName')?.touched}"
+                  >
+                </div>
+                <div *ngIf="signupForm.get('lastName')?.invalid && signupForm.get('lastName')?.touched" class="error-message">
+                  Last name is required
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="email" class="form-label">Email</label>
+              <div class="input-group">
+                <div class="input-icon">
+                  <i class="bi bi-envelope"></i>
+                </div>
+                <input 
+                  type="email" 
+                  class="form-control" 
+                  id="email" 
+                  placeholder="Your email address"
+                  formControlName="email"
+                  [ngClass]="{'is-invalid': signupForm.get('email')?.invalid && signupForm.get('email')?.touched}"
+                >
+              </div>
+              <div *ngIf="signupForm.get('email')?.invalid && signupForm.get('email')?.touched" class="error-message">
+                Please enter a valid email address
+              </div>
+              <div class="form-helper" *ngIf="orderEmail">Use the same email you used for your order</div>
+            </div>
+            
+            <div class="form-group">
+              <label for="phone" class="form-label">Phone</label>
+              <div class="input-group">
+                <div class="input-icon">
+                  <i class="bi bi-telephone"></i>
+                </div>
+                <input 
+                  type="tel" 
+                  class="form-control" 
+                  id="phone" 
+                  placeholder="Your phone number"
+                  formControlName="phone"
+                >
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="password" class="form-label">Password</label>
+              <div class="input-group">
+                <div class="input-icon">
+                  <i class="bi bi-lock"></i>
+                </div>
+                <input 
+                  type="password" 
+                  class="form-control" 
+                  id="password" 
+                  placeholder="Create a password"
+                  formControlName="password"
+                  [ngClass]="{'is-invalid': signupForm.get('password')?.invalid && signupForm.get('password')?.touched}"
+                >
+              </div>
+              <div *ngIf="signupForm.get('password')?.invalid && signupForm.get('password')?.touched" class="error-message">
+                Password must be at least 6 characters
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="confirmPassword" class="form-label">Confirm Password</label>
+              <div class="input-group">
+                <div class="input-icon">
+                  <i class="bi bi-lock-fill"></i>
+                </div>
+                <input 
+                  type="password" 
+                  class="form-control" 
+                  id="confirmPassword" 
+                  placeholder="Confirm your password"
+                  formControlName="confirmPassword"
+                  [ngClass]="{'is-invalid': (signupForm.get('confirmPassword')?.invalid || signupForm.hasError('mismatch')) && signupForm.get('confirmPassword')?.touched}"
+                >
+              </div>
+              <div *ngIf="signupForm.hasError('mismatch') && signupForm.get('confirmPassword')?.touched" class="error-message">
+                Passwords do not match
+              </div>
+            </div>
+            
+            <div class="form-checkbox">
+              <input 
+                type="checkbox" 
+                class="form-check-input" 
+                id="saveAddress" 
+                [(ngModel)]="saveAddress"
+                [ngModelOptions]="{standalone: true}"
+              >
+              <label class="form-check-label" for="saveAddress">Save my shipping address for faster checkout</label>
+            </div>
+            
+            <button type="submit" class="btn-auth-submit" [disabled]="isSubmitting">
+              <span *ngIf="!isSubmitting">Create Account</span>
+              <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            </button>
+          </form>
+          
+          <div class="auth-footer">
+            <div class="divider">
+              <span>OR</span>
+            </div>
+            
+            <p class="login-prompt">Already have an account? <a [routerLink]="['/login']" class="login-link">Login</a></p>
+          </div>
+          
+          <!-- Error Alert -->
+          <div class="auth-error" role="alert" *ngIf="showError">
+            <i class="bi bi-exclamation-circle-fill"></i>
+            {{ errorMessage }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

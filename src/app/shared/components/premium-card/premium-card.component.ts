@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ScrollAnimationDirective } from '../../directives/scroll-animation.directive';
 
@@ -25,7 +25,13 @@ export class PremiumCardComponent {
   @Input() imageAlt?: string;
   @Input() imagePosition: 'top' | 'left' | 'right' | 'bottom' = 'top';
   @Input() badge?: string;
-  @Input() badgeVariant: 'primary' | 'secondary' | 'accent' = 'primary';
+  @Input() badgeVariant: 'primary' | 'secondary' | 'accent' | 'error' = 'primary';
+  @Input() clickable = false;
+
+  showSpecs = false;
+
+  @Output() click = new EventEmitter<void>();
+  @Output() specsClick = new EventEmitter<void>();
 
   get classes(): string[] {
     return [
@@ -36,7 +42,9 @@ export class PremiumCardComponent {
       this.borderAccent ? 'premium-card--border-accent' : '',
       this.fullWidth ? 'premium-card--full-width' : '',
       this.imageSrc ? `premium-card--image-${this.imagePosition}` : '',
-      this.badge ? 'premium-card--has-badge' : ''
+      this.badge ? 'premium-card--has-badge' : '',
+      this.clickable ? 'premium-card--clickable' : '',
+      this.showSpecs ? 'premium-card--showing-specs' : ''
     ].filter(Boolean);
   }
 
@@ -50,5 +58,27 @@ export class PremiumCardComponent {
     return {
       'background-color': this.backgroundColor || ''
     };
+  }
+
+  onClick(): void {
+    if (this.clickable) {
+      this.click.emit();
+    }
+  }
+
+  onSpecsClick(event: Event): void {
+    event.stopPropagation();
+    this.showSpecs = !this.showSpecs;
+    
+    if (this.showSpecs) {
+      // Get the card element and scroll it into view
+      const cardElement = (event.target as HTMLElement).closest('.premium-card');
+      if (cardElement) {
+        cardElement.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'center'
+        });
+      }
+    }
   }
 }

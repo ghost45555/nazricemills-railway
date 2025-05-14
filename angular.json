@@ -118,6 +118,24 @@
             }
           },
           "defaultConfiguration": "production"
+        },
+        "serve-ssr": {
+          "builder": "@angular-devkit/build-angular:ssr-dev-server",
+          "options": {
+            "browserTarget": "ricemill:build",
+            "serverTarget": "ricemill:server"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "ricemill:build:production",
+              "serverTarget": "ricemill:server:production"
+            },
+            "development": {
+              "browserTarget": "ricemill:build:development",
+              "serverTarget": "ricemill:server:development"
+            }
+          },
+          "defaultConfiguration": "development"
         }
       }
     }

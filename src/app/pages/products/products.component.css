@@ -89,22 +89,30 @@
 }
 
 .product-overlay-content {
+  min-height: 100%;
+  overflow-y: auto;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   opacity: 0;
-  transform: translateY(10px);
+  transform: translateY(20px);
   transition: all var(--transition-medium);
 }
 
-app-premium-card:hover .product-overlay-content {
+.premium-card__image-overlay.active .product-overlay-content {
   opacity: 1;
   transform: translateY(0);
 }
 
 .product-specs {
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   font-size: 0.9rem;
   color: var(--color-white);
+  text-align: center;
 }
 
 .product-specs span {
@@ -526,4 +534,116 @@ app-premium-card:nth-child(6) { animation-delay: 0.6s; }
 
 .close-filter i {
   font-size: 1.2rem;
+}
+
+.premium-card__image-overlay {
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Success Toast */
+.success-toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #4CAF50;
+  color: white;
+  padding: 16px 24px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  animation: slideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: top right;
+}
+
+.toast-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.tick-container {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: center;
+  animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+}
+
+.tick-icon {
+  width: 24px;
+  height: 24px;
+  color: white;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.tick-path {
+  stroke-dasharray: 50;
+  stroke-dashoffset: 50;
+  animation: drawTick 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+}
+
+@keyframes drawTick {
+  0% {
+    stroke-dashoffset: 50;
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  0% {
+    transform: translateX(100%) scale(0.95);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .success-toast {
+    top: auto;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    text-align: center;
+    justify-content: center;
+    transform-origin: bottom center;
+  }
 }
