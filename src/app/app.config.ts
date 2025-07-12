@@ -3,6 +3,7 @@ import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors, withFetch } from '@angular/common/http';
 import { provideServiceWorker } from '@angular/service-worker';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideClientHydration, withEventReplay, withIncrementalHydration } from '@angular/platform-browser';
 import { routes } from './app.routes';
 import { errorHandlingInterceptor } from './interceptors/error-handling.interceptor';
 import { authInterceptor } from './interceptors/auth.interceptor';
@@ -25,6 +26,10 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideAnimations(),
     provideHttpClient(withInterceptors([errorHandlingInterceptor, authInterceptor])),
+    provideClientHydration(
+      withEventReplay(),
+      withIncrementalHydration()
+    ),
     { provide: ErrorHandler, useClass: ErrorHandlerService },
     { provide: 'ANALYTICS_CONFIG', useValue: analyticsConfig },
     { 
