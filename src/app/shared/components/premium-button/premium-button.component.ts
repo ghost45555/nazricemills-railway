@@ -5,11 +5,10 @@ type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'text';
 type ButtonSize = 'small' | 'medium' | 'large';
 
 @Component({
-  selector: 'app-premium-button',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './premium-button.component.html',
-  styleUrls: ['./premium-button.component.css']
+    selector: 'app-premium-button',
+    imports: [CommonModule],
+    templateUrl: './premium-button.component.html',
+    styleUrls: ['./premium-button.component.css']
 })
 export class PremiumButtonComponent {
   @Input() variant: ButtonVariant = 'primary';

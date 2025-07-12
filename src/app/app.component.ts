@@ -12,18 +12,17 @@ import { getAnalytics } from "firebase/analytics";
 import { firebaseConfig } from '../../firebaseConfig';
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    NavbarComponent,
-    FooterComponent,
-    ThemeToggleComponent,
-    LoadingContainerComponent
-  ],
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+    selector: 'app-root',
+    imports: [
+        CommonModule,
+        RouterModule,
+        NavbarComponent,
+        FooterComponent,
+        ThemeToggleComponent,
+        LoadingContainerComponent
+    ],
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
   title = 'Naz Rice Mills';

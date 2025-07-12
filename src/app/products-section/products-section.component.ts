@@ -10,16 +10,15 @@ import { ProductDetailModalComponent } from '../shared/components/product-detail
 import { CartService } from '../shared/services/cart.service';
 
 @Component({
-  selector: 'app-products-section',
-  standalone: true,
-  imports: [
-    CommonModule,
-    SectionHeaderComponent,
-    PremiumCardComponent,
-    ProductDetailModalComponent
-  ],
-  templateUrl: './products-section.component.html',
-  styleUrl: './products-section.component.css'
+    selector: 'app-products-section',
+    imports: [
+        CommonModule,
+        SectionHeaderComponent,
+        PremiumCardComponent,
+        ProductDetailModalComponent
+    ],
+    templateUrl: './products-section.component.html',
+    styleUrl: './products-section.component.css'
 })
 export class ProductsSectionComponent implements OnInit {
   products$: Observable<Product[]>;

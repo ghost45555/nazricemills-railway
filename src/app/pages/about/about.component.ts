@@ -74,12 +74,11 @@ interface HeritageHighlight {
 }
 
 @Component({
-  selector: 'app-about',
-  templateUrl: './about.component.html',
-  styleUrls: ['./about.component.css'],
-  standalone: true,
-  imports: [CommonModule, HeroComponent, SectionHeaderComponent, AnimatedIconComponent,RouterLink],
-  providers: [AnimationService]
+    selector: 'app-about',
+    templateUrl: './about.component.html',
+    styleUrls: ['./about.component.css'],
+    imports: [CommonModule, HeroComponent, SectionHeaderComponent, AnimatedIconComponent, RouterLink],
+    providers: [AnimationService]
 })
 export class AboutComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('teamSlider') teamSlider!: ElementRef;

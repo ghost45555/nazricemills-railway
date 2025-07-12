@@ -5,11 +5,10 @@ import { LoadingService } from '../../../services/loading.service';
 import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
 
 @Component({
-  selector: 'app-loading-container',
-  standalone: true,
-  imports: [CommonModule, LoadingSpinnerComponent],
-  templateUrl: './loading-container.component.html',
-  styleUrls: ['./loading-container.component.css']
+    selector: 'app-loading-container',
+    imports: [CommonModule, LoadingSpinnerComponent],
+    templateUrl: './loading-container.component.html',
+    styleUrls: ['./loading-container.component.css']
 })
 export class LoadingContainerComponent implements OnInit, OnDestroy {
   @Input() loadingId!: string;

@@ -3,11 +3,10 @@ import { CommonModule } from '@angular/common';
 import { ScrollAnimationDirective } from '../../directives/scroll-animation.directive';
 
 @Component({
-  selector: 'app-premium-image',
-  standalone: true,
-  imports: [CommonModule, ScrollAnimationDirective],
-  templateUrl: './premium-image.component.html',
-  styleUrls: ['./premium-image.component.css']
+    selector: 'app-premium-image',
+    imports: [CommonModule, ScrollAnimationDirective],
+    templateUrl: './premium-image.component.html',
+    styleUrls: ['./premium-image.component.css']
 })
 export class PremiumImageComponent implements OnInit, OnChanges {
   @Input() src!: string;

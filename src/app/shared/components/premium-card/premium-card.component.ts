@@ -6,11 +6,10 @@ type CardVariant = 'default' | 'product' | 'testimonial' | 'feature';
 type CardElevation = 'none' | 'sm' | 'md' | 'lg';
 
 @Component({
-  selector: 'app-premium-card',
-  standalone: true,
-  imports: [CommonModule, ScrollAnimationDirective],
-  templateUrl: './premium-card.component.html',
-  styleUrls: ['./premium-card.component.css']
+    selector: 'app-premium-card',
+    imports: [CommonModule, ScrollAnimationDirective],
+    templateUrl: './premium-card.component.html',
+    styleUrls: ['./premium-card.component.css']
 })
 export class PremiumCardComponent {
   @Input() variant: CardVariant = 'default';

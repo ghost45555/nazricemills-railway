@@ -6,11 +6,10 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService, LoginPayload } from '../../../services/auth.service';
 
 @Component({
-  selector: 'app-login',
-  standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterLink],
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+    selector: 'app-login',
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterLink],
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;

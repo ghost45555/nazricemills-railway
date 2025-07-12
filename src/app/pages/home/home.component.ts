@@ -8,18 +8,17 @@ import { TestimonialsComponent } from '../../testimonials/testimonials.component
 import { ContactComponent } from '../../contact/contact.component';
 
 @Component({
-  selector: 'app-home',
-  standalone: true,
-  imports: [
-    CommonModule,
-    HeroSectionComponent,
-    AboutSectionComponent,
-    ProductsSectionComponent,
-    WhyChooseUsComponent,
-    TestimonialsComponent,
-    ContactComponent
-  ],
-  template: `
+    selector: 'app-home',
+    imports: [
+        CommonModule,
+        HeroSectionComponent,
+        AboutSectionComponent,
+        ProductsSectionComponent,
+        WhyChooseUsComponent,
+        TestimonialsComponent,
+        ContactComponent
+    ],
+    template: `
     <main class="home-container">
       <section class="section hero-section">
         <app-hero-section></app-hero-section>
@@ -46,7 +45,7 @@ import { ContactComponent } from '../../contact/contact.component';
       </section>
     </main>
   `,
-  styles: [`
+    styles: [`
     .home-container {
       display: flex;
       flex-direction: column;

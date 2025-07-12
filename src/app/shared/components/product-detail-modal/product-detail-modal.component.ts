@@ -13,16 +13,15 @@ interface WeightOption {
 }
 
 @Component({
-  selector: 'app-product-detail-modal',
-  standalone: true,
-  imports: [
-    CommonModule,
-    PremiumButtonComponent,
-    PremiumImageComponent,
-    PremiumTagComponent
-  ],
-  templateUrl: './product-detail-modal.component.html',
-  styleUrls: ['./product-detail-modal.component.css']
+    selector: 'app-product-detail-modal',
+    imports: [
+        CommonModule,
+        PremiumButtonComponent,
+        PremiumImageComponent,
+        PremiumTagComponent
+    ],
+    templateUrl: './product-detail-modal.component.html',
+    styleUrls: ['./product-detail-modal.component.css']
 })
 export class ProductDetailModalComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() product!: Product;

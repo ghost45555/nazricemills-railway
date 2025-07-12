@@ -16,37 +16,36 @@ import { map } from 'rxjs/operators';
 import { ProductDetailModalComponent } from '../../shared/components/product-detail-modal/product-detail-modal.component';
 
 @Component({
-  selector: 'app-products',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    SectionHeaderComponent,
-    PremiumCardComponent,
-    PremiumImageComponent,
-    ScrollAnimationDirective,
-    HeroComponent,
-    ProductDetailModalComponent
-  ],
-  templateUrl: './products.component.html',
-  styleUrls: ['./products.component.css'],
-  animations: [
-    trigger('fadeInOut', [
-      transition(':enter', [
-        style({ opacity: 0, transform: 'scale(0.8)' }),
-        animate('300ms cubic-bezier(0.4, 0, 0.2, 1)', style({ opacity: 1, transform: 'scale(1)' }))
-      ]),
-      transition(':leave', [
-        animate('200ms cubic-bezier(0.4, 0, 0.2, 1)', style({ opacity: 0, transform: 'scale(0.8)' }))
-      ])
-    ]),
-    trigger('tickAnimation', [
-      transition(':enter', [
-        style({ transform: 'scale(0)', opacity: 0 }),
-        animate('300ms cubic-bezier(0.4, 0, 0.2, 1)', style({ transform: 'scale(1)', opacity: 1 }))
-      ])
-    ])
-  ]
+    selector: 'app-products',
+    imports: [
+        CommonModule,
+        FormsModule,
+        SectionHeaderComponent,
+        PremiumCardComponent,
+        PremiumImageComponent,
+        ScrollAnimationDirective,
+        HeroComponent,
+        ProductDetailModalComponent
+    ],
+    templateUrl: './products.component.html',
+    styleUrls: ['./products.component.css'],
+    animations: [
+        trigger('fadeInOut', [
+            transition(':enter', [
+                style({ opacity: 0, transform: 'scale(0.8)' }),
+                animate('300ms cubic-bezier(0.4, 0, 0.2, 1)', style({ opacity: 1, transform: 'scale(1)' }))
+            ]),
+            transition(':leave', [
+                animate('200ms cubic-bezier(0.4, 0, 0.2, 1)', style({ opacity: 0, transform: 'scale(0.8)' }))
+            ])
+        ]),
+        trigger('tickAnimation', [
+            transition(':enter', [
+                style({ transform: 'scale(0)', opacity: 0 }),
+                animate('300ms cubic-bezier(0.4, 0, 0.2, 1)', style({ transform: 'scale(1)', opacity: 1 }))
+            ])
+        ])
+    ]
 })
 export class ProductsComponent implements OnInit {
   private productService = inject(ProductService);

@@ -9,18 +9,17 @@ import { ThemeService } from '../services/theme.service';
 import { map } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-about-section',
-  standalone: true,
-  imports: [
-    CommonModule,
-    SectionHeaderComponent,
-    PremiumImageComponent,
-    PremiumCardComponent,
-    ScrollAnimationDirective
-  ],
-  templateUrl: './about-section.component.html',
-  styleUrls: ['./about-section.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-about-section',
+    imports: [
+        CommonModule,
+        SectionHeaderComponent,
+        PremiumImageComponent,
+        PremiumCardComponent,
+        ScrollAnimationDirective
+    ],
+    templateUrl: './about-section.component.html',
+    styleUrls: ['./about-section.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AboutSectionComponent implements OnInit {
   private themeService = inject(ThemeService);

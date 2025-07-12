@@ -21,16 +21,15 @@ interface Stat {
 }
 
 @Component({
-  selector: 'app-why-choose-us',
-  standalone: true,
-  imports: [
-    CommonModule, 
-    SectionHeaderComponent, 
-    PremiumCardComponent,
-    ScrollAnimationDirective,
-    AnimatedIconComponent
-  ],
-  template: `
+    selector: 'app-why-choose-us',
+    imports: [
+        CommonModule,
+        SectionHeaderComponent,
+        PremiumCardComponent,
+        ScrollAnimationDirective,
+        AnimatedIconComponent
+    ],
+    template: `
     <div class="why-choose-us">
       <app-section-header
         title="Why Choose Us"
@@ -68,7 +67,7 @@ interface Stat {
       </div>
     </div>
   `,
-  styleUrls: ['./why-choose-us.component.css']
+    styleUrls: ['./why-choose-us.component.css']
 })
 export class WhyChooseUsComponent implements AfterViewInit {
   @ViewChildren('statItem') statItems!: QueryList<ElementRef>;

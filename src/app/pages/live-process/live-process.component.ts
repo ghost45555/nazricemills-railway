@@ -15,17 +15,16 @@ interface ProcessStep {
 }
 
 @Component({
-  selector: 'app-live-process',
-  standalone: true,
-  imports: [
-    CommonModule,
-    SectionHeaderComponent,
-    PremiumCardComponent,
-    ScrollAnimationDirective,
-    HeroComponent
-],
-  templateUrl: './live-process.component.html',
-  styleUrls: ['./live-process.component.css']
+    selector: 'app-live-process',
+    imports: [
+        CommonModule,
+        SectionHeaderComponent,
+        PremiumCardComponent,
+        ScrollAnimationDirective,
+        HeroComponent
+    ],
+    templateUrl: './live-process.component.html',
+    styleUrls: ['./live-process.component.css']
 })
 export class LiveProcessComponent {
 

@@ -5,11 +5,10 @@ import { PremiumButtonComponent } from '../premium-button/premium-button.compone
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-error-notification',
-  standalone: true,
-  imports: [CommonModule, PremiumButtonComponent],
-  templateUrl: './error-notification.component.html',
-  styleUrls: ['./error-notification.component.css']
+    selector: 'app-error-notification',
+    imports: [CommonModule, PremiumButtonComponent],
+    templateUrl: './error-notification.component.html',
+    styleUrls: ['./error-notification.component.css']
 })
 export class ErrorNotificationComponent implements OnInit, OnDestroy {
   @Input() position: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' = 'top-right';

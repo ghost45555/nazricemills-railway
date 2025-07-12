@@ -2,10 +2,9 @@ import { Component, Input, ElementRef, AfterViewInit, OnDestroy, ChangeDetectorR
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-animated-icon',
-  standalone: true,
-  imports: [CommonModule],
-  template: `
+    selector: 'app-animated-icon',
+    imports: [CommonModule],
+    template: `
     <div class="animated-icon" 
          [class.animate]="isInView"
          [class.icon-loaded]="isIconLoaded"
@@ -50,7 +49,7 @@ import { CommonModule } from '@angular/common';
       </ng-container>
     </div>
   `,
-  styleUrls: ['./animated-icon.component.css']
+    styleUrls: ['./animated-icon.component.css']
 })
 export class AnimatedIconComponent implements AfterViewInit, OnDestroy {
   @Input() iconName!: string;

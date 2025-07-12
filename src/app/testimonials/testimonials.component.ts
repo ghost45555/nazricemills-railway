@@ -8,12 +8,11 @@ import { SectionHeaderComponent } from '../shared/components/section-header/sect
 import { ScrollAnimationDirective } from '../shared/directives/scroll-animation.directive';
 
 @Component({
-  selector: 'app-testimonials',
-  standalone: true,
-  imports: [CommonModule, SectionHeaderComponent, ScrollAnimationDirective],
-  providers: [AnimationService],
-  templateUrl: './testimonials.component.html',
-  styleUrls: ['./testimonials.component.css']
+    selector: 'app-testimonials',
+    imports: [CommonModule, SectionHeaderComponent, ScrollAnimationDirective],
+    providers: [AnimationService],
+    templateUrl: './testimonials.component.html',
+    styleUrls: ['./testimonials.component.css']
 })
 export class TestimonialsComponent implements OnInit, OnDestroy {
   testimonials: Testimonial[] = [];

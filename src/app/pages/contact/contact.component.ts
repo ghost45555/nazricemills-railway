@@ -14,21 +14,20 @@ import { AnimatedIconComponent } from "../../shared/components/animated-icon/ani
 import { siteConfig } from '../../config/site.config';
 
 @Component({
-  selector: 'app-contact',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    SectionHeaderComponent,
-    PremiumCardComponent,
-    PremiumButtonComponent,
-    ScrollAnimationDirective,
-    HeroComponent,
-    ToastComponent,
-    AnimatedIconComponent
-],
-  templateUrl: './contact.component.html',
-  styleUrls: ['./contact.component.css']
+    selector: 'app-contact',
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        SectionHeaderComponent,
+        PremiumCardComponent,
+        PremiumButtonComponent,
+        ScrollAnimationDirective,
+        HeroComponent,
+        ToastComponent,
+        AnimatedIconComponent
+    ],
+    templateUrl: './contact.component.html',
+    styleUrls: ['./contact.component.css']
 })
 export class ContactComponent implements OnInit {
   contactInfo = siteConfig.contact;

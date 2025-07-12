@@ -17,11 +17,10 @@ interface StatusToast {
 }
 
 @Component({
-  selector: 'app-my-orders',
-  standalone: true,
-  imports: [CommonModule, RouterModule],
-  templateUrl: './my-orders.component.html',
-  styleUrls: ['./my-orders.component.css']
+    selector: 'app-my-orders',
+    imports: [CommonModule, RouterModule],
+    templateUrl: './my-orders.component.html',
+    styleUrls: ['./my-orders.component.css']
 })
 export class MyOrdersComponent implements OnInit, OnDestroy {
   isLoggedIn = false;

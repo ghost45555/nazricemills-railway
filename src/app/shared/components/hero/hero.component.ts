@@ -25,61 +25,56 @@ export interface HeroFeature {
 }
 
 @Component({
-  selector: 'app-hero',
-  standalone: true,
-  imports: [CommonModule, RouterLink],
-  templateUrl: './hero.component.html',
-  styleUrl: './hero.component.css',
-  animations: [
-    // Animations that don't affect layout
-    trigger('fadeInUp', [
-      state('void', style({ 
-        opacity: 0, 
-        transform: 'translateY(30px)' 
-      })),
-      state('*', style({ 
-        opacity: 1, 
-        transform: 'translateY(0)' 
-      })),
-      transition('void => *', animate('600ms 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94)'))
-    ]),
-    
-    trigger('fadeInLeft', [
-      state('void', style({ 
-        opacity: 0, 
-        transform: 'translateX(-30px)' 
-      })),
-      state('*', style({ 
-        opacity: 1, 
-        transform: 'translateX(0)' 
-      })),
-      transition('void => *', animate('600ms 100ms cubic-bezier(0.25, 0.46, 0.45, 0.94)'))
-    ]),
-    
-    trigger('fadeInScale', [
-      state('void', style({ 
-        opacity: 0, 
-        transform: 'scale(0.9)' 
-      })),
-      state('*', style({ 
-        opacity: 1, 
-        transform: 'scale(1)' 
-      })),
-      transition('void => *', animate('600ms 500ms cubic-bezier(0.175, 0.885, 0.32, 1.275)'))
-    ]),
-    
-    trigger('staggerFeatures', [
-      transition('void => *', [
-        query('.feature', [
-          style({ opacity: 0, transform: 'translateY(30px)' }),
-          stagger(100, [
-            animate('600ms cubic-bezier(0.25, 0.46, 0.45, 0.94)', 
-              style({ opacity: 1, transform: 'translateY(0)' }))
-          ])
-        ], { optional: true })
-      ])
-    ])
-  ]
+    selector: 'app-hero',
+    imports: [CommonModule, RouterLink],
+    templateUrl: './hero.component.html',
+    styleUrl: './hero.component.css',
+    animations: [
+        // Animations that don't affect layout
+        trigger('fadeInUp', [
+            state('void', style({
+                opacity: 0,
+                transform: 'translateY(30px)'
+            })),
+            state('*', style({
+                opacity: 1,
+                transform: 'translateY(0)'
+            })),
+            transition('void => *', animate('600ms 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94)'))
+        ]),
+        trigger('fadeInLeft', [
+            state('void', style({
+                opacity: 0,
+                transform: 'translateX(-30px)'
+            })),
+            state('*', style({
+                opacity: 1,
+                transform: 'translateX(0)'
+            })),
+            transition('void => *', animate('600ms 100ms cubic-bezier(0.25, 0.46, 0.45, 0.94)'))
+        ]),
+        trigger('fadeInScale', [
+            state('void', style({
+                opacity: 0,
+                transform: 'scale(0.9)'
+            })),
+            state('*', style({
+                opacity: 1,
+                transform: 'scale(1)'
+            })),
+            transition('void => *', animate('600ms 500ms cubic-bezier(0.175, 0.885, 0.32, 1.275)'))
+        ]),
+        trigger('staggerFeatures', [
+            transition('void => *', [
+                query('.feature', [
+                    style({ opacity: 0, transform: 'translateY(30px)' }),
+                    stagger(100, [
+                        animate('600ms cubic-bezier(0.25, 0.46, 0.45, 0.94)', style({ opacity: 1, transform: 'translateY(0)' }))
+                    ])
+                ], { optional: true })
+            ])
+        ])
+    ]
 })
 export class HeroComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() subtitle = '';

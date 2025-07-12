@@ -4,15 +4,14 @@ import { ToastService } from '../../../services/toast.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-toast',
-  standalone: true,
-  imports: [CommonModule],
-  template: `
+    selector: 'app-toast',
+    imports: [CommonModule],
+    template: `
     <div *ngIf="visible" class="toast" [class.success]="type === 'success'" [class.error]="type === 'error'">
       {{ message }}
     </div>
   `,
-  styles: [`
+    styles: [`
     .toast {
       position: fixed;
       bottom: 20px;

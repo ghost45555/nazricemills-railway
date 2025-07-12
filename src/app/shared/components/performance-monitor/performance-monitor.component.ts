@@ -16,11 +16,10 @@ import {
 } from '../../interfaces/performance-metrics.interface';
 
 @Component({
-  selector: 'app-performance-monitor',
-  standalone: true,
-  imports: [CommonModule, PremiumCardComponent],
-  templateUrl: './performance-monitor.component.html',
-  styleUrls: ['./performance-monitor.component.css']
+    selector: 'app-performance-monitor',
+    imports: [CommonModule, PremiumCardComponent],
+    templateUrl: './performance-monitor.component.html',
+    styleUrls: ['./performance-monitor.component.css']
 })
 export class PerformanceMonitorComponent implements OnInit, OnDestroy {
   @Input() showDetails = false;

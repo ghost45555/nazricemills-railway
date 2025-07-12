@@ -7,11 +7,10 @@ import { AuthService, RegisterPayload } from '../../../services/auth.service';
 import { OrderService } from '../../../services/order.service';
 
 @Component({
-  selector: 'app-signup',
-  standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterLink],
-  templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.css']
+    selector: 'app-signup',
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterLink],
+    templateUrl: './signup.component.html',
+    styleUrls: ['./signup.component.css']
 })
 export class SignupComponent implements OnInit {
   signupForm: FormGroup;
