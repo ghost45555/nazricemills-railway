@@ -20,6 +20,11 @@
   opacity: 1;
 }
 
+/* Failsafe: Ensure static assets are always visible */
+.premium-image__img[src*="assets/"] {
+  opacity: 1 !important;
+}
+
 /* Loading Skeleton */
 .premium-image__skeleton {
   position: absolute;

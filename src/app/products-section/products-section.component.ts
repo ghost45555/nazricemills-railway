@@ -31,9 +31,7 @@ export class ProductsSectionComponent implements OnInit {
     private cartService: CartService,
     private router: Router
   ) {
-    this.products$ = this.productService.getProducts().pipe(
-      map(products => products.slice(0, 3))
-    );
+    this.products$ = this.productService.getFeaturedProducts();
   }
 
   ngOnInit(): void {}
@@ -41,6 +39,32 @@ export class ProductsSectionComponent implements OnInit {
   onProductClick(product: Product): void {
     this.selectedProduct = product;
     this.isModalOpen = true;
+    
+    // Scroll to center the products section when modal opens
+    this.scrollToCenter();
+  }
+
+  private scrollToCenter(): void {
+    // Add a small delay to ensure the modal is rendered
+    setTimeout(() => {
+      const productsSection = document.querySelector('.home-products-section') as HTMLElement;
+      if (productsSection) {
+        const rect = productsSection.getBoundingClientRect();
+        const viewportHeight = window.innerHeight;
+        const elementHeight = rect.height;
+        
+        // Calculate the scroll position to center the section
+        const currentScrollY = window.scrollY;
+        const elementTop = rect.top + currentScrollY;
+        const targetScrollY = elementTop - (viewportHeight - elementHeight) / 2;
+        
+        // Smooth scroll to the calculated position
+        window.scrollTo({
+          top: Math.max(0, targetScrollY),
+          behavior: 'smooth'
+        });
+      }
+    }, 100);
   }
 
   onModalClose(): void {
@@ -54,11 +78,12 @@ export class ProductsSectionComponent implements OnInit {
 
     const cartItem = {
       id: `${event.product.id}-${event.weight}`,
-      name: `${event.product.name} (${event.weight}kg - ${event.product.packagingType})`,
+      name: `${event.product.name} (${event.weight}kg${event.product.packagingType ? ' - ' + event.product.packagingType : ''})`,
       price: weightOption.price,
       quantity: 1,
       image: event.product.imageUrl,
-      packagingPhoto: weightOption.packagingPhoto
+      packagingPhoto: weightOption.packagingPhoto,
+      weight: event.weight
     };
     
     this.cartService.addToCart(cartItem);

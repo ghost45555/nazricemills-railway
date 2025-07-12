@@ -3,7 +3,6 @@
 
 :root {
   /* Light Theme Colors */
-  --color-theme:white;
   --color-gold: #957f36;
   --color-gold-light: #bc8e04;
   --color-gold-dark: #B39129;
@@ -24,13 +23,14 @@
   --color-shadow: rgba(0, 0, 0, 0.08);
   --color-shadow-gold: rgba(212, 175, 55, 0.12);
   
-  /* RGB Values for Color Manipulations */
-  --color-gold-rgb: 149, 127, 54;
-  --color-gold-light-rgb: 188, 142, 4;
-  --color-green-rgb: 27, 77, 62;
-  --color-green-light-rgb: 42, 122, 98;
-  --color-border-rgb: 212, 175, 55;
+
+  --color-success: #2E7D32;
+  --color-success-light: #4CAF50;
+  --color-error: #D32F2F;
+  --color-primary: #1B4D3E;
+  --color-primary-light: #2A7A62;
   
+
   /* Typography */
   --font-heading: 'Playfair Display', serif;
   --font-body: 'Poppins', sans-serif;
@@ -75,7 +75,6 @@
 
 /* Dark Theme Colors */
 .dark-theme {
-  --color-theme:var(--color-surface);
   --color-background: #1A1A1A;
   --color-surface: #2C2C2C;
   --color-text: #F5F5F0;
@@ -94,13 +93,13 @@
   --color-cream-dark: #242424;
   --color-brown: #8B7355;
   --color-brown-light: #A68B6C;
+
   
-  /* RGB Values for Dark Theme */
-  --color-gold-rgb: 255, 215, 0;
-  --color-gold-light-rgb: 255, 228, 77;
-  --color-green-rgb: 42, 122, 98;
-  --color-green-light-rgb: 59, 158, 128;
-  --color-border-rgb: 255, 255, 255;
+  --color-success: #66BB6A;
+  --color-success-light: #81C784;
+  --color-error: #EF5350;
+  --color-primary: #3B9E80;
+  --color-primary-light: #4DB6A1;
 }
 
 /* Reset & Base Styles */
@@ -308,3 +307,4 @@ h1, h2, h3, h4, h5, h6 {
 .dark-theme :focus {
   outline-color: var(--color-gold-light);
 }
+

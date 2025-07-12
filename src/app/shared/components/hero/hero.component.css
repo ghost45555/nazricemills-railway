@@ -5,7 +5,7 @@
     display: flex;
     align-items: center;
     overflow: hidden;
-    padding: 15rem 0 8rem; /* Increased top padding from 12rem to 15rem */
+    padding: 14rem 0 4rem; /* Increased top padding to 14rem, reduced bottom to 4rem */
     will-change: contents;
     transition: height 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
   }
@@ -126,7 +126,7 @@
     visibility: visible;
     max-width: 700px;
     color: var(--color-white);
-    margin: 5rem 0 6rem; /* Increased top margin from 3rem to 5rem */
+    margin: 4rem 0 3rem; /* Restored more balanced margins */
     /* Use absolute positioning to prevent layout shifts */
     transform: translateZ(0);
     backface-visibility: hidden;
@@ -226,7 +226,7 @@
   .cta-group {
     display: flex;
     gap: 2rem;
-    margin-bottom: 5rem;
+    margin-bottom: 5rem; /* Increased from 4rem to create more space above separator */
     transform-origin: left center;
     opacity: 1;
     visibility: visible;
@@ -310,22 +310,22 @@
   }
   
   .hero-features {
-    position: relative;
-    z-index: 1;
-    transform: translateZ(0);
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
     display: flex;
     gap: 4rem;
-    color: var(--color-text);
-    padding: 3rem 0;
-    margin-top: 2rem;
+    color: var(--color-white);
+    position: relative;
+    padding: 4rem 0 1.5rem; /* Increased top padding significantly for better balance */
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    opacity: 1;
+    visibility: visible;
   }
   
   .hero-features::before {
     content: '';
     position: absolute;
-    top: 0;
+    top: 1.5rem; /* Moved down more to create proper space below separator */
     left: 10%;
     width: 80%;
     height: 2px;
@@ -578,8 +578,12 @@
   /* Enhanced responsive design */
   @media (max-width: 768px) {
     .hero {
-      padding: 12rem 1.5rem 4rem; /* Adjusted for mobile */
+      padding: 10rem 1.5rem 3rem; /* Better balance: good top clearance, minimal bottom */
       text-align: center;
+    }
+  
+    .hero-content {
+      margin: 3rem 0 4rem; /* Better spacing for mobile */
     }
   
     h1 {
@@ -609,34 +613,31 @@
       padding: 0;
     }
   
-    .cta-group {
+        .cta-group {
       justify-content: center;
-      margin-bottom: 4rem;
+      margin-bottom: 4.5rem; /* Increased for mobile balance */
     }
-  
+
     .btn-primary {
       padding: 0.5rem 2.5rem;
     }
-  
+
     .hero-features {
       flex-direction: column;
       gap: 1.5rem;
       align-items: center;
-      padding: 2rem 0;
+      padding: 3rem 0 1rem; /* Proper spacing for mobile with separator */
     }
   
     .hero-features::before {
       left: 0;
       width: 100%;
+      top: 1.5rem; /* Adjusted separator position for mobile to match desktop */
     }
   
     .feature {
       width: 100%;
       justify-content: center;
-    }
-  
-    .hero-content {
-      margin: 3rem 0 6rem; /* Less margin needed on mobile */
     }
   }
   
@@ -664,7 +665,7 @@
     }
   
     .hero {
-      padding: 14rem 0 8rem; /* Adjusted for tablets */
+      padding: 13rem 0 3rem; /* Better balance for tablets */
     }
   }
   
@@ -672,6 +673,25 @@
   @media (min-width: 1600px) {
     .hero {
       padding: 18rem 0 10rem; /* Even more space on large screens */
+    }
+  }
+  
+  /* Optimize for medium screens where the overflow issue is most common */
+  @media (min-width: 900px) and (max-width: 1400px) {
+    .hero {
+      padding: 12rem 0 3rem; /* Balanced: good top padding, minimal bottom */
+    }
+    
+    .hero-content {
+      margin: 3rem 0 2.5rem; /* More balanced content spacing */
+    }
+    
+    .cta-group {
+      margin-bottom: 4rem; /* Proportional spacing for medium screens */
+    }
+    
+    .hero-features {
+      padding: 3rem 0 1rem; /* Balanced spacing with proper separator distance */
     }
   }
   
@@ -766,7 +786,7 @@
     
     .hero-features {
       gap: 1rem; /* Less space between features */
-      padding: 1.5rem 0;
+      padding: 2.5rem 0 1rem; /* Proper spacing for small screens */
     }
   }
   

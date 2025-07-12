@@ -276,51 +276,119 @@ export class MyOrdersComponent implements OnInit, OnDestroy {
   renderOrderTracking(status: string): SafeHtml {
     status = status || 'Processing';
     
+    // Define status steps with dynamic icons based on step status
     const steps = [
-      { id: 'processing', label: 'Order Placed', icon: 'bi-box' },
-      { id: 'shipped', label: 'Shipped', icon: 'bi-truck' },
-      { id: 'delivered', label: 'Delivered', icon: 'bi-house-check' }
+      { 
+        id: 'processing', 
+        label: 'Order Placed',
+        pendingIcon: 'bi-box',
+        activeIcon: 'bi-box-fill',
+        completedIcon: 'bi-check-circle-fill'
+      },
+      { 
+        id: 'confirmed', 
+        label: 'Confirmed',
+        pendingIcon: 'bi-clock',
+        activeIcon: 'bi-check-circle',
+        completedIcon: 'bi-check-circle-fill'
+      },
+      { 
+        id: 'shipped', 
+        label: 'Shipped',
+        pendingIcon: 'bi-truck',
+        activeIcon: 'bi-truck-flatbed',
+        completedIcon: 'bi-truck-flatbed'
+      },
+      { 
+        id: 'delivered', 
+        label: 'Delivered',
+        pendingIcon: 'bi-house',
+        activeIcon: 'bi-house-fill',
+        completedIcon: 'bi-house-check-fill'
+      }
     ];
     
     let currentStepIndex = 0;
     
-    if (status === 'Shipped') {
+    if (status === 'Confirmed') {
       currentStepIndex = 1;
-    } else if (status === 'Delivered') {
+    } else if (status === 'Shipped') {
       currentStepIndex = 2;
+    } else if (status === 'Delivered') {
+      currentStepIndex = 3;
     } else if (status === 'Cancelled') {
       return this.sanitizer.bypassSecurityTrustHtml(`
-        <div class="order-tracking">
-          <div class="tracking-step">
-            <div class="tracking-circle" style="background-color: rgba(220, 53, 69, 0.12); border-color: #dc3545; color: #dc3545;">
-              <i class="bi bi-x-lg"></i>
+        <div class="order-tracking-vertical cancelled">
+          <div class="tracking-item">
+            <div class="tracking-icon cancelled">
+              <i class="bi bi-x-circle-fill"></i>
             </div>
-            <div class="tracking-label">Cancelled</div>
+            <div class="tracking-content">
+              <div class="tracking-title">Cancelled</div>
+              <div class="tracking-info">Your order has been cancelled</div>
+            </div>
           </div>
         </div>
       `);
     }
     
-    let html = '<div class="order-tracking">';
+    let html = '<div class="order-tracking-vertical">';
     
     steps.forEach((step, index) => {
-      let circleClass = 'tracking-circle';
-      let stepClass = 'tracking-step';
+      let iconClass = 'tracking-icon';
+      let itemClass = 'tracking-item';
+      let lineClass = 'tracking-line';
+      // Select the appropriate icon based on step status
+      let icon = '';
       
+      // Style based on status
       if (index < currentStepIndex) {
-        circleClass += ' completed';
-        stepClass += ' completed';
+        // Completed step
+        iconClass += ' completed';
+        itemClass += ' completed';
+        lineClass += ' completed';
+        icon = step.completedIcon;
       } else if (index === currentStepIndex) {
-        circleClass += ' active';
-        stepClass += ' active';
+        // Current step
+        iconClass += ' active';
+        itemClass += ' active';
+        lineClass += ' active';
+        icon = step.activeIcon;
+      } else {
+        // Future step
+        iconClass += ' pending';
+        itemClass += ' pending';
+        lineClass += ' pending';
+        icon = step.pendingIcon;
+      }
+      
+      // Only add connecting line if not the last step
+      const lineHtml = index < steps.length - 1 
+        ? `<div class="${lineClass}"></div>` 
+        : '';
+      
+      // Add estimated time for current step
+      let timeEstimate = '';
+      if (index === currentStepIndex) {
+        if (step.id === 'processing') {
+          timeEstimate = '<div class="tracking-info">Est: 1-2 hours</div>';
+        } else if (step.id === 'confirmed') {
+          timeEstimate = '<div class="tracking-info">Est: 1 day</div>';
+        } else if (step.id === 'shipped') {
+          timeEstimate = '<div class="tracking-info">Est: 2-3 days</div>';
+        }
       }
       
       html += `
-        <div class="${stepClass}">
-          <div class="${circleClass}">
-            <i class="bi ${step.icon}"></i>
+        <div class="${itemClass}">
+          <div class="${iconClass}">
+            <i class="bi ${icon}"></i>
           </div>
-          <div class="tracking-label">${step.label}</div>
+          <div class="tracking-content">
+            <div class="tracking-title">${step.label}</div>
+            ${timeEstimate}
+          </div>
+          ${lineHtml}
         </div>
       `;
     });

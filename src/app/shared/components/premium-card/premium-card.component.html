@@ -24,11 +24,32 @@
     *ngIf="imageSrc"
     class="premium-card__image-container"
     [ngStyle]="imageStyles">
+    
+    <!-- Image Loading Placeholder -->
+    <div 
+      *ngIf="!imageLoaded && !imageError"
+      class="premium-card__image-loader">
+      <div class="spinner"></div>
+      <span>Loading...</span>
+    </div>
+    
+    <!-- Image Error Placeholder -->
+    <div 
+      *ngIf="imageError"
+      class="premium-card__image-error">
+      <i class="fas fa-image"></i>
+      <span>Image not available</span>
+    </div>
+    
+    <!-- Actual Image -->
     <img 
       [src]="imageSrc" 
       [alt]="imageAlt || ''"
       class="premium-card__image"
-      loading="lazy">
+      [class.loaded]="imageLoaded"
+      loading="lazy"
+      (load)="onImageLoad()"
+      (error)="onImageError()">
     
     <!-- Image Overlay Content -->
     <div class="premium-card__image-overlay" [class.active]="showSpecs">

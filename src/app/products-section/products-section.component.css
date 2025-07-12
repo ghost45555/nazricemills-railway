@@ -152,15 +152,20 @@ app-premium-card:nth-child(6) { animation-delay: 0.6s; }
 /* Home page specific modal adjustments */
 .home-products-section {
   position: relative;
+  scroll-margin-top: 80px; /* Space for fixed header */
 }
 
 .home-products-section app-product-detail-modal {
   position: fixed;
-  top: 120px; /* Increased from 80px to 120px */
+  top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
 }
 
 .home-products-section app-product-detail-modal .modal-overlay {
@@ -169,21 +174,47 @@ app-premium-card:nth-child(6) { animation-delay: 0.6s; }
   left: 0;
   right: 0;
   bottom: 0;
-  padding-top: 20px; /* Added padding to move content down */
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
 }
 
 .home-products-section app-product-detail-modal .modal-container {
-  margin-top: 40px; /* Increased from 20px to 40px */
-  max-height: calc(100vh - 180px); /* Added max-height to prevent overflow */
+  margin: 0;
+  max-height: calc(100vh - 40px);
+  max-width: calc(100vw - 40px);
+  width: 100%;
+  max-width: 1200px;
+  position: relative;
+  transform: translateY(0);
+  animation: modalSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 @media (max-width: 768px) {
   .home-products-section app-product-detail-modal {
-    top: 100px; /* Increased from 60px to 100px */
+    padding: 10px;
+  }
+  
+  .home-products-section app-product-detail-modal .modal-overlay {
+    padding: 10px;
   }
   
   .home-products-section app-product-detail-modal .modal-container {
-    margin-top: 20px;
-    max-height: calc(100vh - 140px);
+    max-height: calc(100vh - 20px);
+    max-width: calc(100vw - 20px);
   }
 }

@@ -14,6 +14,7 @@
             type="email" 
             id="email" 
             formControlName="email"
+            placeholder=" "
             [ngClass]="{'error': checkoutForm.get('contact.email')?.invalid && checkoutForm.get('contact.email')?.touched}"
           >
           <label for="email">Email</label>
@@ -69,6 +70,7 @@
               type="text" 
               id="firstName" 
               formControlName="firstName"
+              placeholder=" "
               [ngClass]="{'error': checkoutForm.get('delivery.firstName')?.invalid && checkoutForm.get('delivery.firstName')?.touched}"
             >
             <label for="firstName">First Name</label>
@@ -83,6 +85,7 @@
               type="text" 
               id="lastName" 
               formControlName="lastName"
+              placeholder=" "
               [ngClass]="{'error': checkoutForm.get('delivery.lastName')?.invalid && checkoutForm.get('delivery.lastName')?.touched}"
             >
             <label for="lastName">Last Name</label>
@@ -98,6 +101,7 @@
             type="text" 
             id="address" 
             formControlName="address"
+            placeholder=" "
             [ngClass]="{'error': checkoutForm.get('delivery.address')?.invalid && checkoutForm.get('delivery.address')?.touched}"
           >
           <label for="address">Address</label>
@@ -112,6 +116,7 @@
             type="text" 
             id="apartment" 
             formControlName="apartment"
+            placeholder=" "
           >
           <label for="apartment">Apartment, suite, etc. (optional)</label>
           <div class="line-animation"></div>
@@ -123,6 +128,7 @@
               type="text" 
               id="city" 
               formControlName="city"
+              placeholder=" "
               [ngClass]="{'error': checkoutForm.get('delivery.city')?.invalid && checkoutForm.get('delivery.city')?.touched}"
             >
             <label for="city">City</label>
@@ -137,6 +143,7 @@
               type="text" 
               id="postalCode" 
               formControlName="postalCode"
+              placeholder=" "
             >
             <label for="postalCode">Postal Code (optional)</label>
             <div class="line-animation"></div>
@@ -148,6 +155,7 @@
             type="tel" 
             id="phone" 
             formControlName="phone"
+            placeholder=" "
             [ngClass]="{'error': checkoutForm.get('delivery.phone')?.invalid && checkoutForm.get('delivery.phone')?.touched}"
           >
           <label for="phone">Phone</label>
@@ -211,7 +219,7 @@
             [(ngModel)]="orderNotes"
             [ngModelOptions]="{standalone: true}"
           ></textarea>
-          <label *ngIf="!savedNotes" for="orderNotes">Order Notes (optional)</label>
+          <label *ngIf="!orderNotes || orderNotes.trim() === ''" for="orderNotes">Order Notes (optional)</label>
           <div class="line-animation"></div>
         </div>
       </div>
@@ -302,33 +310,52 @@
 </div>
 
 <!-- Order Success Modal -->
-<div class="modal" [class.show]="showOrderSuccess" [style.display]="showOrderSuccess ? 'block' : 'none'" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header bg-success text-white">
-        <h5 class="modal-title">Order Placed Successfully!</h5>
-        <button type="button" class="btn-close btn-close-white" (click)="closeModal()"></button>
+<div class="modal custom-modal-animation" [class.show]="showOrderSuccess" [style.display]="showOrderSuccess ? 'block' : 'none'" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content success-card">
+      <div class="modal-header border-0">
+        <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        <div class="text-center mb-4">
-          <i class="bi bi-check-circle text-success" style="font-size: 4rem;"></i>
+      <div class="modal-body text-center px-4 py-4">
+        <div class="success-icon-container mb-4">
+          <div class="success-icon-circle">
+            <i class="bi bi-check-lg"></i>
+          </div>
         </div>
-        <p>Thank you for your order. Your order has been placed successfully.</p>
-        <p>Order Number: <strong>{{ lastOrderId }}</strong></p>
-        <p>A confirmation email has been sent to <strong>{{ lastOrderEmail }}</strong></p>
+        <h3 class="success-title">Order Placed Successfully!</h3>
+        <p class="success-message">Thank you for your purchase. We've received your order and are processing it now.</p>
+        
+        <div class="order-details-card my-4">
+          <div class="order-detail-item">
+            <span class="detail-label">Order Number:</span>
+            <span class="detail-value">{{ lastOrderId }}</span>
+          </div>
+          <div class="order-detail-item">
+            <span class="detail-label">Confirmation Email:</span>
+            <span class="detail-value">{{ lastOrderEmail }}</span>
+          </div>
+        </div>
         
         <!-- Sign Up Card for Guest Users -->
-        <div *ngIf="!isLoggedIn" class="card mt-4 bg-light">
-          <div class="card-body">
-            <h6 class="card-title"><i class="bi bi-person-plus me-2"></i>Create an Account</h6>
-            <p class="card-text small">Create an account to track this order and future purchases.</p>
-            <button (click)="redirectToSignup()" class="btn btn-outline-primary btn-sm">Sign Up</button>
+        <div *ngIf="!isLoggedIn" class="signup-prompt-card">
+          <div class="card-content">
+            <div class="icon-container">
+              <i class="bi bi-person-plus"></i>
+            </div>
+            <div class="prompt-content">
+              <h6>Create an Account</h6>
+              <p>Track this order and make future purchases even faster</p>
+            </div>
+            <button (click)="redirectToSignup()" class="btn btn-outline signup-btn">Sign Up</button>
           </div>
         </div>
       </div>
-      <div class="modal-footer">
-        <a routerLink="/" class="btn btn-secondary">Back to Home</a>
-        <button type="button" class="btn btn-primary" (click)="viewOrderDetails()">View Order Details</button>
+      <div class="modal-footer border-0 justify-content-center gap-3 py-4">
+        <a routerLink="/" class="btn btn-secondary">Continue Shopping</a>
+        <button type="button" class="btn btn-primary order-details-btn" (click)="viewOrderDetails()">
+          <span>View Order Details</span>
+          <i class="bi bi-arrow-right"></i>
+        </button>
       </div>
     </div>
   </div>

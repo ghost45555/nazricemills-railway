@@ -29,6 +29,8 @@ export class PremiumCardComponent {
   @Input() clickable = false;
 
   showSpecs = false;
+  imageLoaded = false;
+  imageError = false;
 
   @Output() click = new EventEmitter<void>();
   @Output() specsClick = new EventEmitter<void>();
@@ -80,5 +82,15 @@ export class PremiumCardComponent {
         });
       }
     }
+  }
+
+  onImageLoad(): void {
+    this.imageLoaded = true;
+    this.imageError = false;
+  }
+
+  onImageError(): void {
+    this.imageLoaded = false;
+    this.imageError = true;
   }
 }

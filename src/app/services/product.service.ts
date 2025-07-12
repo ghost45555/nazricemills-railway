@@ -65,6 +65,7 @@ interface BackendProduct {
   category: { id: number; name: string } | string;
   isNewArrival: boolean;
   isBestSeller: boolean;
+  isFeatured: boolean;
   pricePerKg: number;
   hasDiscount: boolean;
   discountPercentage: number;
@@ -405,8 +406,8 @@ export class ProductService {
   //     packagingType: 'PP Woven Bags'
   //   }
   // ];
-  private API_URL = 'http://localhost:8080/api';
-  private BACKEND_BASE_URL = 'http://localhost:8080';
+  private API_URL = 'https://peaceful-unity-production.up.railway.app/api';
+  private BACKEND_BASE_URL = 'https://peaceful-unity-production.up.railway.app/';
   private useStaticData = false; // Set to true to use static data without backend
   
   // Store the products array here
@@ -426,11 +427,6 @@ export class ProductService {
 
   // Load products from backend and store them in the service
   private loadProducts(): void {
-    // if (this.useStaticData) {
-    //   this.productsArray = this.staticDataService.getStaticProducts();
-    //   return;
-    // }
-
     this.http.get<BackendProduct[]>(`${this.API_URL}/products`)
       .pipe(
         map(products => this.transformProductsData(products)),
@@ -525,38 +521,44 @@ export class ProductService {
                  typeof spec === 'object' && 'value' in spec ? spec.value : ''
         })) : [];
 
-      // Extract weight options and ensure image URLs have base URL
+      // Extract weight options and construct proper image URLs
       const weightOptions = product.weightOptions.map(option => ({
         value: typeof option.weightValue !== 'undefined' ? option.weightValue : 
                typeof option.value !== 'undefined' ? option.value : 0,
         price: option.price,
-        packagingPhoto: this.ensureFullImageUrl(option.packagingPhoto)
+        packagingPhoto: this.constructWeightOptionImageUrl(product.id, option.id)
       }));
 
       // Transform nutritional info - more robust handling
       let nutritionalInfo = null;
       
       if (product.nutritionalInfo) {
+        console.log('Processing nutritional info for product:', product.id, product.name);
+        
         nutritionalInfo = {
-          servingSize: product.nutritionalInfo.servingSize || '',
-          servingsPerContainer: product.nutritionalInfo.servingsPerContainer || '',
-          calories: product.nutritionalInfo.calories || '0',
-          totalFat: product.nutritionalInfo.totalFat || '0g',
-          saturatedFat: product.nutritionalInfo.saturatedFat || '0g',
-          transFat: product.nutritionalInfo.transFat || '0g',
-          cholesterol: product.nutritionalInfo.cholesterol || '0mg',
-          sodium: product.nutritionalInfo.sodium || '0mg',
-          totalCarbohydrates: product.nutritionalInfo.totalCarbohydrates || '0g',
-          dietaryFiber: product.nutritionalInfo.dietaryFiber || '0g',
-          sugars: product.nutritionalInfo.sugars || '0g',
-          protein: product.nutritionalInfo.protein || '0g',
-          vitaminA: product.nutritionalInfo.vitaminA || '0%',
-          vitaminC: product.nutritionalInfo.vitaminC || '0%',
-          calcium: product.nutritionalInfo.calcium || '0%',
-          iron: product.nutritionalInfo.iron || '0%'
+          servingSize: product.nutritionalInfo.servingSize ?? '1/4 cup (45g)',
+          servingsPerContainer: product.nutritionalInfo.servingsPerContainer ?? 'About 22',
+          calories: product.nutritionalInfo.calories ?? '160',
+          totalFat: product.nutritionalInfo.totalFat ?? '0g',
+          saturatedFat: product.nutritionalInfo.saturatedFat ?? '0g',
+          transFat: product.nutritionalInfo.transFat ?? '0g',
+          cholesterol: product.nutritionalInfo.cholesterol ?? '0mg',
+          sodium: product.nutritionalInfo.sodium ?? '0mg',
+          totalCarbohydrates: product.nutritionalInfo.totalCarbohydrates ?? '36g',
+          dietaryFiber: product.nutritionalInfo.dietaryFiber ?? '0g',
+          sugars: product.nutritionalInfo.sugars ?? '0g',
+          protein: product.nutritionalInfo.protein ?? '3g',
+          vitaminA: product.nutritionalInfo.vitaminA ?? '0%',
+          vitaminC: product.nutritionalInfo.vitaminC ?? '0%',
+          calcium: product.nutritionalInfo.calcium ?? '0%',
+          iron: product.nutritionalInfo.iron ?? '0%'
         };
+        
+        console.log('Transformed nutritional info:', nutritionalInfo);
       } else {
         // Default nutritional info if not provided by backend
+        console.log('No nutritional info found for product:', product.id, product.name, '- using defaults');
+        
         nutritionalInfo = {
           servingSize: '1/4 cup (45g)',
           servingsPerContainer: 'About 22',
@@ -582,7 +584,7 @@ export class ProductService {
         id: product.id.toString(),
         name: product.name,
         description: product.description,
-        imageUrl: this.ensureFullImageUrl(product.imageUrl),
+        imageUrl: this.constructProductImageUrl(product.id),
         category: typeof product.category === 'object' ? product.category.name : product.category,
         certifications,
         features,
@@ -590,6 +592,7 @@ export class ProductService {
         nutritionalInfo,
         isNewArrival: product.isNewArrival,
         isBestSeller: product.isBestSeller,
+        isFeatured: product.isFeatured || false,
         pricePerKg: product.pricePerKg,
         hasDiscount: product.hasDiscount,
         discountPercentage: product.discountPercentage || 0,
@@ -610,11 +613,25 @@ export class ProductService {
     
     // If URL starts with /api/, add the base URL
     if (imageUrl.startsWith('/api/')) {
-      return `${this.BACKEND_BASE_URL}${imageUrl}`;
+      return `${this.BACKEND_BASE_URL.replace(/\/$/, '')}${imageUrl}`;
     }
     
     // Otherwise, assume it's a relative path to the API
-    return `${this.BACKEND_BASE_URL}${imageUrl}`;
+    return `${this.BACKEND_BASE_URL.replace(/\/$/, '')}${imageUrl.startsWith('/') ? imageUrl : '/' + imageUrl}`;
+  }
+
+  // Helper to construct product image URL
+  private constructProductImageUrl(productId: number): string {
+    const url = `${this.BACKEND_BASE_URL.replace(/\/$/, '')}/api/products/${productId}/image`;
+    console.log(`Constructed product image URL for product ${productId}:`, url);
+    return url;
+  }
+
+  // Helper to construct weight option image URL
+  private constructWeightOptionImageUrl(productId: number, weightOptionId: number): string {
+    const url = `${this.BACKEND_BASE_URL.replace(/\/$/, '')}/api/products/${productId}/weight-options/${weightOptionId}/image`;
+    console.log(`Constructed weight option image URL for product ${productId}, option ${weightOptionId}:`, url);
+    return url;
   }
 
   // Helper method to format product specifications
@@ -734,6 +751,12 @@ export class ProductService {
   getBestSellers(): Observable<Product[]> {
     return this.productsSubject.pipe(
       map(products => products.filter(product => product.isBestSeller))
+    );
+  }
+
+  getFeaturedProducts(): Observable<Product[]> {
+    return this.productsSubject.pipe(
+      map(products => products.filter(product => product.isFeatured))
     );
   }
 

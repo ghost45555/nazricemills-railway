@@ -221,16 +221,18 @@ export class HeroComponent implements OnInit, OnDestroy, AfterViewInit {
         totalHeight += featuresElement.offsetHeight;
       }
       
-      // Add padding
-      totalHeight += 200;
+      // Add padding (conservative estimate based on CSS)
+      totalHeight += 300; // Reduced from 200 to account for optimized padding
       
-      // Use the larger of window height or content height
-      const newHeight = Math.max(window.innerHeight, totalHeight);
+      // Use the larger of window height or content height, with a minimum comfortable height
+      const minComfortableHeight = Math.max(window.innerHeight, 750); // Minimum 750px
+      const newHeight = Math.max(minComfortableHeight, totalHeight);
       
       // Only update if significantly different
       if (Math.abs(newHeight - this.heroHeight) > 50) {
         this.heroHeight = newHeight;
         this.renderer.setStyle(heroElement, 'height', `${this.heroHeight}px`);
+        this.renderer.setStyle(heroElement, 'min-height', `${this.heroHeight}px`);
       }
     }
   }

@@ -34,6 +34,11 @@ export class ProductDetailModalComponent implements OnInit, AfterViewInit, OnDes
   private scrollIndicatorDismissed = false;
   private bodyScrollLocked = false;
   private _isOpen = false;
+  isImageChanging = false;
+  slideDirection: 'left' | 'right' | '' = '';
+  currentImageSrc = '';
+  private imageChangeTimeout?: NodeJS.Timeout;
+  private animationTimeout?: NodeJS.Timeout;
 
   constructor(private productService: ProductService) {}
 
@@ -41,11 +46,18 @@ export class ProductDetailModalComponent implements OnInit, AfterViewInit, OnDes
     // Initialize with first weight option if available
     if (this.product.weightOptions && this.product.weightOptions.length > 0) {
       this.selectedWeight = this.product.weightOptions[0];
+      this.currentImageSrc = this.selectedWeight.packagingPhoto || this.product.imageUrl;
     }
   }
 
   ngOnDestroy() {
     this.unlockBodyScroll();
+    if (this.imageChangeTimeout) {
+      clearTimeout(this.imageChangeTimeout);
+    }
+    if (this.animationTimeout) {
+      clearTimeout(this.animationTimeout);
+    }
   }
 
   private lockBodyScroll(): void {
@@ -115,7 +127,41 @@ export class ProductDetailModalComponent implements OnInit, AfterViewInit, OnDes
   }
 
   selectWeight(weight: WeightOption): void {
-    this.selectedWeight = weight;
+    // Clear any pending timeouts
+    if (this.imageChangeTimeout) {
+      clearTimeout(this.imageChangeTimeout);
+    }
+    if (this.animationTimeout) {
+      clearTimeout(this.animationTimeout);
+    }
+    
+    const newImageSrc = weight.packagingPhoto || this.product.imageUrl;
+    
+    // Only show slide animation if the image is actually changing
+    if (newImageSrc !== this.currentImageSrc && this.selectedWeight) {
+      // Determine slide direction based on weight comparison
+      const currentIndex = this.product.weightOptions.findIndex(w => w.value === this.selectedWeight!.value);
+      const newIndex = this.product.weightOptions.findIndex(w => w.value === weight.value);
+      
+      this.slideDirection = newIndex > currentIndex ? 'right' : 'left';
+      this.isImageChanging = true;
+      
+      // Start slide animation
+      this.imageChangeTimeout = setTimeout(() => {
+        this.selectedWeight = weight;
+        this.currentImageSrc = newImageSrc;
+        
+        // Reset animation state after animation completes
+        this.animationTimeout = setTimeout(() => {
+          this.isImageChanging = false;
+          this.slideDirection = '';
+        }, 500); // Match animation duration
+      }, 50); // Small delay to ensure CSS classes are applied
+    } else {
+      // Same image or first selection, no animation needed
+      this.selectedWeight = weight;
+      this.currentImageSrc = newImageSrc;
+    }
   }
 
   get totalPrice(): number {
@@ -150,6 +196,25 @@ export class ProductDetailModalComponent implements OnInit, AfterViewInit, OnDes
     });
     
     this.onClose();
+  }
+
+  onPackagingImageLoad(): void {
+    // Image loaded successfully, but keep animation state until timeout completes
+    // This ensures the slide animation plays fully
+  }
+
+  onPackagingImageError(): void {
+    // Reset all animation states on error
+    this.isImageChanging = false;
+    this.slideDirection = '';
+    
+    // Clear any pending timeouts
+    if (this.imageChangeTimeout) {
+      clearTimeout(this.imageChangeTimeout);
+    }
+    if (this.animationTimeout) {
+      clearTimeout(this.animationTimeout);
+    }
   }
 
   getSpecIcon(key: string): string {

@@ -36,6 +36,7 @@ export interface Product {
   nutritionalInfo: NutritionalInfo;
   isNewArrival: boolean;
   isBestSeller: boolean;
+  isFeatured: boolean;
   pricePerKg: number;
   hasDiscount: boolean;
   discountPercentage?: number;

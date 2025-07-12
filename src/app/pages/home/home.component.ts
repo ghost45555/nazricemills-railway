@@ -67,6 +67,9 @@ import { ContactComponent } from '../../contact/contact.component';
 
     .hero-section {
       padding: 0;
+      /* Smart adaptive height for home page hero */
+      min-height: max(100vh, 750px); /* Ensures minimum comfortable space */
+      height: auto; /* Allow growth when needed */
     }
 
     .about-section {
@@ -92,7 +95,7 @@ import { ContactComponent } from '../../contact/contact.component';
     @media (max-width: 768px) {
       .section {
         min-height: auto;
-        padding: 4rem 0;
+        padding: 0rem 0;
       }
 
       .hero-section {

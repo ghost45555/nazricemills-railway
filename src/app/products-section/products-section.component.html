@@ -1,7 +1,7 @@
 <div class="products-section home-products-section">
   <app-section-header
-    title="Our Premium Rice Collection"
-    subtitle="Discover Excellence in Every Grain"
+    title="Featured Products"
+    subtitle="Our Specially Selected Rice Collection"
     [animateIn]="true">
   </app-section-header>
 
@@ -12,8 +12,8 @@
         variant="product"
         [imageSrc]="product.imageUrl"
         [imageAlt]="product.name"
-        [badge]="product.isNewArrival ? 'New Arrival' : product.isBestSeller ? 'Best Seller' : ''"
-        [badgeVariant]="product.isNewArrival ? 'accent' : 'primary'"
+        [badge]="product.isNewArrival ? 'New Arrival' : product.isBestSeller ? 'Best Seller' : 'Featured'"
+        [badgeVariant]="product.isNewArrival ? 'accent' : product.isBestSeller ? 'primary' : 'secondary'"
         [animateIn]="true"
         [borderAccent]="true"
         [clickable]="true"

@@ -193,7 +193,8 @@ export class ProductsComponent implements OnInit {
       price: event.price,
       quantity: 1,
       image: event.product.imageUrl,
-      packagingPhoto: weightOption.packagingPhoto
+      packagingPhoto: weightOption.packagingPhoto,
+      weight: event.weight
     };
     
     this.cartService.addToCart(cartItem);

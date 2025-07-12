@@ -212,6 +212,7 @@
   height: 2px;
   background-color: var(--color-border);
   z-index: 1;
+  display: none; /* Hide the default connector line as we'll use progress bars */
 }
 
 .tracking-step {
@@ -220,11 +221,13 @@
   align-items: center;
   position: relative;
   z-index: 2;
+  width: 25%;
+  padding: 0 8px;
 }
 
 .tracking-circle {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   background-color: var(--color-surface);
   border: 2px solid var(--color-border);
@@ -233,6 +236,8 @@
   justify-content: center;
   margin-bottom: 0.5rem;
   transition: all var(--transition-medium);
+  position: relative;
+  z-index: 3;
 }
 
 .tracking-circle.active {
@@ -248,16 +253,128 @@
   color: var(--color-white);
 }
 
+.tracking-step.active .tracking-label,
+.tracking-step.completed .tracking-label {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
 .tracking-label {
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm);
+  margin-bottom: 4px;
+  text-align: center;
+  color: var(--color-text-light);
+  transition: all var(--transition-medium);
   font-weight: 500;
+}
+
+.tracking-info {
+  font-size: 11px;
+  color: var(--color-text-lighter);
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+/* Progress Bars */
+.progress-bar {
+  position: absolute;
+  height: 3px;
+  top: 18px;
+  left: 50%;
+  right: -50%;
+  background-color: var(--color-border);
+  z-index: 2;
+}
+
+.progress-bar.progress-complete {
+  background: linear-gradient(135deg, var(--color-green-light), var(--color-green));
+  width: 100%;
+}
+
+.progress-bar.progress-active {
+  background: linear-gradient(135deg, var(--color-gold-light), var(--color-gold));
+  animation: progress-animation 2s infinite;
+}
+
+@keyframes progress-animation {
+  0% { width: 0%; }
+  50% { width: 50%; }
+  100% { width: 0%; }
+}
+
+/* Pulse Animation for Active Step */
+.tracking-circle.pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(var(--color-gold-rgb), 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(var(--color-gold-rgb), 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(var(--color-gold-rgb), 0);
+  }
+}
+
+/* Cancelled Order Style */
+.cancelled-order {
+  justify-content: center;
+}
+
+.tracking-step.cancelled {
+  width: auto;
+}
+
+.tracking-step.cancelled .tracking-circle {
+  width: 42px;
+  height: 42px;
+  animation: cancelled-pulse 2s infinite;
+}
+
+.tracking-step.cancelled .tracking-label {
+  font-weight: 600;
+  font-size: var(--font-size-base);
+  margin: 8px 0;
+  color: #dc3545;
+}
+
+.tracking-step.cancelled .tracking-info {
   color: var(--color-text-light);
 }
 
-.tracking-step.active .tracking-label,
-.tracking-step.completed .tracking-label {
-  color: var(--color-text);
-  font-weight: 600;
+@keyframes cancelled-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(220, 53, 69, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
+  }
+}
+
+/* Mobile Responsiveness for Order Tracking */
+@media (max-width: 767px) {
+  .order-tracking {
+    flex-wrap: wrap;
+  }
+  
+  .tracking-step {
+    width: 50%;
+    margin-bottom: 24px;
+  }
+  
+  .progress-bar {
+    display: none;
+  }
+  
+  .tracking-info {
+    padding: 0 10px;
+  }
 }
 
 /* Empty States */
@@ -1558,6 +1675,18 @@
     border: 1px solid rgba(var(--color-border-rgb), 0.2);
   }
   
+  /* Hide the first cell of summary rows on mobile to prevent duplication */
+  .order-detail-table .order-summary-row td:first-child,
+  .order-detail-table .order-total-row td:first-child {
+    display: none;
+  }
+  
+  /* Make sure the second cell (with data-label) takes full width */
+  .order-detail-table .order-summary-row td:last-child,
+  .order-detail-table .order-total-row td:last-child {
+    width: 100%;
+  }
+  
   .order-total-row td {
     font-size: 1rem;
     color: var(--color-gold-dark);
@@ -1591,5 +1720,215 @@
   
   .modal-header {
     padding: 1.25rem 1.5rem;
+  }
+}
+
+/* Vertical Timeline Order Tracking */
+.order-tracking-vertical {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  color: #fff;
+}
+
+.tracking-item {
+  display: flex;
+  position: relative;
+  padding: 0.75rem 0;
+}
+
+.tracking-icon {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  border-radius: 50%;
+  background-color: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  color: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  z-index: 2;
+  overflow: hidden;
+}
+
+.tracking-icon i {
+  font-size: 1rem;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.tracking-icon:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.tracking-icon:hover:before {
+  opacity: 1;
+}
+
+.tracking-line {
+  position: absolute;
+  top: 32px;
+  left: 16px;
+  width: 2px;
+  height: calc(100% - 16px);
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: translateX(-50%);
+  z-index: 1;
+  transition: background-color 0.5s ease;
+}
+
+.tracking-content {
+  flex: 1;
+  padding-bottom: 1rem;
+}
+
+.tracking-title {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  transition: all 0.3s ease;
+}
+
+.tracking-info {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Status Styling */
+.tracking-icon.completed {
+  background-color: #28a745;
+  border-color: #28a745;
+  color: white;
+  transform: scale(1.05);
+}
+
+.tracking-icon.completed i {
+  transform: scale(1.1);
+}
+
+.tracking-icon.active {
+  background-color: #ffc107;
+  border-color: #ffc107;
+  color: #343a40;
+  animation: pulse-dark 2s infinite;
+  transform: scale(1.1);
+}
+
+.tracking-icon.active i {
+  transform: scale(1.15);
+  animation: icon-bounce 1s infinite alternate;
+}
+
+.tracking-line.completed {
+  background-color: #28a745;
+}
+
+.tracking-line.active {
+  background-color: #ffc107;
+  background-image: linear-gradient(to bottom, #ffc107 0%, rgba(255, 193, 7, 0.5) 100%);
+  animation: progress-pulse 2s infinite;
+}
+
+.tracking-item.active .tracking-title {
+  color: #ffc107;
+  font-size: 1.05em;
+}
+
+.tracking-item.completed .tracking-title {
+  color: #28a745;
+}
+
+.tracking-icon.cancelled {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  color: white;
+  transform: scale(1.1);
+}
+
+.tracking-icon.cancelled i {
+  transform: scale(1.2);
+  animation: icon-shake 1s cubic-bezier(.36,.07,.19,.97) infinite;
+  animation-delay: 1s;
+}
+
+.order-tracking-vertical.cancelled {
+  padding: 1rem;
+}
+
+/* Enhanced Animations */
+@keyframes pulse-dark {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 193, 7, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 193, 7, 0);
+  }
+}
+
+@keyframes progress-pulse {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes icon-bounce {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.3);
+  }
+}
+
+@keyframes icon-shake {
+  0%, 100% {
+    transform: rotate(0);
+  }
+  20%, 60% {
+    transform: rotate(-6deg);
+  }
+  40%, 80% {
+    transform: rotate(6deg);
+  }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 767px) {
+  .order-tracking-vertical {
+    padding: 0.75rem;
+  }
+  
+  .tracking-icon {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+  }
+  
+  .tracking-line {
+    top: 28px;
+    left: 14px;
+  }
+  
+  .tracking-content {
+    padding-bottom: 0.75rem;
   }
 }

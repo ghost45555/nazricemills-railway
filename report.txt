@@ -1,0 +1,98 @@
+🚨 Backend Role Management Issue - Order Creation Endpoint
+Error Summary
+Endpoint: POST https://peaceful-unity-production.up.railway.app/api/orders
+HTTP Status: 400 Bad Request
+Error Message: "Failed to create order: ROLE_USER not found"
+Pattern: Guest orders fail, registered user orders succeed
+Error Details
+Frontend Error Object:
+{
+  message: "Failed to create order: ROLE_USER not found",
+  status: 400,
+  statusText: "OK",
+  url: "https://peaceful-unity-production.up.railway.app/api/orders"
+}
+
+Root Cause Analysis
+The error suggests the backend is trying to:
+Assign a role to a user during order creation process
+Look up "ROLE_USER" in the roles system
+Fail because "ROLE_USER" doesn't exist in the database/system
+Behavior Pattern
+User Type	Order Creation	Explanation
+Registered Users ✅	Works normally	User already has role assigned
+Guest Users ❌	Fails with role error	System tries to assign missing role
+Suspected Backend Issues
+1. Missing Role in Database
+-- Check if this role exists:
+SELECT * FROM roles WHERE name = 'ROLE_USER';
+-- If not found, this is the issue
+2. Incorrect Role Assignment Logic
+// Potentially problematic code pattern:
+if (userId == null) {
+    // Guest user - assign default role
+    Role userRole = roleRepository.findByName("ROLE_USER"); // ❌ Role doesn't exist
+    // This would throw "ROLE_USER not found"
+}
+3. Order Creation Dependencies
+The order creation process may have unnecessary role dependencies for guest users.
+Expected Backend Behavior
+For Guest Orders (userId: null):
+Should NOT require role assignment - guest users don't need roles
+Should process order directly without authentication/authorization checks
+Should only validate order data, not user permissions
+For Registered Orders (userId: number):
+Use existing user role (already working)
+Apply any role-based business logic if needed
+Recommended Backend Fixes
+Option 1: Fix Missing Role (Quick Fix)
+-- Add the missing role to database
+INSERT INTO roles (name, description) VALUES ('ROLE_USER', 'Default user role');
+Option 2: Remove Role Dependency for Guest Orders (Better Fix)
+// In OrderService.createOrder()
+if (orderData.getUserId() == null) {
+    // Guest order - skip role assignment
+    return createGuestOrder(orderData);
+} else {
+    // Registered user order - use existing role logic
+    return createUserOrder(orderData);
+}
+Option 3: Fix Role Logic (Most Robust)
+// Defensive programming
+Role defaultRole = roleRepository.findByName("ROLE_USER")
+    .orElse(roleRepository.findByName("ROLE_GUEST"))
+    .orElse(null); // Don't fail if no role needed for orders
+Frontend Data Being Sent
+The frontend is sending the same data structure as before:
+{
+  "userId": null,  // This triggers the role assignment logic
+  "email": "guest@example.com",
+  "firstName": "John",
+  "lastName": "Doe",
+  // ... other order fields
+  "items": [...]
+}
+Debugging Questions for Backend Team
+Does the "ROLE_USER" role exist in your roles table?
+Why does order creation require role assignment for guest users?
+Can guest orders be processed without role dependencies?
+Is there a createGuestOrder() method that bypasses authentication?
+Testing Scenarios
+Should Work After Fix:
+# Guest Order (userId: null)
+curl -X POST https://peaceful-unity-production.up.railway.app/api/orders \
+  -H "Content-Type: application/json" \
+  -d '{"userId":null,"email":"test@guest.com",...}'
+# Expected: 201 Created
+
+# Registered User Order  
+curl -X POST https://peaceful-unity-production.up.railway.app/api/orders \
+  -H "Authorization: Bearer <token>" \
+  -d '{"userId":123,"email":"user@registered.com",...}'
+# Expected: 201 Created (already working)
+Run
+Priority Level: 🔴 HIGH
+This is blocking all guest checkout functionality, which is critical for e-commerce operations.
+Previous Context
+This appears to be a new issue that emerged after the recent fixes for data type conversions. The role management system may have been inadvertently triggered by the recent changes.
+Summary: The backend needs to either add the missing "ROLE_USER" role to the database OR (preferably) remove role dependencies from guest order creation logic. Guest users shouldn't need roles to place orders.

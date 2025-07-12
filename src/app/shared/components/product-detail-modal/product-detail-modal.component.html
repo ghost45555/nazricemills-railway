@@ -43,13 +43,28 @@
               Best Seller
             </app-premium-tag>
           </div>
-          <app-premium-image
-            [src]="selectedWeight?.packagingPhoto || product.imageUrl"
-            [alt]="product.name"
-            [aspectRatio]="'4:3'"
-            [loading]="'lazy'"
-            class="product-image">
-          </app-premium-image>
+          <div class="product-image-wrapper" 
+               [class.changing]="isImageChanging"
+               [class.slide-left]="slideDirection === 'left'"
+               [class.slide-right]="slideDirection === 'right'">
+            <app-premium-image
+              [src]="selectedWeight?.packagingPhoto || product.imageUrl"
+              [alt]="product.name"
+              [aspectRatio]="'4:3'"
+              [loading]="'lazy'"
+              class="product-image"
+              (loaded)="onPackagingImageLoad()"
+              (error)="onPackagingImageError()">
+            </app-premium-image>
+            
+            <!-- Weight Change Loading Overlay -->
+            <div *ngIf="isImageChanging" class="image-change-overlay">
+              <div class="image-change-loader">
+                <div class="loader-spinner"></div>
+                <span class="loader-text">Changing packaging...</span>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Product Details Section -->

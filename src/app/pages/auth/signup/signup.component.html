@@ -38,7 +38,7 @@
             </div>
             <div class="detail-item">
               <span class="detail-label">Items:</span>
-              <span class="detail-value">{{ orderDetails.items?.length || 0 }} items</span>
+              <span class="detail-value">{{ (orderDetails.items?.length || orderDetails.orderItems?.length || 0) }} items</span>
             </div>
             <div class="detail-item">
               <span class="detail-label">Total:</span>
