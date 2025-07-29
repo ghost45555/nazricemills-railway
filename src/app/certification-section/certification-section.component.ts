@@ -5,10 +5,7 @@ import { CertificateFrameComponent } from '../shared/components/certificate-fram
 import Swiper from 'swiper';
 import { Navigation, Pagination, EffectCoverflow, Autoplay } from 'swiper/modules';
 import { register } from 'swiper/element/bundle';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css/effect-coverflow';
+
 
 register();
 

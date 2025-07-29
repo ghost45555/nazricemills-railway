@@ -25,10 +25,8 @@
               "src/sitemap.xml",
               "src/manifest.webmanifest"
             ],
-            "styles": ["src/styles.css", "node_modules/swiper/swiper.min.css"],
-            "scripts": [
-              "node_modules/swiper/swiper.min.js"
-            ],
+            "styles": ["src/styles.css"],
+            "scripts": [],
             "optimization": true,
             "outputHashing": "all",
             "sourceMap": false,
@@ -94,10 +92,8 @@
               "src/assets",
               "src/manifest.webmanifest"
             ],
-            "styles": ["src/styles.css", "node_modules/swiper/swiper.min.css"],
-            "scripts": [
-              "node_modules/swiper/swiper.min.js"
-            ]
+            "styles": ["src/styles.css"],
+            "scripts": []
           }
         },
         "server": {

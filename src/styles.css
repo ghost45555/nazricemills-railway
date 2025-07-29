@@ -1,6 +1,13 @@
 /* Import Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap');
 
+/* Import Swiper CSS */
+@import 'swiper/css';
+@import 'swiper/css/navigation';
+@import 'swiper/css/pagination';
+@import 'swiper/css/effect-creative';
+@import 'swiper/css/effect-coverflow';
+
 :root {
   /* Light Theme Colors */
   --color-gold: #957f36;

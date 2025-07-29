@@ -4,13 +4,13 @@
   "type": "module",
   "scripts": {
     "ng": "ng",
-    "start": "node dist/ricemill/server/server.mjs",
+    "start": "node dist/ricemill/server/main.js",
     "dev": "ng serve",
     "build": "ng build",
     "build:ssr": "ng build && ng run ricemill:server",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr": "node dist/ricemill/server/server.mjs"
+    "serve:ssr": "node dist/ricemill/server/main.js"
   },
   "private": true,
   "dependencies": {
