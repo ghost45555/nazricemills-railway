@@ -9,12 +9,21 @@ import bootstrap from './src/main.server';
 
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
+  console.log('Setting up Express app...');
+  
   const server = express();
   const serverDistFolder = dirname(fileURLToPath(import.meta.url));
   const browserDistFolder = resolve(serverDistFolder, '../browser');
   const indexHtml = join(browserDistFolder, 'index.html');
 
+  console.log('Paths configured:', {
+    serverDistFolder,
+    browserDistFolder,
+    indexHtml
+  });
+
   const commonEngine = new CommonEngine();
+  console.log('CommonEngine initialized');
 
   // Trust proxy for Railway
   server.set('trust proxy', 1);
@@ -32,10 +41,20 @@ export function app(): express.Express {
 
   // Health check endpoint for Railway
   server.get('/health', (req, res) => {
+    console.log('Health check requested');
     res.status(200).json({
       status: 'healthy',
       timestamp: new Date().toISOString(),
       environment: process.env['NODE_ENV'] || 'development'
+    });
+  });
+
+  // Simple test endpoint
+  server.get('/test', (req, res) => {
+    console.log('Test endpoint requested');
+    res.status(200).json({
+      message: 'Server is running',
+      timestamp: new Date().toISOString()
     });
   });
 
@@ -69,23 +88,38 @@ export function app(): express.Express {
 }
 
 function run(): void {
+  console.log('Starting server...');
+  console.log('Environment variables:', {
+    NODE_ENV: process.env['NODE_ENV'],
+    PORT: process.env['PORT'],
+    HOST: process.env['HOST']
+  });
+
   const port = parseInt(process.env['PORT'] || '4000', 10);
   const host = process.env['HOST'] || '0.0.0.0';
 
-  // Start up the Node server
-  const server = app();
-  
-  // Add error handling
-  server.on('error', (error) => {
-    console.error('Server error:', error);
-    process.exit(1);
-  });
+  console.log(`Configuring server for port ${port} and host ${host}`);
 
-  server.listen(port, host, () => {
-    console.log(`Node Express server listening on http://${host}:${port}`);
-    console.log(`Environment: ${process.env['NODE_ENV'] || 'development'}`);
-    console.log('Health check available at /health');
-  });
+  try {
+    // Start up the Node server
+    const server = app();
+    
+    // Add error handling
+    server.on('error', (error) => {
+      console.error('Server error:', error);
+      process.exit(1);
+    });
+
+    server.listen(port, host, () => {
+      console.log(`✅ Node Express server listening on http://${host}:${port}`);
+      console.log(`Environment: ${process.env['NODE_ENV'] || 'development'}`);
+      console.log('Health check available at /health');
+      console.log('Server startup complete!');
+    });
+  } catch (error) {
+    console.error('Failed to start server:', error);
+    process.exit(1);
+  }
 }
 
 run();
