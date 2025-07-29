@@ -12,7 +12,7 @@ export function app(): express.Express {
   const server = express();
   const serverDistFolder = dirname(fileURLToPath(import.meta.url));
   const browserDistFolder = resolve(serverDistFolder, '../browser');
-  const indexHtml = join(serverDistFolder, 'index.server.html');
+  const indexHtml = join(browserDistFolder, 'index.html');
 
   const commonEngine = new CommonEngine();
 
@@ -39,14 +39,14 @@ export function app(): express.Express {
     });
   });
 
-  // Serve static files from /browser
-  server.get('**', express.static(browserDistFolder, {
+  // Serve static files from /browser (only for actual static files)
+  server.use(express.static(browserDistFolder, {
     maxAge: '1y',
-    index: 'index.html',
+    index: false, // Don't serve index.html for static requests
   }));
 
   // All regular routes use the Angular engine
-  server.get('**', (req, res, next) => {
+  server.get('*', (req, res, next) => {
     const { protocol, originalUrl, baseUrl, headers } = req;
 
     commonEngine
@@ -58,7 +58,11 @@ export function app(): express.Express {
         providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
       })
       .then((html) => res.send(html))
-      .catch((err) => next(err));
+      .catch((err) => {
+        console.error('Angular rendering error:', err);
+        // Fallback to sending a basic error response
+        res.status(500).send('Internal Server Error');
+      });
   });
 
   return server;
@@ -70,9 +74,17 @@ function run(): void {
 
   // Start up the Node server
   const server = app();
+  
+  // Add error handling
+  server.on('error', (error) => {
+    console.error('Server error:', error);
+    process.exit(1);
+  });
+
   server.listen(port, host, () => {
     console.log(`Node Express server listening on http://${host}:${port}`);
     console.log(`Environment: ${process.env['NODE_ENV'] || 'development'}`);
+    console.log('Health check available at /health');
   });
 }
 

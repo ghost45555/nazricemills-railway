@@ -7,9 +7,7 @@ import { ThemeToggleComponent } from './theme-toggle/theme-toggle.component';
 import { filter } from 'rxjs/operators';
 import { LoadingService } from './services/loading.service';
 import { LoadingContainerComponent } from './shared/components/loading-container/loading-container.component';
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { firebaseConfig } from '../../firebaseConfig';
+
 
 @Component({
     selector: 'app-root',
@@ -37,7 +35,6 @@ export class AppComponent implements OnInit {
     private ngZone: NgZone,
     private renderer: Renderer2
   ) {
-    const app = initializeApp(firebaseConfig);
   }
 
   @HostListener('window:load')
