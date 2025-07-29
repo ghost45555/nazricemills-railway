@@ -1,10 +1,19 @@
+import { Injectable } from '@angular/core';
+import * as THREE from 'three';
+
+interface GlobalLocation {
+  lat: number;
+  lng: number;
+  name: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class GlobeService {
   private renderer?: THREE.WebGLRenderer;
   private scene?: THREE.Scene;
-  private camera?: THREE.PerspectiveCamera;
+  private camera?: THREE.OrthographicCamera;
   private globe?: THREE.Mesh;
   private markers: THREE.Group = new THREE.Group();
   private isAnimating = false;
@@ -43,6 +52,14 @@ export class GlobeService {
     
     // Optimize animation loop
     this.startAnimation();
+  }
+
+  private createMarkers(locations: GlobalLocation[]): void {
+    // Implementation for creating markers
+    // This is a placeholder - you can implement marker creation logic here
+    locations.forEach(location => {
+      // Create marker logic here
+    });
   }
 
   private startAnimation(): void {

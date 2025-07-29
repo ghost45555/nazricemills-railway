@@ -10,8 +10,7 @@
     "build:ssr": "ng build && ng run ricemill:server",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr": "node dist/ricemill/server/server.mjs",
-    "postinstall": "npm run build:ssr"
+    "serve:ssr": "node dist/ricemill/server/server.mjs"
   },
   "private": true,
   "dependencies": {
