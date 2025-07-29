@@ -33,6 +33,7 @@ interface CheckoutFormData {
 
 @Component({
     selector: 'app-checkout',
+    standalone: true,
     templateUrl: './checkout.component.html',
     styleUrls: ['./checkout.component.css'],
     imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule]

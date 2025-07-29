@@ -6,6 +6,7 @@ import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.comp
 
 @Component({
     selector: 'app-loading-container',
+    standalone: true,
     imports: [CommonModule, LoadingSpinnerComponent],
     templateUrl: './loading-container.component.html',
     styleUrls: ['./loading-container.component.css']

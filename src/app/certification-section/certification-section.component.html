@@ -1,0 +1,63 @@
+<section class="certification-section luxury-bg" aria-label="International Certifications" role="region">
+  <app-section-header
+    title="Internationally Recognized Certifications"
+    subtitle="Our commitment to global standards is validated by the world’s most respected authorities."
+    [animateIn]="true"
+    alignment="center"
+    theme="light"
+    [showDivider]="true"
+    titleSize="large"
+    subtitleStyle="elegant"
+    [maxWidth]="'700px'">
+  </app-section-header>
+
+  <div class="certifications-slider-wrapper">
+    <div class="certifications-swiper swiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide" *ngFor="let cert of certificates">
+          <app-certificate-frame
+            [image]="cert.image"
+            [alt]="cert.alt"
+            [name]="cert.name"
+            [description]="cert.description"
+            (magnify)="openModal(cert)"
+            [showMagnify]="true"
+            [ariaLabel]="'View details for ' + cert.name">
+          </app-certificate-frame>
+        </div>
+      </div>
+      <!-- Navigation Arrows -->
+      <button class="cert-swiper-prev slider-button" aria-label="Previous certificate">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <button class="cert-swiper-next slider-button" aria-label="Next certificate">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+      <!-- Pagination Dots -->
+      <div class="cert-swiper-pagination slider-pagination" aria-label="Certificate navigation"></div>
+    </div>
+  </div>
+
+  <!-- Modal/Lightbox for Certificate Details -->
+  <div *ngIf="modalOpen && modalCert" class="certificate-modal-overlay" tabindex="-1" role="dialog" aria-modal="true" (click)="closeModal()">
+    <div class="certificate-modal" (click)="$event.stopPropagation()" [attr.aria-label]="'Details for ' + modalCert.name">
+      <button class="modal-close" aria-label="Close details" (click)="closeModal()">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <div class="modal-image-wrapper">
+        <img [src]="modalCert.image" [alt]="modalCert.alt" class="modal-certificate-image" loading="eager" />
+      </div>
+      <div class="modal-info">
+        <div class="modal-cert-name">{{ modalCert.name }}</div>
+        <div class="modal-cert-desc">{{ modalCert.description }}</div>
+        <div class="modal-cert-authority">
+          <img *ngIf="modalCert.name === 'ISO 9001:2015'" src="assets/img/certifications/authority-iso.png" alt="ISO Authority Logo" class="authority-logo" />
+          <img *ngIf="modalCert.name === 'ISO 22000:2018'" src="assets/img/certifications/authority-iso.png" alt="ISO Authority Logo" class="authority-logo" />
+          <img *ngIf="modalCert.name === 'HACCP'" src="assets/img/certifications/authority-haccp.png" alt="HACCP Authority Logo" class="authority-logo" />
+          <img *ngIf="modalCert.name === 'Halal'" src="assets/img/certifications/authority-halal.png" alt="Halal Authority Logo" class="authority-logo" />
+        </div>
+        <div class="modal-cert-summary">This certification is a testament to our commitment to world-class standards and global trust.</div>
+      </div>
+    </div>
+  </div>
+</section>

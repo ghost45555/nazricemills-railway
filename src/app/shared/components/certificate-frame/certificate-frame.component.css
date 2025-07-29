@@ -1,0 +1,176 @@
+.certificate-frame {
+  outline: none;
+  border: none;
+  background: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  cursor: pointer;
+  transition: box-shadow 0.35s cubic-bezier(0.4,0,0.2,1), transform 0.35s cubic-bezier(0.4,0,0.2,1);
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18), 0 1.5px 8px rgba(212,175,55,0.08);
+  margin: 0 0.5rem;
+  position: relative;
+  min-width: 260px;
+  max-width: 340px;
+  width: 100%;
+}
+.certificate-frame:focus,
+.certificate-frame.focused,
+.certificate-frame:hover {
+  box-shadow: 0 16px 48px rgba(212,175,55,0.18), 0 4px 16px rgba(46,125,50,0.10);
+  transform: translateY(-6px) scale(1.025);
+}
+
+.certificate-frame__glass {
+  width: 100%;
+  border-radius: 1.5rem;
+  background: rgba(30, 32, 40, 0.55);
+  backdrop-filter: blur(18px) saturate(1.2);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+  border: 1.2px solid linear-gradient(135deg, #D4AF37 60%, #bfc6d1 100%);
+  box-shadow: 0 2px 12px rgba(212,175,55,0.08);
+  position: relative;
+  padding: 2.2rem 1.5rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.certificate-frame__glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 1.5rem;
+  pointer-events: none;
+  border: 1.2px solid;
+  border-image: linear-gradient(135deg, #D4AF37 60%, #bfc6d1 100%) 1;
+  box-shadow: 0 0 0 0.5px rgba(212,175,55,0.12);
+  opacity: 0.95;
+}
+
+.certificate-frame__image-wrapper {
+  width: 100%;
+  aspect-ratio: 3/4;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1.1rem;
+  overflow: hidden;
+  background: rgba(255,255,255,0.04);
+  box-shadow: 0 2px 12px rgba(212,175,55,0.08);
+}
+
+.certificate-frame__image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 1.1rem;
+  box-shadow: 0 1.5px 8px rgba(212,175,55,0.08);
+  background: transparent;
+  transition: filter 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+
+.certificate-frame__magnify {
+  position: absolute;
+  bottom: 1.1rem;
+  right: 1.1rem;
+  background: rgba(30,32,40,0.18);
+  border: none;
+  border-radius: 50%;
+  padding: 0.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms cubic-bezier(0.4,0,0.2,1), transform 120ms cubic-bezier(0.4,0,0.2,1);
+  transform: scale(0.95);
+  z-index: 2;
+}
+.certificate-frame:hover .certificate-frame__magnify,
+.certificate-frame:focus .certificate-frame__magnify,
+.certificate-frame.focused .certificate-frame__magnify {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+  transition-delay: 120ms;
+}
+.certificate-frame__magnify:active {
+  opacity: 0.7;
+  transform: scale(0.97);
+}
+.magnify-icon {
+  stroke: #D4AF37;
+  opacity: 0.7;
+  transition: opacity 80ms cubic-bezier(0.4,0,0.2,1);
+}
+.certificate-frame__magnify:hover .magnify-icon,
+.certificate-frame__magnify:focus .magnify-icon {
+  opacity: 1;
+}
+
+.certificate-frame__info {
+  width: 100%;
+  text-align: center;
+  margin-top: 1.2rem;
+}
+.certificate-frame__name {
+  font-family: var(--font-heading, 'Playfair Display', serif);
+  font-size: 1.13rem;
+  font-weight: 600;
+  color: var(--color-gold, #D4AF37);
+  letter-spacing: 0.01em;
+  margin-bottom: 0.25rem;
+}
+.certificate-frame__desc {
+  font-size: 0.98rem;
+  color: var(--color-text-light, #bfc6d1);
+  font-family: var(--font-body, 'Inter', sans-serif);
+  opacity: 0.85;
+  margin-bottom: 0.1rem;
+}
+
+@media (max-width: 900px) {
+  .certificate-frame {
+    min-width: 180px;
+    max-width: 220px;
+    border-radius: 1rem;
+  }
+  .certificate-frame__glass {
+    border-radius: 1rem;
+    padding: 1.2rem 0.7rem 1rem 0.7rem;
+  }
+  .certificate-frame__glass::before {
+    border-radius: 1rem;
+  }
+  .certificate-frame__image-wrapper {
+    border-radius: 0.7rem;
+  }
+  .certificate-frame__image {
+    border-radius: 0.7rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .certificate-frame {
+    min-width: 120px;
+    max-width: 160px;
+    border-radius: 0.7rem;
+  }
+  .certificate-frame__glass {
+    border-radius: 0.7rem;
+    padding: 0.7rem 0.2rem 0.7rem 0.2rem;
+  }
+  .certificate-frame__glass::before {
+    border-radius: 0.7rem;
+  }
+  .certificate-frame__image-wrapper {
+    border-radius: 0.5rem;
+  }
+  .certificate-frame__image {
+    border-radius: 0.5rem;
+  }
+} 

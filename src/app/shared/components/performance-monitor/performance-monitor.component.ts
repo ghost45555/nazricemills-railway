@@ -17,6 +17,7 @@ import {
 
 @Component({
     selector: 'app-performance-monitor',
+    standalone: true,
     imports: [CommonModule, PremiumCardComponent],
     templateUrl: './performance-monitor.component.html',
     styleUrls: ['./performance-monitor.component.css']

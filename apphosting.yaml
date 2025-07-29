@@ -1,65 +1,23 @@
-# Firebase App Hosting configuration for Angular 19 SSR
-# Settings for Backend (on Cloud Run)
+# Settings for Backend (on Cloud Run).
 # See https://firebase.google.com/docs/app-hosting/configure#cloud-run
 runConfig:
   minInstances: 0
-  maxInstances: 100
-  concurrency: 80
-  cpu: 1
-  memoryMiB: 1024
-  # Enable HTTP/2 for better performance
-  timeoutSeconds: 300
+  # maxInstances: 100
+  # concurrency: 80
+  # cpu: 1
+  # memoryMiB: 512
 
-# Build configuration
-build:
-  commands:
-    - npm ci
-    - npm run build:ssr
-  outputDir: dist/ricemill
+# Environment variables and secrets.
+# env:
+  # Configure environment variables.
+  # See https://firebase.google.com/docs/app-hosting/configure#user-defined-environment
+  # - variable: MESSAGE
+  #   value: Hello world!
+  #   availability:
+  #     - BUILD
+  #     - RUNTIME
 
-# Environment variables and secrets
-env:
-  # Runtime environment variables
-  - variable: NODE_ENV
-    value: production
-    availability:
-      - RUNTIME
-  
-  # Build-time environment variables
-  - variable: ANGULAR_ENV
-    value: production
-    availability:
-      - BUILD
-      - RUNTIME
-
-  # SEO and Analytics configuration
-  - variable: SITE_URL
-    value: https://nazricemills.com
-    availability:
-      - BUILD
-      - RUNTIME
-  
-  - variable: GA_TRACKING_ID
-    value: G-XXXXXXXXXX
-    availability:
-      - BUILD
-      - RUNTIME
-
-  # Firebase project configuration
-  - variable: FIREBASE_PROJECT_ID
-    value: naz-rice-mills
-    availability:
-      - BUILD
-      - RUNTIME
-
-# Grant access to secrets in Cloud Secret Manager
-# Uncomment and configure as needed
-# - variable: DATABASE_URL
-#   secret: database-url-secret
-#   availability:
-#     - RUNTIME
-
-# - variable: API_KEY
-#   secret: api-key-secret
-#   availability:
-#     - RUNTIME
+  # Grant access to secrets in Cloud Secret Manager.
+  # See https://firebase.google.com/docs/app-hosting/configure#secret-parameters
+  # - variable: MY_SECRET
+  #   secret: mySecretRef

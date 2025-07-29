@@ -18,6 +18,7 @@ interface StatusToast {
 
 @Component({
     selector: 'app-my-orders',
+    standalone: true,
     imports: [CommonModule, RouterModule],
     templateUrl: './my-orders.component.html',
     styleUrls: ['./my-orders.component.css']

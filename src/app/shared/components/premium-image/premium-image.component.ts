@@ -4,6 +4,7 @@ import { ScrollAnimationDirective } from '../../directives/scroll-animation.dire
 
 @Component({
     selector: 'app-premium-image',
+    standalone: true,
     imports: [CommonModule, ScrollAnimationDirective],
     templateUrl: './premium-image.component.html',
     styleUrls: ['./premium-image.component.css']

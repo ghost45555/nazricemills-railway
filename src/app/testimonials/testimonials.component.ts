@@ -9,6 +9,7 @@ import { ScrollAnimationDirective } from '../shared/directives/scroll-animation.
 
 @Component({
     selector: 'app-testimonials',
+    standalone: true,
     imports: [CommonModule, SectionHeaderComponent, ScrollAnimationDirective],
     providers: [AnimationService],
     templateUrl: './testimonials.component.html',

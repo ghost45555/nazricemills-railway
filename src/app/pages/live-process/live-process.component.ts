@@ -16,6 +16,7 @@ interface ProcessStep {
 
 @Component({
     selector: 'app-live-process',
+    standalone: true,
     imports: [
         CommonModule,
         SectionHeaderComponent,

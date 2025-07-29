@@ -11,6 +11,7 @@ import { CartService } from '../shared/services/cart.service';
 
 @Component({
     selector: 'app-products-section',
+    standalone: true,
     imports: [
         CommonModule,
         SectionHeaderComponent,

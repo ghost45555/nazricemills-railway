@@ -7,6 +7,7 @@ import { HeroComponent } from "../shared/components/hero/hero.component";
 
 @Component({
     selector: 'app-hero-section',
+    standalone: true,
     imports: [CommonModule, HeroComponent],
     templateUrl: './hero-section.component.html',
     styleUrls: ['./hero-section.component.css']

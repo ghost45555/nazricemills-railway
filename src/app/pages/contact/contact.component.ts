@@ -15,6 +15,7 @@ import { siteConfig } from '../../config/site.config';
 
 @Component({
     selector: 'app-contact',
+    standalone: true,
     imports: [
         CommonModule,
         ReactiveFormsModule,

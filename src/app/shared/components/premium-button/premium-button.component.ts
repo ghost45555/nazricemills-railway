@@ -6,6 +6,7 @@ type ButtonSize = 'small' | 'medium' | 'large';
 
 @Component({
     selector: 'app-premium-button',
+    standalone: true,
     imports: [CommonModule],
     templateUrl: './premium-button.component.html',
     styleUrls: ['./premium-button.component.css']

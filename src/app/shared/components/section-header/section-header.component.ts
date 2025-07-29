@@ -5,6 +5,7 @@ import { AnimationService } from '../../../services/animation.service';
 
 @Component({
     selector: 'app-section-header',
+    standalone: true,
     imports: [CommonModule, ScrollAnimationDirective],
     templateUrl: './section-header.component.html',
     styleUrls: ['./section-header.component.css']

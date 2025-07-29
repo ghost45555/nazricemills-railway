@@ -16,8 +16,28 @@ export function app(): express.Express {
 
   const commonEngine = new CommonEngine();
 
+  // Trust proxy for Railway
+  server.set('trust proxy', 1);
+  
+  // Security headers
+  server.use((req, res, next) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    next();
+  });
+
   server.set('view engine', 'html');
   server.set('views', browserDistFolder);
+
+  // Health check endpoint for Railway
+  server.get('/health', (req, res) => {
+    res.status(200).json({
+      status: 'healthy',
+      timestamp: new Date().toISOString(),
+      environment: process.env['NODE_ENV'] || 'development'
+    });
+  });
 
   // Serve static files from /browser
   server.get('**', express.static(browserDistFolder, {
@@ -45,12 +65,14 @@ export function app(): express.Express {
 }
 
 function run(): void {
-  const port = process.env['PORT'] || 4000;
+  const port = parseInt(process.env['PORT'] || '4000', 10);
+  const host = process.env['HOST'] || '0.0.0.0';
 
   // Start up the Node server
   const server = app();
-  server.listen(port, () => {
-    console.log(`Node Express server listening on http://localhost:${port}`);
+  server.listen(port, host, () => {
+    console.log(`Node Express server listening on http://${host}:${port}`);
+    console.log(`Environment: ${process.env['NODE_ENV'] || 'development'}`);
   });
 }
 

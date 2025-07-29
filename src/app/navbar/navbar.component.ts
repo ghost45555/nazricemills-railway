@@ -15,6 +15,7 @@ interface NavItem {
 
 @Component({
     selector: 'app-navbar',
+    standalone: true,
     imports: [
         CommonModule,
         RouterModule

@@ -17,6 +17,7 @@ import { ProductDetailModalComponent } from '../../shared/components/product-det
 
 @Component({
     selector: 'app-products',
+    standalone: true,
     imports: [
         CommonModule,
         FormsModule,
@@ -28,6 +29,7 @@ import { ProductDetailModalComponent } from '../../shared/components/product-det
         ProductDetailModalComponent
     ],
     templateUrl: './products.component.html',
+    
     styleUrls: ['./products.component.css'],
     animations: [
         trigger('fadeInOut', [

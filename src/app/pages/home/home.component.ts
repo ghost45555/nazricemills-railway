@@ -6,13 +6,16 @@ import { ProductsSectionComponent } from '../../products-section/products-sectio
 import { WhyChooseUsComponent } from '../../why-choose-us/why-choose-us.component';
 import { TestimonialsComponent } from '../../testimonials/testimonials.component';
 import { ContactComponent } from '../../contact/contact.component';
+import { CertificationSectionComponent } from '../../certification-section/certification-section.component';
 
 @Component({
     selector: 'app-home',
+    standalone: true,
     imports: [
         CommonModule,
         HeroSectionComponent,
         AboutSectionComponent,
+        CertificationSectionComponent,
         ProductsSectionComponent,
         WhyChooseUsComponent,
         TestimonialsComponent,
@@ -28,12 +31,17 @@ import { ContactComponent } from '../../contact/contact.component';
         <app-about-section></app-about-section>
       </section>
       
+      
       <section class="section products-section" id="products">
         <app-products-section></app-products-section>
       </section>
       
       <section class="section why-choose-section" id="why-choose-us">
         <app-why-choose-us></app-why-choose-us>
+      </section>
+
+      <section class="section certification-section" id="certifications">
+        <app-certification-section></app-certification-section>
       </section>
       
       <section class="section testimonials-section" id="testimonials">

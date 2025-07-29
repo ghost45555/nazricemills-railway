@@ -10,6 +10,7 @@ import { map } from 'rxjs/operators';
 
 @Component({
     selector: 'app-about-section',
+    standalone: true,
     imports: [
         CommonModule,
         SectionHeaderComponent,

@@ -14,6 +14,7 @@ interface WeightOption {
 
 @Component({
     selector: 'app-product-detail-modal',
+    standalone: true,
     imports: [
         CommonModule,
         PremiumButtonComponent,

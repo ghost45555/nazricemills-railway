@@ -8,6 +8,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 
 @Component({
     selector: 'app-contact',
+    standalone: true,
     imports: [
         CommonModule,
         ReactiveFormsModule,

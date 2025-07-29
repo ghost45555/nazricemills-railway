@@ -22,6 +22,7 @@ interface Stat {
 
 @Component({
     selector: 'app-why-choose-us',
+    standalone: true,
     imports: [
         CommonModule,
         SectionHeaderComponent,

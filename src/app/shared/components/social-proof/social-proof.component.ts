@@ -11,6 +11,7 @@ interface SocialProof {
 
 @Component({
     selector: 'app-social-proof',
+    standalone: true,
     imports: [CommonModule],
     templateUrl: './social-proof.component.html',
     styleUrls: ['./social-proof.component.css']

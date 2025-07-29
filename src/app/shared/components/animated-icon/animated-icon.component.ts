@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
     selector: 'app-animated-icon',
+    standalone: true,
     imports: [CommonModule],
     template: `
     <div class="animated-icon" 

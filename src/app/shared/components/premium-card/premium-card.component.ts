@@ -7,6 +7,7 @@ type CardElevation = 'none' | 'sm' | 'md' | 'lg';
 
 @Component({
     selector: 'app-premium-card',
+    standalone: true,
     imports: [CommonModule, ScrollAnimationDirective],
     templateUrl: './premium-card.component.html',
     styleUrls: ['./premium-card.component.css']

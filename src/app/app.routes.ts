@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { ExtraInfoListComponent } from './pages/extra-info/extra-info-list.component';
+import { ExtraInfoContentComponent } from './pages/extra-info/extra-info-content.component';
 
 export const routes: Routes = [
   {
@@ -8,6 +10,14 @@ export const routes: Routes = [
   {
     path: 'about',
     loadComponent: () => import('./pages/about/about.component').then(m => m.AboutComponent)
+  },
+  {
+    path: 'extra-info/:productId',
+    component: ExtraInfoListComponent
+  },
+  {
+    path: 'extra-info/:productId/:id',
+    component: ExtraInfoContentComponent
   },
   {
     path: 'products',

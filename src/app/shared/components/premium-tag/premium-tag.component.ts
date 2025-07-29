@@ -6,6 +6,7 @@ type TagSize = 'small' | 'medium' | 'large';
 
 @Component({
     selector: 'app-premium-tag',
+    standalone: true,
     imports: [CommonModule],
     templateUrl: './premium-tag.component.html',
     styleUrls: ['./premium-tag.component.css']

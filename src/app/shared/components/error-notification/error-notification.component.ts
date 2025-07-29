@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-error-notification',
+    standalone: true,
     imports: [CommonModule, PremiumButtonComponent],
     templateUrl: './error-notification.component.html',
     styleUrls: ['./error-notification.component.css']

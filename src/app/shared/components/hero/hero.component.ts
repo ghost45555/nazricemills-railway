@@ -26,6 +26,7 @@ export interface HeroFeature {
 
 @Component({
     selector: 'app-hero',
+    standalone: true,
     imports: [CommonModule, RouterLink],
     templateUrl: './hero.component.html',
     styleUrl: './hero.component.css',
