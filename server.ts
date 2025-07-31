@@ -13,15 +13,40 @@ export async function app(): Promise<express.Express> {
   
   const server = express();
   const serverDistFolder = dirname(fileURLToPath(import.meta.url));
-  const browserDistFolder = resolve(serverDistFolder, '../browser');
-  const indexHtml = join(browserDistFolder, 'index.html');
+  // Fix path resolution for Railway environment
+  let browserDistFolder = resolve(serverDistFolder, '../browser');
+  let indexHtml = join(browserDistFolder, 'index.html');
+
+  // If we're in the root directory (development), adjust paths
+  if (serverDistFolder.includes('ricemill - org product modification - railway hosting')) {
+    browserDistFolder = resolve(serverDistFolder, 'dist/ricemill/browser');
+    indexHtml = join(browserDistFolder, 'index.html');
+  }
 
   // Debug: Check if files exist
   console.log('Checking file paths...');
   try {
     const fs = await import('fs');
+    console.log('Server dist folder exists:', fs.existsSync(serverDistFolder));
     console.log('Browser dist folder exists:', fs.existsSync(browserDistFolder));
     console.log('Index.html exists:', fs.existsSync(indexHtml));
+    
+    // List contents of server dist folder
+    console.log('Server dist folder contents:', fs.readdirSync(serverDistFolder));
+    
+    // Try alternative paths if the default path doesn't exist
+    if (!fs.existsSync(indexHtml)) {
+      const altBrowserPath = resolve(serverDistFolder, '../../browser');
+      const altIndexPath = join(altBrowserPath, 'index.html');
+      console.log('Alternative browser path exists:', fs.existsSync(altBrowserPath));
+      console.log('Alternative index.html exists:', fs.existsSync(altIndexPath));
+      
+      if (fs.existsSync(altIndexPath)) {
+        console.log('Using alternative path for index.html');
+        browserDistFolder = altBrowserPath;
+        indexHtml = altIndexPath;
+      }
+    }
   } catch (error) {
     console.log('Error checking files:', error);
   }
