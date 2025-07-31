@@ -1,5 +1,5 @@
-import { Component, HostListener, ElementRef, Renderer2, OnInit, ViewChild, AfterViewInit, ContentChild, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, HostListener, ElementRef, Renderer2, OnInit, ViewChild, AfterViewInit, ContentChild, OnDestroy, PLATFORM_ID, Inject } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { trigger, transition, style, animate, stagger, query, state, group } from '@angular/animations';
 import { AnimationService } from '../services/animation.service';
@@ -167,22 +167,29 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
     private el: ElementRef,
     private animationService: AnimationService,
     private cartService: CartService,
-    public authService: AuthService
+    public authService: AuthService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {
-    this.isMobile = window.innerWidth <= 900;
+    // Only check window width in browser environment
+    if (isPlatformBrowser(this.platformId)) {
+      this.isMobile = window.innerWidth <= 900;
+    }
   }
 
   ngOnInit() {
-    if (!this.isMobile) {
-      this.initializeParallaxEffects();
-    }
-    
-    window.addEventListener('resize', () => {
-      this.isMobile = window.innerWidth <= 900;
-      if (this.isMobile) {
-        this.resetAllEffects();
+    // Only run browser-specific code in browser environment
+    if (isPlatformBrowser(this.platformId)) {
+      if (!this.isMobile) {
+        this.initializeParallaxEffects();
       }
-    });
+      
+      window.addEventListener('resize', () => {
+        this.isMobile = window.innerWidth <= 900;
+        if (this.isMobile) {
+          this.resetAllEffects();
+        }
+      });
+    }
 
     this.cartSubscription = this.cartService.getCartItems().subscribe(items => {
       this.cartItemCount = items.reduce((total, item) => total + item.quantity, 0);
@@ -231,10 +238,18 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @HostListener('window:scroll', ['$event'])
   onScroll() {
-    this.checkScroll();
+    // Only handle scroll in browser environment
+    if (isPlatformBrowser(this.platformId)) {
+      this.checkScroll();
+    }
   }
 
   private checkScroll() {
+    // Only run in browser environment
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     this.isScrolled = scrollTop > 50;
     this.isScrollingUp = scrollTop < this.lastScrollTop;
@@ -251,15 +266,19 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
 
   toggleMobileMenu() {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
-    if (this.isMobileMenuOpen) {
-      this.renderer.addClass(document.body, 'menu-open');
-    } else {
-      this.renderer.removeClass(document.body, 'menu-open');
+    if (isPlatformBrowser(this.platformId)) {
+      if (this.isMobileMenuOpen) {
+        this.renderer.addClass(document.body, 'menu-open');
+      } else {
+        this.renderer.removeClass(document.body, 'menu-open');
+      }
     }
   }
 
   closeMobileMenu() {
     this.isMobileMenuOpen = false;
-    this.renderer.removeClass(document.body, 'menu-open');
+    if (isPlatformBrowser(this.platformId)) {
+      this.renderer.removeClass(document.body, 'menu-open');
+    }
   }
 }
