@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map, tap, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { isPlatformBrowser } from '@angular/common';
 
 export interface User {
   id: number;
@@ -45,13 +46,19 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.loadUserFromStorage();
   }
 
   // Load user data from localStorage on service initialization
   private loadUserFromStorage(): void {
+    // Only run in browser environment
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    
     const token = localStorage.getItem('token');
     const userStr = localStorage.getItem('user');
     
@@ -99,9 +106,11 @@ export class AuthService {
   // Handle the authentication response
   private handleAuthResponse(response: LoginResponse): void {
     if (response && response.token) {
-      // Store token and user data in localStorage
-      localStorage.setItem('token', response.token);
-      localStorage.setItem('user', JSON.stringify(response.user));
+      // Store token and user data in localStorage (only in browser)
+      if (isPlatformBrowser(this.platformId)) {
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('user', JSON.stringify(response.user));
+      }
       
       // Update subjects
       this.currentUserSubject.next(response.user);
@@ -111,20 +120,27 @@ export class AuthService {
 
   // Logout the user
   logout(): void {
-    // Clear localStorage
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    // Clear localStorage (only in browser)
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+    }
     
     // Reset subjects
     this.currentUserSubject.next(null);
     this.isLoggedInSubject.next(false);
     
-    // Redirect to home page
-    this.router.navigate(['/']);
+    // Redirect to home page (only in browser)
+    if (isPlatformBrowser(this.platformId)) {
+      this.router.navigate(['/']);
+    }
   }
 
   // Check if the user is authenticated
   isAuthenticated(): boolean {
+    if (!isPlatformBrowser(this.platformId)) {
+      return false;
+    }
     return !!localStorage.getItem('token');
   }
 
@@ -135,9 +151,10 @@ export class AuthService {
     }
     
     const userId = this.getCurrentUser()?.id;
+    const token = isPlatformBrowser(this.platformId) ? localStorage.getItem('token') : null;
     return this.http.get<any[]>(`${this.API_URL}/addresses/user/${userId}`, {
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
+        'Authorization': `Bearer ${token}`
       }
     }).pipe(
       catchError(error => {
@@ -153,9 +170,10 @@ export class AuthService {
       return of(null);
     }
     
+    const token = isPlatformBrowser(this.platformId) ? localStorage.getItem('token') : null;
     return this.http.post<any>(`${this.API_URL}/addresses`, addressData, {
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       }
     }).pipe(
@@ -173,9 +191,10 @@ export class AuthService {
     }
     
     const userId = this.getCurrentUser()?.id;
+    const token = isPlatformBrowser(this.platformId) ? localStorage.getItem('token') : null;
     return this.http.put<User>(`${this.API_URL}/users/${userId}`, userData, {
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       }
     }).pipe(
@@ -184,7 +203,9 @@ export class AuthService {
         const currentUser = this.getCurrentUser();
         const mergedUser = { ...currentUser, ...updatedUser };
         
-        localStorage.setItem('user', JSON.stringify(mergedUser));
+        if (isPlatformBrowser(this.platformId)) {
+          localStorage.setItem('user', JSON.stringify(mergedUser));
+        }
         this.currentUserSubject.next(mergedUser);
       }),
       catchError(error => {

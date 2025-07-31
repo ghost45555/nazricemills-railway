@@ -20,11 +20,13 @@ export class CartService {
   private cartTotal = new BehaviorSubject<number>(0);
 
   constructor() {
-    // Load cart from localStorage on service initialization
-    const savedCart = localStorage.getItem('cart');
-    if (savedCart) {
-      this.cartItems.next(JSON.parse(savedCart));
-      this.updateTotal();
+    // Load cart from localStorage on service initialization (only in browser)
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const savedCart = localStorage.getItem('cart');
+      if (savedCart) {
+        this.cartItems.next(JSON.parse(savedCart));
+        this.updateTotal();
+      }
     }
   }
 
@@ -89,6 +91,9 @@ export class CartService {
   }
 
   private saveCart(): void {
-    localStorage.setItem('cart', JSON.stringify(this.cartItems.value));
+    // Only save to localStorage in browser environment
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.setItem('cart', JSON.stringify(this.cartItems.value));
+    }
   }
 } 
