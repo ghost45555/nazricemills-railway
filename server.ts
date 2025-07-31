@@ -60,15 +60,7 @@ export function app(): express.Express {
     });
   });
 
-  // Root endpoint for basic health check
-  server.get('/', (req, res) => {
-    console.log('Root endpoint requested');
-    res.status(200).json({
-      message: 'Naz Rice Mills SSR Server',
-      status: 'running',
-      timestamp: new Date().toISOString()
-    });
-  });
+  // Root endpoint removed - let Angular handle it
 
   // Serve static files from /browser (only for actual static files)
   server.use(express.static(browserDistFolder, {
@@ -83,8 +75,7 @@ export function app(): express.Express {
     // Skip API endpoints
     if (originalUrl.startsWith('/api/') || 
         originalUrl === '/health' || 
-        originalUrl === '/test' || 
-        originalUrl === '/') {
+        originalUrl === '/test') {
       return next();
     }
 
