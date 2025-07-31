@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SectionHeaderComponent } from '../../shared/components/section-header/section-header.component';
-import { PremiumCardComponent } from '../../shared/components/premium-card/premium-card.component';
-import { ScrollAnimationDirective } from '../../shared/directives/scroll-animation.directive';
 import { HeroComponent } from "../../shared/components/hero/hero.component";
 import { AnimationService } from '../../services/animation.service';
 
@@ -20,8 +18,6 @@ interface ProcessStep {
     imports: [
         CommonModule,
         SectionHeaderComponent,
-        PremiumCardComponent,
-        ScrollAnimationDirective,
         HeroComponent
     ],
     templateUrl: './live-process.component.html',

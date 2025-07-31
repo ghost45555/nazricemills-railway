@@ -7,8 +7,6 @@ import { ProductService } from '../../services/product.service';
 import { CartService } from '../../shared/services/cart.service';
 import { SectionHeaderComponent } from '../../shared/components/section-header/section-header.component';
 import { PremiumCardComponent } from '../../shared/components/premium-card/premium-card.component';
-import { PremiumImageComponent } from '../../shared/components/premium-image/premium-image.component';
-import { ScrollAnimationDirective } from '../../shared/directives/scroll-animation.directive';
 import { HeroComponent } from "../../shared/components/hero/hero.component";
 import { Product, ProductFilter, ProductCategory } from '../../shared/interfaces/product.interface';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
@@ -23,8 +21,6 @@ import { ProductDetailModalComponent } from '../../shared/components/product-det
         FormsModule,
         SectionHeaderComponent,
         PremiumCardComponent,
-        PremiumImageComponent,
-        ScrollAnimationDirective,
         HeroComponent,
         ProductDetailModalComponent
     ],

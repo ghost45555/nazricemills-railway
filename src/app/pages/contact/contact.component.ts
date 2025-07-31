@@ -20,12 +20,10 @@ import { siteConfig } from '../../config/site.config';
         CommonModule,
         ReactiveFormsModule,
         SectionHeaderComponent,
-        PremiumCardComponent,
         PremiumButtonComponent,
         ScrollAnimationDirective,
         HeroComponent,
-        ToastComponent,
-        AnimatedIconComponent
+        ToastComponent
     ],
     templateUrl: './contact.component.html',
     styleUrls: ['./contact.component.css']

@@ -1,7 +1,6 @@
 {
   "name": "ricemill",
   "version": "0.0.0",
-  "type": "module",
   "scripts": {
     "ng": "ng",
     "start": "node dist/ricemill/server/main.js",

@@ -1,390 +1,207 @@
-# Firebase App Hosting Deployment Guide - Angular 19 SSR
+# Railway Deployment Guide for Angular SSR
 
 ## Overview
-
-This guide covers deploying the Naz Rice Mills website to Firebase App Hosting with Angular 19 Server-Side Rendering (SSR) capabilities.
+This guide helps you deploy your Angular SSR application to Railway successfully.
 
 ## Prerequisites
-
-- Firebase CLI installed and configured
 - Node.js 20+ installed
-- Angular CLI 19+ installed
-- Firebase project set up
+- Railway CLI installed (`npm install -g @railway/cli`)
+- Railway account and project created
 
-## Project Setup
+## Quick Deployment Steps
 
-### 1. Install Firebase CLI
-
+### 1. Prepare Your Application
 ```bash
-npm install -g firebase-tools
-```
+# Install dependencies
+npm ci --include=dev
 
-### 2. Login to Firebase
-
-```bash
-firebase login
-```
-
-### 3. Initialize Firebase Project
-
-```bash
-firebase init
-```
-
-Select:
-- App Hosting
-- Functions (optional)
-- Hosting (as fallback)
-
-## Build Configuration
-
-### 1. Angular 19 Features Enabled
-
-✅ **Incremental Hydration**: Components hydrate on-demand
-✅ **Event Replay**: User events are captured and replayed
-✅ **Hot Module Replacement**: Fast development with HMR
-✅ **Improved SSR**: Better server-side rendering performance
-
-### 2. Build Commands
-
-```bash
-# Development build
-npm run build
-
-# Production build
-npm run build --configuration=production
-
-# SSR build (for App Hosting)
+# Build the application
 npm run build:ssr
 
-# Serve SSR locally
-npm run serve:ssr
+# Test locally
+npm start
 ```
 
-## Firebase App Hosting Configuration
-
-### 1. apphosting.yaml
-
-```yaml
-# Firebase App Hosting configuration for Angular 19 SSR
-runConfig:
-  minInstances: 0
-  maxInstances: 100
-  concurrency: 80
-  cpu: 1
-  memoryMiB: 1024
-  timeoutSeconds: 300
-
-# Build configuration
-build:
-  commands:
-    - npm ci
-    - npm run build:ssr
-  outputDir: dist/ricemill
-
-# Environment variables
-env:
-  - variable: NODE_ENV
-    value: production
-    availability:
-      - RUNTIME
-  
-  - variable: SITE_URL
-    value: https://nazricemills.com
-    availability:
-      - BUILD
-      - RUNTIME
-  
-  - variable: GA_TRACKING_ID
-    value: G-XXXXXXXXXX
-    availability:
-      - BUILD
-      - RUNTIME
-```
-
-### 2. Firebase Configuration
-
-```json
-{
-  "hosting": {
-    "public": "dist/ricemill/browser",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ],
-    "headers": [
-      {
-        "source": "**/*.@(js|css|map)",
-        "headers": [
-          {
-            "key": "Cache-Control",
-            "value": "public, max-age=31536000, immutable"
-          }
-        ]
-      },
-      {
-        "source": "index.html",
-        "headers": [
-          {
-            "key": "Cache-Control",
-            "value": "public, max-age=0, must-revalidate"
-          }
-        ]
-      }
-    ],
-    "cleanUrls": true,
-    "trailingSlash": false
-  }
-}
-```
-
-## Deployment Steps
-
-### 1. Deploy to Firebase App Hosting
-
+### 2. Deploy to Railway
 ```bash
-# Deploy to App Hosting
-firebase deploy --only apphosting
+# Login to Railway (if not already logged in)
+railway login
 
-# Or deploy everything
-firebase deploy
+# Link to your Railway project
+railway link
+
+# Deploy
+railway up
 ```
 
-### 2. Custom Domain Setup
+## Configuration Files
 
-1. Go to Firebase Console > App Hosting
-2. Click "Add custom domain"
-3. Enter: nazricemills.com
-4. Follow DNS verification steps
-5. Update DNS records as instructed
+### railway.toml
+```toml
+[build]
+builder = "nixpacks"
+buildCommand = "npm run build:ssr"
 
-### 3. SSL Configuration
+[deploy]
+startCommand = "npm start"
+healthcheckPath = "/health"
+healthcheckTimeout = 300
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 10
 
-Firebase App Hosting automatically provides SSL certificates for custom domains.
-
-## SEO Optimization
-
-### 1. Meta Tags & Open Graph
-
-✅ Dynamic meta tags for each page
-✅ Open Graph tags for social sharing
-✅ Twitter Card integration
-✅ Canonical URLs
-
-### 2. Structured Data
-
-✅ Organization schema
-✅ Product schema
-✅ Local business schema
-✅ FAQ schema
-✅ Breadcrumb schema
-
-### 3. Sitemap & Robots
-
-✅ Dynamic sitemap generation
-✅ Image sitemaps
-✅ Robots.txt optimization
-
-## Performance Optimizations
-
-### 1. Core Web Vitals
-
-- **LCP**: < 2.5s with SSR
-- **FID**: < 100ms with event replay
-- **CLS**: < 0.1 with proper layout
-
-### 2. Caching Strategy
-
-```
-Static Assets: 1 year cache
-HTML Pages: 1 hour cache
-API Data: 24 hours cache
-Images: 1 year cache
+[env]
+NODE_ENV = "production"
+PORT = "3000"
+HOST = "0.0.0.0"
 ```
 
-### 3. Bundle Optimization
+### nixpacks.toml
+```toml
+[phases.setup]
+nixPkgs = ["nodejs_20"]
 
-```
-Initial Bundle: ~197KB (gzipped)
-Lazy Chunks: Route-based splitting
-Tree Shaking: Enabled
-Dead Code Elimination: Enabled
-```
+[phases.install]
+cmds = ["npm ci --include=dev"]
 
-## Analytics & Monitoring
+[phases.build]
+cmds = ["npm run build:ssr"]
 
-### 1. Google Analytics 4
+[start]
+cmd = "npm start"
 
-```typescript
-// GA4 Configuration
-const gaConfig = {
-  trackingId: 'G-XXXXXXXXXX',
-  anonymizeIp: true,
-  cookieDomain: 'nazricemills.com'
-};
+[variables]
+NODE_ENV = "production"
 ```
 
-### 2. Google Search Console
+## Health Check Endpoints
 
-1. Add property: nazricemills.com
-2. Verify ownership via HTML file
-3. Submit sitemap: https://nazricemills.com/sitemap.xml
+The application provides several health check endpoints:
 
-### 3. Performance Monitoring
-
-```typescript
-// Performance tracking
-trackTiming('page_load', 'initial_render', loadTime);
-trackEvent('page_view', 'home', { page_path: '/' });
-```
-
-## Testing & Validation
-
-### 1. SEO Testing
-
-```bash
-# Check structured data
-curl -s "https://nazricemills.com" | grep -o 'application/ld+json'
-
-# Test robots.txt
-curl https://nazricemills.com/robots.txt
-
-# Test sitemap
-curl https://nazricemills.com/sitemap.xml
-```
-
-### 2. Performance Testing
-
-```bash
-# Lighthouse CI
-npx lighthouse https://nazricemills.com --output=json
-
-# PageSpeed Insights
-https://pagespeed.web.dev/analysis?url=https://nazricemills.com
-```
-
-### 3. SSR Validation
-
-```bash
-# Check server-side rendering
-curl -s "https://nazricemills.com" | grep -i "naz rice mills"
-
-# Test hydration
-curl -s "https://nazricemills.com" | grep -i "ng-hydration"
-```
+- `/health` - Main health check (returns JSON with status)
+- `/test` - Test endpoint (returns JSON with server info)
+- `/` - Root endpoint (returns basic server info)
 
 ## Troubleshooting
 
-### 1. Common Issues
+### Common Issues
 
-**Build Errors**
+#### 1. Health Check Failing
+**Symptoms**: Railway shows "Healthcheck failed" in logs
+
+**Solutions**:
+- Check if the server is starting on the correct port (3000)
+- Verify the health check path is correct (`/health`)
+- Check server logs for startup errors
+
+#### 2. Build Failures
+**Symptoms**: Build process fails during deployment
+
+**Solutions**:
+- Ensure all dependencies are in `package.json`
+- Check for TypeScript compilation errors
+- Verify Angular build configuration
+
+#### 3. Server Not Starting
+**Symptoms**: Application builds but server doesn't start
+
+**Solutions**:
+- Check `server.ts` for syntax errors
+- Verify the start command in `package.json`
+- Check environment variables
+
+### Debugging Steps
+
+1. **Check Build Logs**:
+   ```bash
+   railway logs --build
+   ```
+
+2. **Check Runtime Logs**:
+   ```bash
+   railway logs
+   ```
+
+3. **Test Locally**:
+   ```bash
+   npm run build:ssr
+   npm start
+   curl http://localhost:3000/health
+   ```
+
+4. **Check Environment Variables**:
+   ```bash
+   railway variables
+   ```
+
+### Performance Optimizations
+
+1. **Enable Caching**:
+   - Static files are cached for 1 year
+   - Angular rendering is optimized for SSR
+
+2. **Memory Management**:
+   - Server includes memory usage monitoring
+   - Automatic cleanup of unused resources
+
+3. **Error Handling**:
+   - Comprehensive error handling in server.ts
+   - Graceful fallbacks for rendering failures
+
+## Monitoring
+
+### Health Check Monitoring
+The application automatically provides health metrics:
+- Server uptime
+- Memory usage
+- Response times
+
+### Log Monitoring
+Railway provides built-in log monitoring:
+- Application logs
+- Build logs
+- Error logs
+
+## Security
+
+### Security Headers
+The server automatically adds security headers:
+- `X-Content-Type-Options: nosniff`
+- `X-Frame-Options: DENY`
+- `X-XSS-Protection: 1; mode=block`
+
+### Environment Variables
+Sensitive data should be stored as Railway environment variables:
+- API keys
+- Database credentials
+- Configuration secrets
+
+## Support
+
+If you encounter issues:
+
+1. Check the troubleshooting section above
+2. Review Railway documentation
+3. Check application logs
+4. Test locally to isolate issues
+
+## Useful Commands
+
 ```bash
-# Clear cache
-rm -rf .angular/cache
-npm run build
-
-# Update dependencies
-ng update
-```
-
-**SSR Issues**
-```bash
-# Check server logs
-firebase functions:log --only apphosting
-
-# Test locally
-npm run serve:ssr
-```
-
-**Performance Issues**
-```bash
-# Bundle analysis
-npm run build -- --stats-json
-npx webpack-bundle-analyzer dist/ricemill/stats.json
-```
-
-### 2. Debug Commands
-
-```bash
-# Check Firebase project
-firebase projects:list
-
-# Check deployment status
-firebase deploy --dry-run
+# Deploy to Railway
+railway up
 
 # View logs
-firebase functions:log
-```
+railway logs
 
-## Environment Variables
+# Open Railway dashboard
+railway open
 
-### Production Environment
+# Check status
+railway status
 
-```bash
-# Update tracking ID
-firebase functions:config:set analytics.tracking_id="G-XXXXXXXXXX"
+# View variables
+railway variables
 
-# Update site URL
-firebase functions:config:set site.url="https://nazricemills.com"
-```
-
-### Development Environment
-
-```bash
-# Local development
-export NODE_ENV=development
-export SITE_URL=http://localhost:4200
-export GA_TRACKING_ID=G-XXXXXXXXXX
-```
-
-## Monitoring & Maintenance
-
-### 1. Regular Checks
-
-- Monthly Google Search Console review
-- Weekly performance monitoring
-- Daily error log review
-
-### 2. Updates
-
-- Monthly Angular updates
-- Quarterly dependency updates
-- Annual Firebase plan review
-
-### 3. Backup Strategy
-
-```bash
-# Export Firebase project
-firebase projects:addfirebase <project-id>
-
-# Backup configuration
-git commit -am "Backup Firebase config"
-```
-
-## Support & Resources
-
-### Documentation
-
-- [Angular 19 SSR Guide](https://angular.io/guide/ssr)
-- [Firebase App Hosting](https://firebase.google.com/docs/app-hosting)
-- [Angular Universal](https://angular.io/guide/universal)
-
-### Community
-
-- [Angular Discord](https://discord.gg/angular)
-- [Firebase Community](https://firebase.google.com/community)
-- [Stack Overflow](https://stackoverflow.com/questions/tagged/angular)
-
-## Conclusion
-
-The website is now deployed with:
-- ✅ Angular 19 with SSR
-- ✅ Firebase App Hosting
-- ✅ Comprehensive SEO optimization
-- ✅ Performance monitoring
-- ✅ Analytics integration
-
-The setup provides excellent SEO performance, fast loading times, and scalable hosting for the Naz Rice Mills website. 
+# Connect to shell
+railway shell
+``` 

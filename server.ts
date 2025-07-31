@@ -54,6 +54,18 @@ export function app(): express.Express {
     console.log('Test endpoint requested');
     res.status(200).json({
       message: 'Server is running',
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime(),
+      memory: process.memoryUsage()
+    });
+  });
+
+  // Root endpoint for basic health check
+  server.get('/', (req, res) => {
+    console.log('Root endpoint requested');
+    res.status(200).json({
+      message: 'Naz Rice Mills SSR Server',
+      status: 'running',
       timestamp: new Date().toISOString()
     });
   });
@@ -67,6 +79,16 @@ export function app(): express.Express {
   // All regular routes use the Angular engine
   server.get('*', (req, res, next) => {
     const { protocol, originalUrl, baseUrl, headers } = req;
+
+    // Skip API endpoints
+    if (originalUrl.startsWith('/api/') || 
+        originalUrl === '/health' || 
+        originalUrl === '/test' || 
+        originalUrl === '/') {
+      return next();
+    }
+
+    console.log(`Rendering Angular route: ${originalUrl}`);
 
     commonEngine
       .render({
@@ -95,7 +117,7 @@ function run(): void {
     HOST: process.env['HOST']
   });
 
-  const port = parseInt(process.env['PORT'] || '4000', 10);
+  const port = parseInt(process.env['PORT'] || '3000', 10);
   const host = process.env['HOST'] || '0.0.0.0';
 
   console.log(`Configuring server for port ${port} and host ${host}`);
@@ -110,10 +132,22 @@ function run(): void {
       process.exit(1);
     });
 
+    // Add process error handlers
+    process.on('uncaughtException', (error) => {
+      console.error('Uncaught Exception:', error);
+      process.exit(1);
+    });
+
+    process.on('unhandledRejection', (reason, promise) => {
+      console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+      process.exit(1);
+    });
+
     server.listen(port, host, () => {
       console.log(`✅ Node Express server listening on http://${host}:${port}`);
       console.log(`Environment: ${process.env['NODE_ENV'] || 'development'}`);
       console.log('Health check available at /health');
+      console.log('Test endpoint available at /test');
       console.log('Server startup complete!');
     });
   } catch (error) {
