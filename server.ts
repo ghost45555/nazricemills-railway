@@ -17,35 +17,46 @@ export async function app(): Promise<express.Express> {
   let browserDistFolder = resolve(serverDistFolder, '../browser');
   let indexHtml = join(browserDistFolder, 'index.html');
 
-  // If we're in the root directory (development), adjust paths
-  if (serverDistFolder.includes('ricemill - org product modification - railway hosting')) {
-    browserDistFolder = resolve(serverDistFolder, 'dist/ricemill/browser');
-    indexHtml = join(browserDistFolder, 'index.html');
-  }
+  // Try multiple possible paths for the browser dist folder
+  const possiblePaths = [
+    resolve(serverDistFolder, '../browser'), // Default Angular SSR path
+    resolve(serverDistFolder, '../../browser'), // Alternative path
+    resolve(serverDistFolder, 'dist/ricemill/browser'), // Development path
+    resolve(serverDistFolder, '../dist/ricemill/browser'), // Another possible path
+    '/app/dist/ricemill/browser' // Railway container path
+  ];
 
   // Debug: Check if files exist
   console.log('Checking file paths...');
   try {
     const fs = await import('fs');
     console.log('Server dist folder exists:', fs.existsSync(serverDistFolder));
-    console.log('Browser dist folder exists:', fs.existsSync(browserDistFolder));
-    console.log('Index.html exists:', fs.existsSync(indexHtml));
-    
-    // List contents of server dist folder
     console.log('Server dist folder contents:', fs.readdirSync(serverDistFolder));
     
-    // Try alternative paths if the default path doesn't exist
-    if (!fs.existsSync(indexHtml)) {
-      const altBrowserPath = resolve(serverDistFolder, '../../browser');
-      const altIndexPath = join(altBrowserPath, 'index.html');
-      console.log('Alternative browser path exists:', fs.existsSync(altBrowserPath));
-      console.log('Alternative index.html exists:', fs.existsSync(altIndexPath));
+    // Try all possible paths
+    let foundPath = false;
+    for (let i = 0; i < possiblePaths.length; i++) {
+      const path = possiblePaths[i];
+      const indexPath = join(path, 'index.html');
+      console.log(`Trying path ${i + 1}: ${path}`);
+      console.log(`  Path exists: ${fs.existsSync(path)}`);
+      console.log(`  Index.html exists: ${fs.existsSync(indexPath)}`);
       
-      if (fs.existsSync(altIndexPath)) {
-        console.log('Using alternative path for index.html');
-        browserDistFolder = altBrowserPath;
-        indexHtml = altIndexPath;
+      if (fs.existsSync(indexPath)) {
+        console.log(`✅ Found working path: ${path}`);
+        browserDistFolder = path;
+        indexHtml = indexPath;
+        foundPath = true;
+        break;
       }
+    }
+    
+    if (!foundPath) {
+      console.log('❌ No working path found for index.html');
+      console.log('All attempted paths:');
+      possiblePaths.forEach((path, index) => {
+        console.log(`  ${index + 1}. ${path}`);
+      });
     }
   } catch (error) {
     console.log('Error checking files:', error);
