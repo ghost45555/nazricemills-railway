@@ -8,13 +8,23 @@ import { dirname, join, resolve } from 'node:path';
 import bootstrap from './src/main.server';
 
 // The Express app is exported so that it can be used by serverless Functions.
-export function app(): express.Express {
+export async function app(): Promise<express.Express> {
   console.log('Setting up Express app...');
   
   const server = express();
   const serverDistFolder = dirname(fileURLToPath(import.meta.url));
   const browserDistFolder = resolve(serverDistFolder, '../browser');
   const indexHtml = join(browserDistFolder, 'index.html');
+
+  // Debug: Check if files exist
+  console.log('Checking file paths...');
+  try {
+    const fs = await import('fs');
+    console.log('Browser dist folder exists:', fs.existsSync(browserDistFolder));
+    console.log('Index.html exists:', fs.existsSync(indexHtml));
+  } catch (error) {
+    console.log('Error checking files:', error);
+  }
 
   console.log('Paths configured:', {
     serverDistFolder,
@@ -100,7 +110,7 @@ export function app(): express.Express {
   return server;
 }
 
-function run(): void {
+async function run(): Promise<void> {
   console.log('Starting server...');
   console.log('Environment variables:', {
     NODE_ENV: process.env['NODE_ENV'],
@@ -115,10 +125,10 @@ function run(): void {
 
   try {
     // Start up the Node server
-    const server = app();
+    const server = await app();
     
     // Add error handling
-    server.on('error', (error) => {
+    server.on('error', (error: any) => {
       console.error('Server error:', error);
       process.exit(1);
     });
