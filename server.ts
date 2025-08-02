@@ -1,8 +1,11 @@
 import 'zone.js/node';
 
+import { APP_BASE_HREF } from '@angular/common';
+import { CommonEngine } from '@angular/ssr/node';
 import express from 'express';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
+import bootstrap from './src/main.server';
 
 // The Express app is exported so that it can be used by serverless Functions.
 export async function app(): Promise<express.Express> {
@@ -20,6 +23,9 @@ export async function app(): Promise<express.Express> {
     browserDistFolder,
     indexHtml
   });
+
+  const commonEngine = new CommonEngine();
+  console.log('CommonEngine initialized');
 
   // Trust proxy for Railway
   server.set('trust proxy', 1);
@@ -56,13 +62,52 @@ export async function app(): Promise<express.Express> {
   // Serve static files from /browser
   server.use(express.static(browserDistFolder, {
     maxAge: '1y',
-    index: 'index.html', // Serve index.html for directory requests
+    index: false, // Don't serve index.html for static requests
   }));
 
-  // All routes serve index.html (SPA fallback)
-  server.get('*', (req, res) => {
-    console.log(`Request: ${req.originalUrl}`);
-    res.sendFile(indexHtml);
+  // All regular routes use the Angular engine
+  server.get('*', (req, res, next) => {
+    const { protocol, originalUrl, baseUrl, headers } = req;
+
+    // Skip API endpoints
+    if (originalUrl.startsWith('/api/') || 
+        originalUrl === '/health' || 
+        originalUrl === '/test') {
+      return next();
+    }
+
+    console.log(`Rendering Angular route: ${originalUrl}`);
+
+    // Set a timeout for the rendering process
+    const renderTimeout = setTimeout(() => {
+      console.error('Angular rendering timeout for:', originalUrl);
+      res.status(500).send('Server timeout - please try again');
+    }, 30000); // 30 second timeout
+
+    commonEngine
+      .render({
+        bootstrap,
+        documentFilePath: indexHtml,
+        url: `${protocol}://${headers.host}${originalUrl}`,
+        publicPath: browserDistFolder,
+        providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
+      })
+      .then((html) => {
+        clearTimeout(renderTimeout);
+        console.log(`✅ Successfully rendered: ${originalUrl}`);
+        res.send(html);
+      })
+      .catch((err) => {
+        clearTimeout(renderTimeout);
+        console.error('Angular rendering error:', err);
+        console.error('Error details:', {
+          url: originalUrl,
+          error: err.message,
+          stack: err.stack
+        });
+        // Fallback to sending a basic error response
+        res.status(500).send('Internal Server Error - Angular rendering failed');
+      });
   });
 
   return server;

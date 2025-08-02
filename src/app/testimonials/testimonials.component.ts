@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy, HostListener, ChangeDetectorRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, OnDestroy, HostListener, ChangeDetectorRef, PLATFORM_ID, Inject } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { TestimonialService } from '../services/testimonial.service';
 import { AnimationService } from '../services/animation.service';
 import { Testimonial } from '../shared/interfaces/testimonial.interface';
@@ -28,29 +28,45 @@ export class TestimonialsComponent implements OnInit, OnDestroy {
   constructor(
     private testimonialService: TestimonialService,
     private animationService: AnimationService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngOnInit() {
-    // Initialize testimonials with a delay to ensure proper rendering
-    setTimeout(() => {
+    // Only run in browser environment
+    if (isPlatformBrowser(this.platformId)) {
+      // Initialize testimonials with a delay to ensure proper rendering
+      setTimeout(() => {
+        this.testimonialSubscription = this.testimonialService.getTestimonials()
+          .subscribe(testimonials => {
+            this.testimonials = testimonials;
+            if (this.testimonials.length > 1) {
+              this.startAutoPlay();
+              // Set initial rating percentage
+              this.setRatingPercentage(0);
+            }
+            this.cdr.detectChanges();
+          });
+      }, 100);
+
+      // Add keyboard navigation
+      this.addKeyboardNavigation();
+    } else {
+      // In SSR, just load testimonials without animations
       this.testimonialSubscription = this.testimonialService.getTestimonials()
         .subscribe(testimonials => {
           this.testimonials = testimonials;
-          if (this.testimonials.length > 1) {
-            this.startAutoPlay();
-            // Set initial rating percentage
-            this.setRatingPercentage(0);
-          }
           this.cdr.detectChanges();
         });
-    }, 100);
-
-    // Add keyboard navigation
-    this.addKeyboardNavigation();
+    }
   }
 
   private setRatingPercentage(index: number) {
+    // Only run in browser environment
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
     const rating = this.testimonials[index].rating || 0;
     const ratingPercent = (rating / 5) * 360; // Convert rating to degrees (0-360)
     const imageContainer = document.querySelector('.testimonial-card.active .image-container') as HTMLElement;
@@ -67,6 +83,11 @@ export class TestimonialsComponent implements OnInit, OnDestroy {
   }
 
   private addKeyboardNavigation() {
+    // Only run in browser environment
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
     fromEvent(document, 'keydown').subscribe((event: any) => {
       if (event.key === 'ArrowLeft') {
         this.prev();
@@ -142,6 +163,14 @@ export class TestimonialsComponent implements OnInit, OnDestroy {
   }
 
   private animateSlide(newIndex: number, direction: 'next' | 'prev') {
+    // Only run in browser environment
+    if (!isPlatformBrowser(this.platformId)) {
+      this.currentIndex = newIndex;
+      this.isTransitioning = false;
+      this.cdr.detectChanges();
+      return;
+    }
+
     const currentCard = document.querySelector('.testimonial-card.active') as HTMLElement;
     const nextCard = document.querySelectorAll('.testimonial-card')[newIndex] as HTMLElement;
 

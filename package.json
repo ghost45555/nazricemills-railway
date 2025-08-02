@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "node simple-server.js",
+    "start": "node dist/ricemill/server/main.js",
     "dev": "ng serve",
     "build": "ng build",
     "build:ssr": "ng build && ng run ricemill:server",

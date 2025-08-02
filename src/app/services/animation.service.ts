@@ -1,6 +1,7 @@
-import { Injectable, NgZone } from '@angular/core';
+import { Injectable, NgZone, PLATFORM_ID, Inject } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { gsap } from 'gsap';
+import { isPlatformBrowser } from '@angular/common';
 
 interface AnimationOptions {
   threshold?: number;
@@ -15,7 +16,10 @@ export class AnimationService {
   private observers: Map<Element, IntersectionObserver> = new Map();
   private animationSubjects: Map<Element, BehaviorSubject<boolean>> = new Map();
 
-  constructor(private ngZone: NgZone) {}
+  constructor(
+    private ngZone: NgZone,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
 
   /**
    * Observe an element for visibility changes and trigger animations
@@ -28,6 +32,12 @@ export class AnimationService {
       once: true
     }
   ): BehaviorSubject<boolean> {
+    // Only run in browser environment
+    if (!isPlatformBrowser(this.platformId)) {
+      const subject = new BehaviorSubject<boolean>(true);
+      return subject;
+    }
+
     // Return existing subject if element is already being observed
     if (this.animationSubjects.has(element)) {
       return this.animationSubjects.get(element)!;
@@ -70,6 +80,11 @@ export class AnimationService {
    * Stop observing an element
    */
   unobserveElement(element: Element): void {
+    // Only run in browser environment
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
     const observer = this.observers.get(element);
     if (observer) {
       observer.unobserve(element);
@@ -91,6 +106,11 @@ export class AnimationService {
     childSelector: string, 
     baseDelay: number = 0.1
   ): void {
+    // Only run in browser environment
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
     const children = container.querySelectorAll(childSelector);
     children.forEach((child, index) => {
       (child as HTMLElement).style.animationDelay = `${baseDelay * index}s`;
@@ -213,6 +233,11 @@ export class AnimationService {
    * Clean up all observers
    */
   cleanUp(): void {
+    // Only run in browser environment
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
     this.observers.forEach(observer => observer.disconnect());
     this.observers.clear();
     this.animationSubjects.forEach(subject => subject.complete());
@@ -232,6 +257,11 @@ export class AnimationService {
       blur?: boolean;
     } = {}
   ): void {
+    // Only run in browser environment
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
     const handleScroll = () => {
       const scrolled = window.scrollY;
       const rect = element.getBoundingClientRect();
@@ -291,6 +321,11 @@ export class AnimationService {
       scale?: boolean;
     } = {}
   ): void {
+    // Only run in browser environment
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
     const {
       strength = 0.3,
       radius = 100,
@@ -336,6 +371,11 @@ export class AnimationService {
       ease?: string;
     } = {}
   ): void {
+    // Only run in browser environment
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
     const {
       duration = 1,
       stagger = 0.1,
@@ -402,6 +442,11 @@ export class AnimationService {
       glareOpacity?: number;
     } = {}
   ): void {
+    // Only run in browser environment
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
     const {
       perspective = 1000,
       tiltAmount = 20,
@@ -474,6 +519,11 @@ export class AnimationService {
       easing?: string;
     }
   ): void {
+    // Only run in browser environment
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
     const {
       paths,
       duration = 1,
@@ -514,6 +564,11 @@ export class AnimationService {
       speed?: number;
     } = {}
   ): void {
+    // Only run in browser environment
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
     const {
       particleCount = 50,
       colors = ['#FFD700', '#FFA500', '#FF8C00'],

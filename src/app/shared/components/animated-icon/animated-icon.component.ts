@@ -1,5 +1,5 @@
-import { Component, Input, ElementRef, AfterViewInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, Input, ElementRef, AfterViewInit, OnDestroy, ChangeDetectorRef, PLATFORM_ID, Inject } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 
 @Component({
     selector: 'app-animated-icon',
@@ -62,21 +62,28 @@ export class AnimatedIconComponent implements AfterViewInit, OnDestroy {
 
   constructor(
     private elementRef: ElementRef,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngAfterViewInit() {
-    this.setupIntersectionObserver();
-    this.setupThemeObserver();
-    this.checkInitialTheme();
+    // Only run in browser environment
+    if (isPlatformBrowser(this.platformId)) {
+      this.setupIntersectionObserver();
+      this.setupThemeObserver();
+      this.checkInitialTheme();
+    }
   }
 
   ngOnDestroy() {
-    if (this.observer) {
-      this.observer.disconnect();
-    }
-    if (this.themeObserver) {
-      this.themeObserver.disconnect();
+    // Only run in browser environment
+    if (isPlatformBrowser(this.platformId)) {
+      if (this.observer) {
+        this.observer.disconnect();
+      }
+      if (this.themeObserver) {
+        this.themeObserver.disconnect();
+      }
     }
   }
 
