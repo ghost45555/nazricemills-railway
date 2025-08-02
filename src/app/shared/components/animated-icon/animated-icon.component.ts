@@ -88,6 +88,11 @@ export class AnimatedIconComponent implements AfterViewInit, OnDestroy {
   }
 
   onSvgLoad(event: Event) {
+    // Only run in browser environment
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
     const obj = event.target as HTMLObjectElement;
     if (obj && obj.contentDocument) {
       const svg = obj.contentDocument.querySelector('svg');
@@ -163,6 +168,11 @@ export class AnimatedIconComponent implements AfterViewInit, OnDestroy {
   }
 
   private checkTheme() {
+    // Only run in browser environment
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
     const isDark = document.body.classList.contains('dark-theme') || 
                   window.matchMedia('(prefers-color-scheme: dark)').matches;
     if (this.isDarkTheme !== isDark) {
