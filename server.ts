@@ -1,11 +1,8 @@
 import 'zone.js/node';
 
-import { APP_BASE_HREF } from '@angular/common';
-import { CommonEngine } from '@angular/ssr/node';
 import express from 'express';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
-import bootstrap from './src/main.server';
 
 // The Express app is exported so that it can be used by serverless Functions.
 export async function app(): Promise<express.Express> {
@@ -13,63 +10,16 @@ export async function app(): Promise<express.Express> {
   
   const server = express();
   const serverDistFolder = dirname(fileURLToPath(import.meta.url));
-  // Fix path resolution for Railway environment
-  let browserDistFolder = resolve(serverDistFolder, '../browser');
-  let indexHtml = join(browserDistFolder, 'index.html');
-
-  // Try multiple possible paths for the browser dist folder
-  const possiblePaths = [
-    resolve(serverDistFolder, '../browser'), // Default Angular SSR path
-    resolve(serverDistFolder, '../../browser'), // Alternative path
-    resolve(serverDistFolder, 'dist/ricemill/browser'), // Development path
-    resolve(serverDistFolder, '../dist/ricemill/browser'), // Another possible path
-    '/app/dist/ricemill/browser' // Railway container path
-  ];
-
-  // Debug: Check if files exist
-  console.log('Checking file paths...');
-  try {
-    const fs = await import('fs');
-    console.log('Server dist folder exists:', fs.existsSync(serverDistFolder));
-    console.log('Server dist folder contents:', fs.readdirSync(serverDistFolder));
-    
-    // Try all possible paths
-    let foundPath = false;
-    for (let i = 0; i < possiblePaths.length; i++) {
-      const path = possiblePaths[i];
-      const indexPath = join(path, 'index.html');
-      console.log(`Trying path ${i + 1}: ${path}`);
-      console.log(`  Path exists: ${fs.existsSync(path)}`);
-      console.log(`  Index.html exists: ${fs.existsSync(indexPath)}`);
-      
-      if (fs.existsSync(indexPath)) {
-        console.log(`✅ Found working path: ${path}`);
-        browserDistFolder = path;
-        indexHtml = indexPath;
-        foundPath = true;
-        break;
-      }
-    }
-    
-    if (!foundPath) {
-      console.log('❌ No working path found for index.html');
-      console.log('All attempted paths:');
-      possiblePaths.forEach((path, index) => {
-        console.log(`  ${index + 1}. ${path}`);
-      });
-    }
-  } catch (error) {
-    console.log('Error checking files:', error);
-  }
+  
+  // Simple path resolution
+  const browserDistFolder = resolve(serverDistFolder, '../browser');
+  const indexHtml = join(browserDistFolder, 'index.html');
 
   console.log('Paths configured:', {
     serverDistFolder,
     browserDistFolder,
     indexHtml
   });
-
-  const commonEngine = new CommonEngine();
-  console.log('CommonEngine initialized');
 
   // Trust proxy for Railway
   server.set('trust proxy', 1);
@@ -81,9 +31,6 @@ export async function app(): Promise<express.Express> {
     res.setHeader('X-XSS-Protection', '1; mode=block');
     next();
   });
-
-  server.set('view engine', 'html');
-  server.set('views', browserDistFolder);
 
   // Health check endpoint for Railway
   server.get('/health', (req, res) => {
@@ -106,41 +53,16 @@ export async function app(): Promise<express.Express> {
     });
   });
 
-  // Root endpoint removed - let Angular handle it
-
-  // Serve static files from /browser (only for actual static files)
+  // Serve static files from /browser
   server.use(express.static(browserDistFolder, {
     maxAge: '1y',
-    index: false, // Don't serve index.html for static requests
+    index: 'index.html', // Serve index.html for directory requests
   }));
 
-  // All regular routes use the Angular engine
-  server.get('*', (req, res, next) => {
-    const { protocol, originalUrl, baseUrl, headers } = req;
-
-    // Skip API endpoints
-    if (originalUrl.startsWith('/api/') || 
-        originalUrl === '/health' || 
-        originalUrl === '/test') {
-      return next();
-    }
-
-    console.log(`Rendering Angular route: ${originalUrl}`);
-
-    commonEngine
-      .render({
-        bootstrap,
-        documentFilePath: indexHtml,
-        url: `${protocol}://${headers.host}${originalUrl}`,
-        publicPath: browserDistFolder,
-        providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
-      })
-      .then((html) => res.send(html))
-      .catch((err) => {
-        console.error('Angular rendering error:', err);
-        // Fallback to sending a basic error response
-        res.status(500).send('Internal Server Error');
-      });
+  // All routes serve index.html (SPA fallback)
+  server.get('*', (req, res) => {
+    console.log(`Request: ${req.originalUrl}`);
+    res.sendFile(indexHtml);
   });
 
   return server;
