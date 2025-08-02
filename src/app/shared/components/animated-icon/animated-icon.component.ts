@@ -11,42 +11,39 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
          [class.icon-loaded]="isIconLoaded"
          [class.dark-theme]="isDarkTheme">
       <ng-container [ngSwitch]="iconName">
-        <object *ngSwitchCase="'global-standards'"
-                data="assets/img/icons/Globe-shield-01.svg"
-                type="image/svg+xml"
-                class="icon"
-                (load)="onSvgLoad($event)">
-        </object>
-        <object *ngSwitchCase="'modern-processing'"
-                data="assets/img/icons/multiple-files-processing-icon.svg"
-                type="image/svg+xml"
-                class="icon"
-                (load)="onSvgLoad($event)">
-        </object>
-        <object *ngSwitchCase="'quality-control'"
-                data="assets/img/icons/quality-control-icon.svg"
-                type="image/svg+xml"
-                class="icon"
-                (load)="onSvgLoad($event)">
-        </object>
-        <object *ngSwitchCase="'sustainability'"
-                data="assets/icons/sustainability.svg"
-                type="image/svg+xml"
-                class="icon"
-                (load)="onSvgLoad($event)">
-        </object>
-        <object *ngSwitchCase="'innovation'"
-                data="assets/icons/innovation.svg"
-                type="image/svg+xml"
-                class="icon"
-                (load)="onSvgLoad($event)">
-        </object>
-        <object *ngSwitchCase="'community'"
-                data="assets/icons/community.svg"
-                type="image/svg+xml"
-                class="icon"
-                (load)="onSvgLoad($event)">
-        </object>
+        <img *ngSwitchCase="'global-standards'"
+             src="assets/img/icons/Globe-shield-01.svg"
+             alt="Global Standards"
+             class="icon"
+             (load)="onSvgLoad($event)"
+             (error)="onSvgError($event)">
+        <img *ngSwitchCase="'modern-processing'"
+             src="assets/img/icons/multiple-files-processing-icon.svg"
+             alt="Modern Processing"
+             class="icon"
+             (load)="onSvgLoad($event)"
+             (error)="onSvgError($event)">
+        <img *ngSwitchCase="'quality-control'"
+             src="assets/img/icons/quality-control-icon.svg"
+             alt="Quality Control"
+             class="icon"
+             (load)="onSvgLoad($event)"
+             (error)="onSvgError($event)">
+        <img *ngSwitchCase="'sustainability'"
+             src="assets/icons/sustainability.svg"
+             alt="Sustainability"
+             class="icon"
+             (load)="onSvgLoad($event)">
+        <img *ngSwitchCase="'innovation'"
+             src="assets/icons/innovation.svg"
+             alt="Innovation"
+             class="icon"
+             (load)="onSvgLoad($event)">
+        <img *ngSwitchCase="'community'"
+             src="assets/icons/community.svg"
+             alt="Community"
+             class="icon"
+             (load)="onSvgLoad($event)">
       </ng-container>
     </div>
   `,
@@ -69,6 +66,7 @@ export class AnimatedIconComponent implements AfterViewInit, OnDestroy {
   ngAfterViewInit() {
     // Only run in browser environment
     if (isPlatformBrowser(this.platformId)) {
+      console.log('AnimatedIconComponent - iconName:', this.iconName);
       this.setupIntersectionObserver();
       this.setupThemeObserver();
       this.checkInitialTheme();
@@ -93,42 +91,25 @@ export class AnimatedIconComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    const obj = event.target as HTMLObjectElement;
-    if (obj && obj.contentDocument) {
-      const svg = obj.contentDocument.querySelector('svg');
-      if (svg) {
-        // Add classes to SVG element
-        svg.classList.add('svg-icon');
-        
-        // Process all paths and adjust viewBox if needed
-        const paths = svg.querySelectorAll('path');
-        paths.forEach((path, index) => {
-          path.classList.add('animated-path');
-          
-          // Calculate total length for precise animation
-          const length = path.getTotalLength();
-          path.style.strokeDasharray = length.toString();
-          path.style.strokeDashoffset = length.toString();
-          
-          // Add data attribute for staggered animations
-          path.setAttribute('data-index', index.toString());
-        });
-
-        // Remove any fill colors from the original SVG
-        const elements = svg.querySelectorAll('*');
-        elements.forEach(el => {
-          if (el.hasAttribute('fill')) {
-            el.setAttribute('fill', 'currentColor');
-          }
-        });
-
-        // Mark icon as loaded to start pulse animation
-        setTimeout(() => {
-          this.isIconLoaded = true;
-          this.cdr.detectChanges();
-        }, 3000); // Wait for initial animation to complete
-      }
+    console.log('SVG loaded for icon:', this.iconName);
+    const img = event.target as HTMLImageElement;
+    if (img) {
+      console.log('Image loaded successfully');
+      // Mark icon as loaded to start pulse animation
+      setTimeout(() => {
+        this.isIconLoaded = true;
+        this.cdr.detectChanges();
+      }, 1000); // Reduced delay since we're not processing SVG paths
     }
+  }
+
+  onSvgError(event: Event) {
+    // Only run in browser environment
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    console.error('SVG failed to load for icon:', this.iconName, event);
   }
 
   private setupIntersectionObserver() {
