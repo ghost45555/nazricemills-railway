@@ -14,11 +14,56 @@ export async function app(): Promise<express.Express> {
   const server = express();
   const serverDistFolder = dirname(fileURLToPath(import.meta.url));
   
-  // Simple path resolution
-  const browserDistFolder = resolve(serverDistFolder, '../browser');
-  const indexHtml = join(browserDistFolder, 'index.html');
+  // Fix path resolution for Railway environment
+  let browserDistFolder = resolve(serverDistFolder, '../browser');
+  let indexHtml = join(browserDistFolder, 'index.html');
 
-  console.log('Paths configured:', {
+  // Try multiple possible paths for the browser dist folder
+  const possiblePaths = [
+    resolve(serverDistFolder, '../browser'), // Default Angular SSR path
+    resolve(serverDistFolder, '../../browser'), // Alternative path
+    resolve(serverDistFolder, 'dist/ricemill/browser'), // Development path
+    resolve(serverDistFolder, '../dist/ricemill/browser'), // Another possible path
+    '/app/dist/ricemill/browser' // Railway container path
+  ];
+
+  // Debug: Check if files exist
+  console.log('Checking file paths...');
+  try {
+    const fs = await import('fs');
+    console.log('Server dist folder exists:', fs.existsSync(serverDistFolder));
+    console.log('Server dist folder contents:', fs.readdirSync(serverDistFolder));
+
+    // Try all possible paths
+    let foundPath = false;
+    for (let i = 0; i < possiblePaths.length; i++) {
+      const path = possiblePaths[i];
+      const indexPath = join(path, 'index.html');
+      console.log(`Trying path ${i + 1}: ${path}`);
+      console.log(`  Path exists: ${fs.existsSync(path)}`);
+      console.log(`  Index.html exists: ${fs.existsSync(indexPath)}`);
+
+      if (fs.existsSync(indexPath)) {
+        console.log(`✅ Found working path: ${path}`);
+        browserDistFolder = path;
+        indexHtml = indexPath;
+        foundPath = true;
+        break;
+      }
+    }
+
+    if (!foundPath) {
+      console.log('❌ No working path found for index.html');
+      console.log('All attempted paths:');
+      possiblePaths.forEach((path, index) => {
+        console.log(`  ${index + 1}. ${path}`);
+      });
+    }
+  } catch (error) {
+    console.log('Error checking files:', error);
+  }
+
+  console.log('Final paths configured:', {
     serverDistFolder,
     browserDistFolder,
     indexHtml
@@ -69,10 +114,12 @@ export async function app(): Promise<express.Express> {
   server.get('*', (req, res, next) => {
     const { protocol, originalUrl, baseUrl, headers } = req;
 
-    // Skip API endpoints
+    // Skip API endpoints and static files
     if (originalUrl.startsWith('/api/') || 
         originalUrl === '/health' || 
-        originalUrl === '/test') {
+        originalUrl === '/test' ||
+        originalUrl.includes('.') || // Skip files with extensions
+        originalUrl.startsWith('/assets/')) {
       return next();
     }
 
@@ -81,7 +128,13 @@ export async function app(): Promise<express.Express> {
     // Set a timeout for the rendering process
     const renderTimeout = setTimeout(() => {
       console.error('Angular rendering timeout for:', originalUrl);
-      res.status(500).send('Server timeout - please try again');
+      // Fallback to static index.html
+      res.sendFile(indexHtml, (err) => {
+        if (err) {
+          console.error('Fallback failed:', err);
+          res.status(500).send('Server timeout - please try again');
+        }
+      });
     }, 30000); // 30 second timeout
 
     commonEngine
@@ -105,8 +158,17 @@ export async function app(): Promise<express.Express> {
           error: err.message,
           stack: err.stack
         });
-        // Fallback to sending a basic error response
-        res.status(500).send('Internal Server Error - Angular rendering failed');
+        
+        // Fallback to static index.html
+        console.log('Attempting fallback to static index.html...');
+        res.sendFile(indexHtml, (fallbackErr) => {
+          if (fallbackErr) {
+            console.error('Fallback also failed:', fallbackErr);
+            res.status(500).send('Internal Server Error - Angular rendering failed');
+          } else {
+            console.log('✅ Fallback successful');
+          }
+        });
       });
   });
 
