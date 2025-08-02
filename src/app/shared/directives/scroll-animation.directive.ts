@@ -1,6 +1,7 @@
-import { Directive, ElementRef, Input, OnInit, OnDestroy } from '@angular/core';
+import { Directive, ElementRef, Input, OnInit, OnDestroy, PLATFORM_ID, Inject } from '@angular/core';
 import { AnimationService } from '../../services/animation.service';
 import { Subscription } from 'rxjs';
+import { isPlatformBrowser } from '@angular/common';
 
 @Directive({
   selector: '[scrollAnimation], [appScrollAnimation]',
@@ -26,11 +27,21 @@ export class ScrollAnimationDirective implements OnInit, OnDestroy {
 
   constructor(
     private el: ElementRef,
-    private animationService: AnimationService
+    private animationService: AnimationService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngOnInit(): void {
     if (!this.appScrollAnimation) {
+      return;
+    }
+
+    // Only run in browser environment
+    if (!isPlatformBrowser(this.platformId)) {
+      // In SSR, just add the animation class without observing
+      if (this.animationClass) {
+        this.el.nativeElement.classList.add(this.animationClass);
+      }
       return;
     }
 
@@ -85,6 +96,11 @@ export class ScrollAnimationDirective implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    // Only run in browser environment
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
