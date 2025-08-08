@@ -7,6 +7,7 @@ import { ThemeToggleComponent } from './theme-toggle/theme-toggle.component';
 import { filter } from 'rxjs/operators';
 import { LoadingService } from './services/loading.service';
 import { LoadingContainerComponent } from './shared/components/loading-container/loading-container.component';
+import { ComingSoonComponent } from './pages/coming-soon/coming-soon.component';
 
 
 @Component({
@@ -17,7 +18,8 @@ import { LoadingContainerComponent } from './shared/components/loading-container
         NavbarComponent,
         FooterComponent,
         ThemeToggleComponent,
-        LoadingContainerComponent
+        LoadingContainerComponent,
+        ComingSoonComponent
     ],
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css']
