@@ -35,7 +35,17 @@ export class AppComponent implements OnInit {
     private ngZone: NgZone,
     private renderer: Renderer2
   ) {
+
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe((event: NavigationEnd) => {
+      gtag('config', 'G-BX5XYN8S6T', {
+        page_path: event.urlAfterRedirects
+      });
+    });
+    
   }
+
 
   @HostListener('window:load')
   onLoad() {
