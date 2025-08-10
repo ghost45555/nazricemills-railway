@@ -5,14 +5,6 @@ import { ExtraInfoContentComponent } from './pages/extra-info/extra-info-content
 export const routes: Routes = [
   {
     path: '',
-    loadComponent: () => import('./pages/coming-soon/coming-soon.component').then(m => m.ComingSoonComponent)
-  },
-  // {
-  //   path: '',
-  //   loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent)
-  // },
-  {
-    path: 'home',
     loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent)
   },
   {
