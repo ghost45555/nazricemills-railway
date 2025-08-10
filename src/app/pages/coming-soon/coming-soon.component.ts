@@ -1,11 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-coming-soon',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule],
   templateUrl: './coming-soon.component.html',
   styleUrls: ['./coming-soon.component.css']
 })
@@ -35,9 +34,14 @@ export class ComingSoonComponent implements OnInit, OnDestroy {
     }
   }
 
-  notifyMe(): void {
+  notifyMe(event: Event): void {
+    const input = (event.target as HTMLElement).closest('.input-wrap')?.querySelector('input') as HTMLInputElement;
+    if (!input) return;
+    
+    this.email = input.value;
     this.isValidEmail = this.validateEmail(this.email);
     if (!this.isValidEmail) return;
+    
     // For now, just store locally and show success state
     try {
       const key = 'coming-soon-subscribers';

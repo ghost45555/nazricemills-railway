@@ -31,8 +31,8 @@
 
       <div class="notify slide-up" *ngIf="!submitted; else thankyou">
         <div class="input-wrap" [class.invalid]="!isValidEmail">
-          <input type="email" [(ngModel)]="email" placeholder="Your email address" aria-label="Email address" />
-          <button class="btn btn-primary" (click)="notifyMe()">Notify Me</button>
+          <input type="email" placeholder="Your email address" aria-label="Email address" />
+          <button class="btn btn-primary" (click)="notifyMe($event)">Notify Me</button>
         </div>
         <p class="error" *ngIf="!isValidEmail">Please enter a valid email address.</p>
         <p class="note">No spam. Only elegant updates.</p>
