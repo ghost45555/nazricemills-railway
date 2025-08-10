@@ -30,6 +30,8 @@ export class AppComponent implements OnInit {
   navigationInProgress = false;
   initialLoadTimerComplete = false;
   isInitialLoad = true;
+  // Temporary: disable global loader while Coming Soon is live
+  private comingSoonMode = true;
 
   constructor(
     private router: Router,
@@ -56,20 +58,29 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.comingSoonMode) {
+      // Skip global loader entirely for Coming Soon page
+      this.loadingService.stopGlobal();
+      this.renderer.removeClass(document.body, 'page-loading');
+      this.assetsLoaded = true;
+      this.initialLoadTimerComplete = true;
+      return;
+    }
+
     // Add loading class to body when component initializes
     this.renderer.addClass(document.body, 'page-loading');
 
     // Start the loader immediately
     this.loadingService.startGlobal('Loading...', 'grain');
 
-    // Set a minimum display time for the loader (reduced to 1s for production initial paint)
+    // Set a minimum display time for the loader (3 seconds)
     setTimeout(() => {
       this.initialLoadTimerComplete = true;
       this.checkLoading();
-    }, 1000);
+    }, 3000);
 
-    // Track only above-the-fold images during Coming Soon phase for faster ready signal
-    this.trackImageLoading(true);
+    // Track all images on the page
+    this.trackImageLoading();
 
     // Check if document is already loaded (for cached pages)
     if (document.readyState === 'complete') {
@@ -79,35 +90,37 @@ export class AppComponent implements OnInit {
       }, 1000);
     }
 
-    // Show loader during navigation
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationStart) {
-        this.navigationInProgress = true;
-        this.assetsLoaded = false;
-        
-        if (!this.isInitialLoad) {
-          this.loadingService.startGlobal('Loading...', 'grain');
+    // Show loader during navigation (disabled in comingSoonMode)
+    if (!this.comingSoonMode) {
+      this.router.events.subscribe(event => {
+        if (event instanceof NavigationStart) {
+          this.navigationInProgress = true;
+          this.assetsLoaded = false;
+          
+          if (!this.isInitialLoad) {
+            this.loadingService.startGlobal('Loading...', 'grain');
+          }
+        } else if (
+          event instanceof NavigationEnd ||
+          event instanceof NavigationCancel ||
+          event instanceof NavigationError
+        ) {
+          this.navigationInProgress = false;
+          this.isInitialLoad = false;
+          
+          // After navigation completes, track images again
+          this.trackImageLoading();
+          
+          // Only consider assets loaded if document is complete AND navigation is done
+          if (document.readyState === 'complete') {
+            setTimeout(() => {
+              this.assetsLoaded = true;
+              this.checkLoading();
+            }, 500);
+          }
         }
-      } else if (
-        event instanceof NavigationEnd ||
-        event instanceof NavigationCancel ||
-        event instanceof NavigationError
-      ) {
-        this.navigationInProgress = false;
-        this.isInitialLoad = false;
-        
-        // After navigation completes, track images again
-        this.trackImageLoading();
-        
-        // Only consider assets loaded if document is complete AND navigation is done
-        if (document.readyState === 'complete') {
-          setTimeout(() => {
-            this.assetsLoaded = true;
-            this.checkLoading();
-          }, 500);
-        }
-      }
-    });
+      });
+    }
 
     // Subscribe to router events and scroll to top on navigation
     this.router.events.pipe(
@@ -120,27 +133,27 @@ export class AppComponent implements OnInit {
       });
     });
 
-    // Safety timeout to prevent loader from getting stuck (reduced)
+    // Safety timeout to prevent loader from getting stuck
     setTimeout(() => {
       this.loadingService.stopGlobal();
-    }, 8000);
+    }, 15000);
 
     // Subscribe to loading state changes
-    this.loadingService.isLoadingById('global').subscribe(isLoading => {
-      if (isLoading) {
-        this.renderer.addClass(document.body, 'page-loading');
-      } else {
-        // When loading stops, remove the class and trigger animations
-        this.renderer.removeClass(document.body, 'page-loading');
-      }
-    });
+    if (!this.comingSoonMode) {
+      this.loadingService.isLoadingById('global').subscribe(isLoading => {
+        if (isLoading) {
+          this.renderer.addClass(document.body, 'page-loading');
+        } else {
+          // When loading stops, remove the class and trigger animations
+          this.renderer.removeClass(document.body, 'page-loading');
+        }
+      });
+    }
   }
 
-  private trackImageLoading(onlyAboveTheFold: boolean = false) {
+  private trackImageLoading() {
     setTimeout(() => {
-      const selector = onlyAboveTheFold ? 'img[fetchpriority="high"], img[loading="eager"]' : 'img';
-      const nodeList = document.querySelectorAll(selector);
-      const images: HTMLImageElement[] = Array.from(nodeList).filter((el): el is HTMLImageElement => el instanceof HTMLImageElement);
+      const images = document.querySelectorAll('img');
       let loadedImages = 0;
       const totalImages = images.length;
       
