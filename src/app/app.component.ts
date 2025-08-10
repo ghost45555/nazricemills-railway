@@ -62,14 +62,14 @@ export class AppComponent implements OnInit {
     // Start the loader immediately
     this.loadingService.startGlobal('Loading...', 'grain');
 
-    // Set a minimum display time for the loader (3 seconds)
+    // Set a minimum display time for the loader (reduced to 1s for production initial paint)
     setTimeout(() => {
       this.initialLoadTimerComplete = true;
       this.checkLoading();
-    }, 3000);
+    }, 1000);
 
-    // Track all images on the page
-    this.trackImageLoading();
+    // Track only above-the-fold images during Coming Soon phase for faster ready signal
+    this.trackImageLoading(true);
 
     // Check if document is already loaded (for cached pages)
     if (document.readyState === 'complete') {
@@ -120,10 +120,10 @@ export class AppComponent implements OnInit {
       });
     });
 
-    // Safety timeout to prevent loader from getting stuck
+    // Safety timeout to prevent loader from getting stuck (reduced)
     setTimeout(() => {
       this.loadingService.stopGlobal();
-    }, 15000);
+    }, 8000);
 
     // Subscribe to loading state changes
     this.loadingService.isLoadingById('global').subscribe(isLoading => {
@@ -136,9 +136,11 @@ export class AppComponent implements OnInit {
     });
   }
 
-  private trackImageLoading() {
+  private trackImageLoading(onlyAboveTheFold: boolean = false) {
     setTimeout(() => {
-      const images = document.querySelectorAll('img');
+      const selector = onlyAboveTheFold ? 'img[fetchpriority="high"], img[loading="eager"]' : 'img';
+      const nodeList = document.querySelectorAll(selector);
+      const images: HTMLImageElement[] = Array.from(nodeList).filter((el): el is HTMLImageElement => el instanceof HTMLImageElement);
       let loadedImages = 0;
       const totalImages = images.length;
       

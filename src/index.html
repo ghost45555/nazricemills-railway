@@ -55,31 +55,35 @@
     gtag('config', 'G-XXXXXX');
   </script>
   
-  <!-- Microsoft Clarity -->
+  <!-- Microsoft Clarity (deferred to window load) -->
   <script>
-    (function(c,l,a,r,i,t,y){
-      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "XXXXXX");
+    window.addEventListener('load', function () {
+      (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window, document, "clarity", "script", "XXXXXX");
+    });
   </script>
   
-  <!-- Facebook Pixel -->
+  <!-- Facebook Pixel (deferred to window load) -->
   <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', 'XXXXXXXXXX');
-    fbq('track', 'PageView');
+    window.addEventListener('load', function () {
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', 'XXXXXXXXXX');
+      fbq('track', 'PageView');
+    });
   </script>
   
-  <!-- Performance optimizations -->
-  <link rel="preload" as="image" href="assets/img/farm2-slider-bg.jpg">
+  <!-- Performance: avoid preloading heavy hero bg on Coming Soon -->
+  <!-- <link rel="preload" as="image" href="assets/img/farm2-slider-bg.jpg"> -->
   <link rel="dns-prefetch" href="https://cdn.nazricemills.com">
   
   <!-- Structured Data -->
@@ -134,12 +138,22 @@
   </noscript>
 
 
-  
-  <script src="https://cdn.botpress.cloud/webchat/v2.2/inject.js"></script>
-  <script src="https://files.bpcontent.cloud/2025/02/25/07/20250225075340-2OBA7WAU.js"></script>
+  <!-- Botpress (deferred to window load to avoid blocking TTI) -->
+  <script>
+    window.addEventListener('load', function () {
+      var s1 = document.createElement('script');
+      s1.src = 'https://cdn.botpress.cloud/webchat/v2.2/inject.js';
+      s1.async = true;
+      document.body.appendChild(s1);
+      var s2 = document.createElement('script');
+      s2.src = 'https://files.bpcontent.cloud/2025/02/25/07/20250225075340-2OBA7WAU.js';
+      s2.defer = true;
+      document.body.appendChild(s2);
+    });
+  </script>
   
   <!-- Bootstrap 5 JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
       
 </body>
 </html>
